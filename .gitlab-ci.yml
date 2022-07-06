@@ -9,15 +9,17 @@ cache:
 
 # Deploy job
 deploy:
+  tags:
+    - shell
   # Attach Deploy job to Deploy stage
   stage: build
   script:
     # Only copy changed files to project folder
     - echo 'Update repo'
-    - cp -r -u * /var/www/bullcoin/swap
+    - sudo cp -r -u * /var/www/bullcoin/swap
     - cd /var/www/bullcoin/swap
-    - yarn install
-    - yarn build
+    - sudo yarn install
+    - sudo yarn build
     # - echo 'Install Packages'
     # - sudo flutter clean
     # - flutter packages get
