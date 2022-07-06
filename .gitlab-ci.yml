@@ -14,10 +14,10 @@ deploy:
   script:
     # Only copy changed files to project folder
     - echo 'Update repo'
-    - sudo cp -r -u * /var/www/bullcoin/swap
+    - cp -r -u * /var/www/bullcoin/swap
     - cd /var/www/bullcoin/swap
-    - sudo yarn install
-    - sudo yarn build
+    - yarn install
+    - yarn build
     # - echo 'Install Packages'
     # - sudo flutter clean
     # - flutter packages get
