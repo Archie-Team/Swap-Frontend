@@ -1,0 +1,20 @@
+.tokens-inwallet,
+.staking-amount {
+}
+
+.tokens-inwallet > p,
+.staking-amount > p {
+  font-weight: light !important;
+  color: #fff;
+}
+
+.tokens-inwallet_container,
+.staking-amount_container {
+  display: flex;
+  margin-block: 20px;
+}
+
+.tokens-inwallet_container > div,
+.staking-amount_container > div {
+  width: 50%;
+}

@@ -1,0 +1,35 @@
+.pool-card {
+  text-align: center;
+}
+
+.pool-icon {
+  background-color: inherit;
+  border: none;
+  color: #22a24d;
+  margin-block: 20px;
+  font-size: large;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  margin-inline: auto;
+  cursor: pointer;
+}
+
+.pool-actions {
+  display: flex;
+  margin-block: 20px 0;
+  justify-content: space-around;
+}
+
+.pool-actions button {
+  width: 100%;
+}
+
+.pool-actions button:hover {
+  opacity: 0.8;
+}
+
+.token-pool__containers {
+  display: flex;
+  flex-direction: column;
+}
