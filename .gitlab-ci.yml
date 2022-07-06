@@ -11,9 +11,6 @@ cache:
 deploy:
   # Attach Deploy job to Deploy stage
   stage: build
-  # Config to use our Runner with Executor Shell
-  tags:
-    - build
   script:
     # Only copy changed files to project folder
     - echo 'Update repo'
