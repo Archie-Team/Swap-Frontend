@@ -1,0 +1,31 @@
+# We have 2 stage Test and Deploy
+stages:
+  - build
+
+# Config cache
+cache:
+  paths:
+    - node_modules/
+
+# Deploy job
+deploy:
+  # Attach Deploy job to Deploy stage
+  stage: build
+  # Config to use our Runner with Executor Shell
+  tags:
+    - build
+  script:
+    # Only copy changed files to project folder
+    - echo 'Update repo'
+    - sudo cp -r -u * /var/www/bullcoin/swap
+    - cd /var/www/bullcoin/swap
+    - sudo yarn install
+    - sudo yarn build
+    # - echo 'Install Packages'
+    # - sudo flutter clean
+    # - flutter packages get
+    # - flutter packages upgrade
+    # - echo 'Build App'
+    # - sudo flutter build web --no-sound-null-safety
+  only:
+    - main
