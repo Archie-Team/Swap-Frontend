@@ -1,0 +1,42 @@
+.swap-card {
+  text-align: center;
+}
+
+button.swap-icon {
+  background-color: inherit;
+  border: none;
+  font-size: xx-large;
+  color: #22a24d;
+  margin-block: 10px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  margin-inline: auto;
+  width: 45px;
+  height: 45px;
+}
+
+button.swap-icon:hover {
+  background-color: #22a24d;
+  color: white;
+}
+
+.swap-actions {
+  display: flex;
+  margin-block: 20px 0;
+  justify-content: space-around;
+}
+
+.swap-actions button {
+  width: 100%;
+}
+
+.swap-actions button:hover {
+  opacity: 0.8;
+}
+
+.token-swap__containers{
+  display: flex;
+  flex-direction: column;
+  /*  */
+}

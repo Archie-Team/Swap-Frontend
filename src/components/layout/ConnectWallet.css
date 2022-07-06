@@ -1,0 +1,40 @@
+.connect-wallet__actions {
+  display: flex;
+  margin-left: auto;
+}
+
+.connect-wallet__button {
+  font-size: medium;
+  cursor: pointer;
+  background-color: var(--green);
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-block: auto;
+  border-radius: 16px;
+  width: 190px;
+  height: 55px;
+  color: white;
+}
+
+.wallet-information {
+  display: flex;
+  font-size: large;
+  align-items: center;
+}
+
+.wallet-information .wallet-icon {
+  font-size: larger;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wallet-information p {
+  margin-left: 8px;
+}

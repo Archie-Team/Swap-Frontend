@@ -1,0 +1,15 @@
+.pool-status__container > p {
+  font-size: x-large;
+  font-weight: bold;
+}
+
+.status-details > div {
+  display: flex;
+  justify-content: space-between;
+  margin-block: 10px;
+}
+
+.status-details > div .amount {
+  color: var(--green);
+  font-size: xx-large;
+}

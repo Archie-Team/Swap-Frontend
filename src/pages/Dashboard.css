@@ -1,0 +1,23 @@
+.seprator-line {
+  background-color: #fff;
+  width: 100%;
+  height: 1px;
+  margin-block: 15px;
+  border-radius: 50%;
+}
+
+.top-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.top-container > div {
+  padding: 30px;
+  width: 49%;
+  background-color: #415c4e;
+  border-radius: 15px;
+}
+
+.bottom-container{
+  padding: 0;
+}

@@ -1,0 +1,31 @@
+:root {
+  --green: #0bc003;
+  --dark-green: #173324;
+  --sec-dark-green: #1e4832;
+  --main-dark-green: #1d4e35;
+  --navbar-green: #3a644e;
+}
+
+p,
+button {
+  margin: 0;
+}
+
+input {
+  border: none;
+  outline: none;
+}
+
+button {
+  border: none;
+  outline: none;
+  color: white;
+  cursor: pointer;
+}
+
+.main-button {
+  background-color: var(--green);
+  padding: 15px;
+  border-radius: 10px;
+  font-size: medium;
+}

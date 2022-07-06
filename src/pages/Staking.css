@@ -1,0 +1,8 @@
+.staking-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.staking-actions button {
+  width: 49%;
+}
