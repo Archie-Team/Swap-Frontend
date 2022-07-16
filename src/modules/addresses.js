@@ -1,6 +1,7 @@
 export const addresses = {
-    BUSD_ADDRESS: "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
-    NFTCollection_Address: "0x2245f9cabA2dC5Fc7DD5385Ea55958CF6967fE5f", //main
-    // NFTCollection_Address: "0xAe64598DC1F246A796A02dC0a54E62D70bC581C8", //test
+    contract_Address: "0x0e8B72f707A705bA70e8B7B6e86B7f523ed872DF", //swap_address
+    BUSD_address: "0x3afC77D320CB164134FC5afD73B8dB453813094a",
+    BULC_address: "0x1603035964573375E9546fA2cDbed9Ad435865df",
+    pair_address :'0x07BD8B6D31672dAA0e557f9d1086407376041F83'
   };
   

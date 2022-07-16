@@ -1,7 +1,6 @@
 import React from "react";
-import "../TokenFormStyle.css";
 
-const BUSDPool = ({ onChangeInputHandler, BUSDAmount }) => {
+const CoinField = ({ tokenImage, tokenName, onChangeInputHandler }) => {
   const changeInputHandler = (e) => {
     onChangeInputHandler({ name: e.target.name, value: e.target.value });
   };
@@ -10,19 +9,16 @@ const BUSDPool = ({ onChangeInputHandler, BUSDAmount }) => {
     <div className="token-container">
       <div className="amount">
         <div className="logo">
-          <img
-            src="https://cryptologos.cc/logos/binance-usd-busd-logo.png?v=0"
-            alt=""
-          />
-          <p className="">BUSD</p>
+          <img src={tokenImage} alt="" />
+          <p className="">{tokenName}</p>
         </div>
         <div className="form-group">
           <input
             type="number"
-            value={BUSDAmount}
+            name={tokenName}
+            id=""
+            placeholder={tokenName}
             onChange={changeInputHandler}
-            name="BUSDPool"
-            placeholder="BUSD"
           />
         </div>
       </div>
@@ -34,4 +30,4 @@ const BUSDPool = ({ onChangeInputHandler, BUSDAmount }) => {
   );
 };
 
-export default BUSDPool;
+export default CoinField;
