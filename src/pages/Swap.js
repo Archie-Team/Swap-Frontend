@@ -8,6 +8,9 @@ import { addresses } from "../modules/addresses";
 import Web3 from "web3";
 import { initContract, initERC20 } from "../modules/web3Client";
 
+import ERC20_abi from "../assets/files/ERC20.json";
+import swap_abi from "../assets/files/Swap.json";
+
 const Swap = () => {
   const [contract, setContract] = useState(null);
 
@@ -20,7 +23,7 @@ const Swap = () => {
   const [coin2Amount, setCoin2Amount] = useState(coins.BULC);
 
   useEffect(() => {
-    const func = initContract();
+    const func = initContract(swap_abi.abi,addresses.contract_Address);
     setContract(func);
     initBUSDContarct();
   }, []);
@@ -65,7 +68,7 @@ const Swap = () => {
   };
 
   const initBUSDContarct = async () => {
-    const tempContract = await initContract('0x3afC77D320CB164134FC5afD73B8dB453813094a');
+    const tempContract = await initContract(ERC20_abi.abi,addresses.BULC_address);
     setTokenContarct(tempContract);
   };
 
@@ -84,7 +87,7 @@ const Swap = () => {
 
   const swapFirst = async (input) => {
     // await approvePair() //approve first tken (coin)
-    console.log(contract);
+    // console.log(contract);
     // console.log(coin1.address);
     // console.log(coin2.address);
     await contract.methods

@@ -1,6 +1,6 @@
 import Web3 from "web3";
-import swap_abi from "../assets/files/Swap.json";
-import ERC20_abi from "../assets/files/ERC20.json";
+// import swap_abi from "../assets/files/Swap.json";
+// import ERC20_abi from "../assets/files/ERC20.json";
 // providers
 
 import { addresses } from "../modules/addresses";
