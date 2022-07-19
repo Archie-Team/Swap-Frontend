@@ -1,5 +1,5 @@
 import React from 'react'
-import { CommaFormat } from '../../modules/commaFormat'
+import { CommaFormat } from '../../modules/formatNumbers'
 import './TotalValue.css'
 
 const TotalValue = ({totalValue}) => {
