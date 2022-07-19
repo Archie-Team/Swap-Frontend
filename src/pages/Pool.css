@@ -2,6 +2,27 @@
   text-align: center;
 }
 
+.pool__containers .link-to-address {
+  display: flex;
+  margin-block: 10px 15px;
+  align-items: center;
+  font-size: large;
+  color: var(--green);
+  cursor: pointer;
+}
+.pool__containers .link-to-address:hover p {
+  color: var(--green);
+}
+
+.pool__containers .link-to-address p {
+  margin-right: 8px;
+  color: white;
+}
+
+.pool__containers .link-to-address .icon {
+  font-size: x-large;
+}
+
 .pool-icon {
   background-color: inherit;
   border: none;
@@ -18,11 +39,15 @@
 .pool-actions {
   display: flex;
   margin-block: 20px 0;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 .pool-actions button {
-  width: 100%;
+  width: 98%;
+}
+
+.pool-actions button.supply {
+  margin-left: 10px;
 }
 
 .pool-actions button:hover {

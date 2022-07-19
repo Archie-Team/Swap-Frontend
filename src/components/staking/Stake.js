@@ -1,5 +1,6 @@
 import React from "react";
 import "./Stake.css";
+
 const Stake = ({ monthNumber, APRAmountPersent }) => {
   return (
     <div class="stake_form_field">

@@ -1,6 +1,6 @@
 import React from 'react'
 import './PoolStatus.css'
-import { CommaFormat } from '../../modules/commaFormat'
+import { CommaFormat } from '../../modules/formatNumbers'
 
 const Status = ({totalTokenSupply,marketCap,totalFrozen}) => {
  

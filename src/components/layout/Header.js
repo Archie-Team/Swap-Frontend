@@ -1,5 +1,6 @@
 import React from "react";
-import {logos} from '../../modules/varibales'
+import BULC from '../../assets/images/BULKLogo.svg'
+
 import { navigationItems } from "../../modules/varibales";
 import { NavLink } from "react-router-dom";
 import "./Header.css";
@@ -11,7 +12,7 @@ const Header = () => {
   return (
     <header className="header">
       <div className="bullcoin-logo">
-        <img src={logos.BULC} alt="" />
+        <img src={BULC} alt="" />
         <p>Bullcoin</p>
       </div>
       <nav className="nav">

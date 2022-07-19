@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Token from "./Token";
-import { logos } from "../../modules/varibales";
 import "./TokensInWallet.css";
+
+import {coins} from '../../modules/coins'
 
 const StakingAmount = () => {
   const [BUSDAmount, setBUSDAmount] = useState(0);
@@ -11,8 +12,8 @@ const StakingAmount = () => {
     <div className="staking-amount">
       <p>Staking Amount</p>
       <div className="staking-amount_container">
-        <Token tokenAmount={BUSDAmount} tokenUrl={logos.BUSD} />
-        <Token tokenAmount={BULKAmount} tokenUrl={logos.BULC} />
+        <Token tokenAmount={BUSDAmount} tokenUrl={coins.BUSD.image} />
+        <Token tokenAmount={BULKAmount} tokenUrl={coins.BULC.image} />
       </div>
     </div>
   );

@@ -1,89 +1,269 @@
 import React, { useEffect, useState } from "react";
-import BULKSwap from "../components/swap/BULCSwap";
-import BUSDSwap from "../components/swap/BUSDSwap";
 import MainCard from "../components/layout/MainCard";
 import "./Swap.css";
 import { MdSwapVert } from "react-icons/md";
+import CoinField from "../components/coin/CoinField";
+import { coins } from "../modules/coins";
+import { addresses } from "../modules/addresses";
 import Web3 from "web3";
-
+import {
+  approve,
+  checkAllowence,
+  getTokenBalance,
+  initContract,
+} from "../modules/web3Client";
+import ERC20_abi from "../assets/files/ERC20.json";
+import swapAbi from "../assets/files/Swap.json";
+import toast, { Toaster } from "react-hot-toast";
+import { roundNumber } from "../modules/formatNumbers";
 
 const Swap = () => {
-  const [swapState, setSwapState] = useState("BUSD_to_BULK"); //2 state od BUSD_to_BULK and BULK_to_BUSD
+  const [swapContract, setSwapContract] = useState(null);
+  const [token1Contract, setToken1Contract] = useState(null);
+  const [token2Contract, setToken2Contract] = useState(null);
 
-  useEffect( () => {
+  const [coin1, setCoin1] = useState({
+    ...coins.BUSD,
+    balance: "",
+    amount: "",
+    contract: null,
+  });
 
-    const web3 = new Web3(
-      Web3.givenProvider
-      //  ||
-      //  providers.test
-    ); //test
-  
-    // const networkId = await web3.eth.net.getId();
-    // const nftContract = new web3.eth.Contract(NFTContractBuild.abi,NFTContractBuild.networks[networkId].address
-    // await this.NFTContract.methods
-    //   .revealed()
-    //   .call()
-    //   .then((res) => {
-    //   });
+  const [coin2, setCoin2] = useState({
+    ...coins.BULC,
+    balance: "",
+    amount: "",
+    contract: null,
+  });
 
-    // const tokenAddress = "0x0d8775f648430679a709e98d2b0cb6250d"
+  const [coin1Amount, setCoin1Amount] = useState("");
+  const [coin2Amount, setCoin2Amount] = useState("");
+  const [calculatedCoin1Amount, setCalculatedCoin1Amount] = useState("");
+  const [calculatedCoin2Amount, setCalculatedCoin2Amount] = useState("");
 
+  let account = localStorage.getItem("account");
 
-// The minimum ABI required to get the ERC20 Token balance
-const minABI = [
-  // balanceOf
-  {
-    constant: true,
-    inputs: [{ name: "_owner", type: "address" }],
-    name: "balanceOf",
-    outputs: [{ name: "balance", type: "uint256" }],
-    type: "function",
-  },
-];
-const tokenAddress = "0x0d8775f648430679a709e98d2b0cb6250d2887ef";
-// const walletAddress = "0x1cf56Fd8e1567f8d663e54050d7e44643aF970Ce";
+  const updateTokenBalances = () => {
+    getTokenBalance(token1Contract, coin1.address).then((res) => {
+      setCoin1((prev) => {
+        return { ...prev, balance: res };
+      });
+    });
 
-const contract = new web3.eth.Contract(minABI, tokenAddress);
+    getTokenBalance(token2Contract, coin2.address).then((res) => {
+      setCoin2((prev) => {
+        return { ...prev, balance: res };
+      });
+    });
+  };
 
-
-
-// async function getBalance() {
-  const result =  contract.methods.balanceOf('0xccfC48733331FDE696A5058DbEBC4574a18464c5').call(); // 29803630997051883414242659
-  console.log(result);
-
-    // web3.eth
-    //   .getBalance("0xccfC48733331FDE696A5058DbEBC4574a18464c5")
-    //   .then(res => console.log(res));
-
+  useEffect(() => {
+    initContract(swapAbi.abi, addresses.contract_Address).then((res) => {
+      setSwapContract(res);
+    });
   }, []);
 
-  const changeSwapState = () => {
-    swapState === "BUSD_to_BULK"
-      ? setSwapState("BULK_to_BUSD")
-      : setSwapState("BUSD_to_BULK");
+  const changeFirstInputHandler = async (input) => {
+    if (!input.value || input.value === 0) {
+      setCalculatedCoin2Amount("");
+      return;
+    }
+    setCoin2Amount("");
+    let inputStringValue = input.value.toString();
+    let data = Web3.utils.toWei(inputStringValue, "ether");
+    setCoin1Amount(data);
+
+    await swapContract.methods
+      .getAmountsOut(data, [coin1.address, coin2.address]) //execute amount of second (amount, convertible token address, result token address)
+      .call()
+      .then((res) => {
+        let val = Web3.utils.fromWei(res[1], "ether");
+        setCalculatedCoin2Amount(val);
+      })
+      .catch((err) => {
+        setCalculatedCoin2Amount(0);
+      });
   };
+
+  useEffect(() => {
+    if (token1Contract && token2Contract) {
+      updateTokenBalances();
+    }
+  }, [token1Contract, token2Contract]);
+
+  const changeSecCoinHandler = async (input) => {
+    if (!input.value || input.value === 0) {
+      setCalculatedCoin1Amount("");
+      return;
+    }
+
+    setCoin1Amount("");
+    let inputStringValue = input.value.toString();
+    let data = Web3.utils.toWei(inputStringValue, "ether");
+    setCoin2Amount(data);
+
+    await swapContract.methods
+      .getAmountsIn(data, [coin1.address, coin2.address]) //execute amount of second (amount, convertible token address, result token address)
+      .call()
+      .then((res) => {
+        let val = Web3.utils.fromWei(res[0], "ether");
+        setCalculatedCoin1Amount(val);
+      });
+  };
+
+  const swap = async (
+    contract,
+    methodName,
+    amount,
+    address1,
+    address2,
+    amountOutMin
+  ) => {
+    return await contract.methods[methodName](
+      amount, // coin1.amount,
+      amountOutMin, //ask from client
+      [address1, address2],
+      account,
+      9876543210
+    )
+      .send({ from: account })
+      .then((res) => {
+        return Promise.resolve("Swap Was Successfull");
+      })
+      .catch((err) => {
+        return Promise.reject("Error in Swap");
+      });
+  };
+
+  const swapFirstCoinFunction = async () => {
+    await checkAllowence(
+      token1Contract,
+      account,
+      addresses.contract_Address
+    ).then(async (res) => {
+      if (res < Web3.utils.toWei(coin1Amount, "ether")) {
+        await approve(
+          token1Contract,
+          Web3.utils.toWei(coin1Amount, "tether"),
+          account,
+          addresses.contract_Address
+        );
+      } else {
+        return;
+      }
+    });
+    swap(
+      swapContract,
+      "swapExactTokensForTokens",
+      coin1Amount,
+      coin1.address,
+      coin2.address,
+      Web3.utils.fromWei(coin1Amount, "Kwei")
+    )
+      .then((res) => {
+        toast.success(res);
+      })
+      .catch((err) => {
+        toast.error(err);
+      });
+  };
+
+  const swapSecCoinFunction = async () => {
+    await checkAllowence(
+      token1Contract,
+      account,
+      addresses.contract_Address
+    ).then(async (res) => {
+      if (res < Web3.utils.toWei(coin2Amount, "ether")) {
+        await approve(
+          token1Contract,
+          Web3.utils.toWei(coin2Amount, "tether"),
+          account,
+          addresses.contract_Address
+        );
+      } else {
+        return;
+      }
+    });
+
+    swap(
+      swapContract,
+      "swapTokensForExactTokens",
+      coin2Amount,
+      coin1.address,
+      coin2.address,
+      coin2Amount + Math.pow(10, 16)
+    )
+      .then((res) => {
+        toast.success(res);
+      })
+      .catch((err) => {
+        toast.error(err);
+      });
+  };
+
+  const callingSwapHanlder = () => {
+    if (!coin1Amount) {
+      swapSecCoinFunction();
+    } else if (!coin2Amount) {
+      swapFirstCoinFunction();
+    }
+  };
+
+  const changeSwapState = async () => {
+    let temp = coin1;
+    setCoin1(coin2);
+    setCoin2(temp);
+    setCoin1Amount("");
+    setCoin2Amount("");
+    setCalculatedCoin1Amount(0);
+    setCalculatedCoin2Amount(0);
+  };
+
+  useEffect(() => {
+    initContract(ERC20_abi.abi, coin1.address).then((res) => {
+      setToken1Contract(res);
+    });
+
+    initContract(ERC20_abi.abi, coin2.address).then((res) => {
+      setToken2Contract(res);
+    });
+  }, [coin1, coin2]);
 
   return (
     <MainCard className="swap-card">
-      <div
-        className="token-swap__containers"
-        style={{
-          ...(swapState === "BULK_to_BUSD"
-            ? {
-                flexDirection: "column-reverse",
-              }
-            : {}),
-        }}
-      >
-        <BUSDSwap role={swapState === "BUSD_to_BULK" ? "sender" : ""} />
+      <Toaster position="top-center" reverseOrder={false} />
+
+      <div>
+        <CoinField
+          tokenImage={coin1.image}
+          tokenName={coin1.name}
+          tokenAddress={coin1.address}
+          tokenContract={token1Contract}
+          coinBalance={coin1.balance}
+          onChangeInputHandler={changeFirstInputHandler}
+          calculatedAmount={calculatedCoin1Amount}
+        />
+
         <button className="swap-icon" onClick={changeSwapState}>
           <MdSwapVert />
         </button>
-        <BULKSwap role={swapState === "BULK_to_BUSD" ? "sender" : ""} />
+
+        <CoinField
+          tokenImage={coin2.image}
+          tokenName={coin2.name}
+          tokenContract={token2Contract}
+          tokenAddress={coin2.address}
+          coinBalance={coin2.balance}
+          calculatedAmount={calculatedCoin2Amount}
+          onChangeInputHandler={changeSecCoinHandler}
+        />
       </div>
 
       <div className="swap-actions">
-        <button className="main-button">Swap</button>
+        <button onClick={callingSwapHanlder} className="main-button">
+          Swap
+        </button>
       </div>
     </MainCard>
   );

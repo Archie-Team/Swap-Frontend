@@ -1,4 +1,4 @@
-import BULC from '../assets/images/BULKLogo.svg'
+
 export const navigationItems = [
     {
         link: "/",
@@ -18,8 +18,3 @@ export const navigationItems = [
         name: "Staking",
       },  
 ]
-
-export const logos = {
-  BULC : BULC,
-  BUSD : 'https://cryptologos.cc/logos/binance-usd-busd-logo.png?v=0'
-}
