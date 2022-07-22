@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { roundNumber } from "../../modules/formatNumbers";
-import { getTokenBalance } from "../../modules/web3Client";
 import "../TokenFormStyle.css";
 
 const CoinField = ({
   tokenImage,
   tokenName,
-  tokenAddress,
-  tokenContract,
   onChangeInputHandler,
   calculatedAmount,
   coinBalance
 }) => {
   const [coinValue, setCoinValue] = useState("");
-  const [tokenBalance, settokenBalance] = useState("");
 
   const changeInputHandler = (e) => {
     setCoinValue(e.target.value);
@@ -23,8 +19,6 @@ const CoinField = ({
   useEffect(() => {
     setCoinValue(roundNumber(calculatedAmount,5));
   }, [calculatedAmount]);
-
- 
 
   return (
     <div className="token-container">
@@ -46,7 +40,7 @@ const CoinField = ({
       <div className="balance">
         <p>Balance :</p>
         <p className="balance-amount">
-          {roundNumber(coinBalance, 5) || roundNumber(tokenBalance, 5)} {tokenName}
+          {roundNumber(coinBalance, 5) } {tokenName}
         </p>
       </div>
     </div>

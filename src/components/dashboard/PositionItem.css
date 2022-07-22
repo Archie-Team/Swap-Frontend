@@ -1,0 +1,45 @@
+.position-item {
+  border-bottom: 1px solid #ccc;
+  margin-block: 20px;
+  padding: 10px 0;
+}
+
+.position-item:last-child {
+border: none;
+}
+
+.position-item > div {
+  display: flex;
+  justify-content: space-between;
+  margin-block: 10px;
+  align-items: center;
+}
+
+.position-item > div p:first-child {
+  color: #ccc;
+}
+
+.position-item button {
+  background-color: var(--green);
+  padding: 10px 0px;
+  min-width: 130px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.position-item button:hover {
+  opacity: 0.7;
+}
+
+.position-item .deadline-timer {
+  display: flex;
+  margin-block: 20px;
+align-items: flex-end;
+}
+
+.position-item .deadline-timer > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

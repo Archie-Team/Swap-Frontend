@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import MainCard from "../components/layout/MainCard";
 import "./Swap.css";
 import { MdSwapVert } from "react-icons/md";
@@ -15,12 +15,14 @@ import {
 import ERC20_abi from "../assets/files/ERC20.json";
 import swapAbi from "../assets/files/Swap.json";
 import toast, { Toaster } from "react-hot-toast";
-import { roundNumber } from "../modules/formatNumbers";
+import AuthContext from "../context/auth-context";
 
 const Swap = () => {
   const [swapContract, setSwapContract] = useState(null);
   const [token1Contract, setToken1Contract] = useState(null);
   const [token2Contract, setToken2Contract] = useState(null);
+  const authCtx = useContext(AuthContext)
+
 
   const [coin1, setCoin1] = useState({
     ...coins.BUSD,
@@ -41,16 +43,15 @@ const Swap = () => {
   const [calculatedCoin1Amount, setCalculatedCoin1Amount] = useState("");
   const [calculatedCoin2Amount, setCalculatedCoin2Amount] = useState("");
 
-  let account = localStorage.getItem("account");
 
   const updateTokenBalances = () => {
-    getTokenBalance(token1Contract, coin1.address).then((res) => {
+    getTokenBalance(token1Contract, authCtx.account).then((res) => {
       setCoin1((prev) => {
         return { ...prev, balance: res };
       });
     });
 
-    getTokenBalance(token2Contract, coin2.address).then((res) => {
+    getTokenBalance(token2Contract, authCtx.account).then((res) => {
       setCoin2((prev) => {
         return { ...prev, balance: res };
       });
@@ -62,6 +63,7 @@ const Swap = () => {
       setSwapContract(res);
     });
   }, []);
+
 
   const changeFirstInputHandler = async (input) => {
     if (!input.value || input.value === 0) {
@@ -85,17 +87,13 @@ const Swap = () => {
       });
   };
 
-  useEffect(() => {
-    if (token1Contract && token2Contract) {
-      updateTokenBalances();
-    }
-  }, [token1Contract, token2Contract]);
-
+  
   const changeSecCoinHandler = async (input) => {
     if (!input.value || input.value === 0) {
       setCalculatedCoin1Amount("");
       return;
     }
+
 
     setCoin1Amount("");
     let inputStringValue = input.value.toString();
@@ -111,14 +109,24 @@ const Swap = () => {
       });
   };
 
+
+  useEffect(() => {
+    if (token1Contract && token2Contract && authCtx.account) {
+      updateTokenBalances();
+    }
+  }, [authCtx.account]);
+
+
   const swap = async (
     contract,
     methodName,
     amount,
     address1,
     address2,
-    amountOutMin
+    amountOutMin,
+    account
   ) => {
+
     return await contract.methods[methodName](
       amount, // coin1.amount,
       amountOutMin, //ask from client
@@ -126,7 +134,7 @@ const Swap = () => {
       account,
       9876543210
     )
-      .send({ from: account })
+      .send({ from:  account })
       .then((res) => {
         return Promise.resolve("Swap Was Successfull");
       })
@@ -138,29 +146,33 @@ const Swap = () => {
   const swapFirstCoinFunction = async () => {
     await checkAllowence(
       token1Contract,
-      account,
+      authCtx.account,
       addresses.contract_Address
     ).then(async (res) => {
       if (res < Web3.utils.toWei(coin1Amount, "ether")) {
         await approve(
           token1Contract,
           Web3.utils.toWei(coin1Amount, "tether"),
-          account,
+          authCtx.account,
           addresses.contract_Address
         );
       } else {
         return;
       }
     });
+
+ 
     swap(
       swapContract,
       "swapExactTokensForTokens",
       coin1Amount,
       coin1.address,
       coin2.address,
-      Web3.utils.fromWei(coin1Amount, "Kwei")
+      Web3.utils.fromWei(coin1Amount, "Kwei"),
+      authCtx.account
     )
       .then((res) => {
+        // updateTokenBalances()
         toast.success(res);
       })
       .catch((err) => {
@@ -171,14 +183,14 @@ const Swap = () => {
   const swapSecCoinFunction = async () => {
     await checkAllowence(
       token1Contract,
-      account,
+      authCtx.account,
       addresses.contract_Address
     ).then(async (res) => {
       if (res < Web3.utils.toWei(coin2Amount, "ether")) {
         await approve(
           token1Contract,
           Web3.utils.toWei(coin2Amount, "tether"),
-          account,
+          authCtx.account,
           addresses.contract_Address
         );
       } else {
@@ -192,7 +204,8 @@ const Swap = () => {
       coin2Amount,
       coin1.address,
       coin2.address,
-      coin2Amount + Math.pow(10, 16)
+      coin2Amount + Math.pow(10, 16),
+      authCtx.account
     )
       .then((res) => {
         toast.success(res);

@@ -1,18 +1,4 @@
 import Web3 from "web3";
-import swap_abi from "../assets/files/Swap.json";
-import ERC20_abi from "../assets/files/ERC20.json";
-// providers
-
-import { addresses } from "../modules/addresses";
-import { providers } from "./providers";
-
-// const web3 = new Web3(
-//   // Web3.givenProvider  ||
-//   Web3.givenProvider ||
-//   'https://data-seed-prebsc-2-s3.binance.org:8545'
-// );
-
-const account = localStorage.getItem("account");
 
 const web3 = new Web3(
   Web3.givenProvider ||
@@ -42,19 +28,21 @@ export const approve = async (contarct, amount, account, address) => {
     .approve(address, amount) //client(owner) address , contarct address
     .send({ from: account })
     .then((res) => {
+      console.log(res);
       return Promise.resolve("Successfully approved!");
     })
     .catch((err) => {
       console.log(err);
+      return Promise.reject(" approve has problem!");
     });
 };
 
-export const getTokenBalance = async (contract, tokenAddress) => {
+export const getTokenBalance = async (contract,account) => {
+  // console.log(account);
   return await contract.methods
     .balanceOf(account) //client(owner) address , contarct address
     .call()
     .then((res) => {
-      // console.log(res);
       return Promise.resolve(Web3.utils.fromWei(res, "ether"));
     })
     .catch((err) => {
