@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import MainCard from "../components/layout/MainCard";
 import { BsPlusLg } from "react-icons/bs";
 import "./Pool.css";
@@ -18,8 +18,8 @@ import CoinField from "../components/coin/CoinField";
 import toast, { Toaster } from "react-hot-toast";
 import Modal from "react-modal";
 import RemoveLiquidity from "../components/pool/RemoveLiquidity";
-import { roundNumber } from "../modules/formatNumbers";
 import { BiLinkExternal } from "react-icons/bi";
+import AuthContext from "../context/auth-context";
 
 const Pool = () => {
   const [swapContract, setSwapContract] = useState("");
@@ -27,8 +27,7 @@ const Pool = () => {
   const [BUSDContarct, setBUSDContarct] = useState(null);
   const [pairContarct, setPairContarct] = useState(null);
   const [modalIsOpen, setIsOpen] = useState(false);
-
-  const [LPTokenBalance, setLPTokenBalance] = useState(0);
+  const authCtx = useContext(AuthContext);
 
   const [coin1, setCoin1] = useState({
     ...coins.BULC,
@@ -44,8 +43,6 @@ const Pool = () => {
     contract: null,
   });
 
-  const account = localStorage.getItem("account");
-
   const changeBULCAmount = async (data) => {
     if (!data.value || data.value <= 0) {
       setCoin2((prev) => {
@@ -57,6 +54,7 @@ const Pool = () => {
       return { ...prev, amount: data.value };
     });
     await getBalances().then(async (res) => {
+      if (res.resBUSD < 2000 || res.resBULC < 2000) return;
       await quote(data.value, res.resBULC, res.resBUSD).then((res2) => {
         setCoin2((prev) => {
           return { ...prev, amount: Web3.utils.fromWei(res2, "ether") };
@@ -66,13 +64,13 @@ const Pool = () => {
   };
 
   const updateTokenBalances = () => {
-    getTokenBalance(BULCContarct, coin1.address).then((res) => {
+    getTokenBalance(BULCContarct, authCtx.account).then((res) => {
       setCoin1((prev) => {
         return { ...prev, balance: res };
       });
     });
 
-    getTokenBalance(BUSDContarct, coin2.address).then((res) => {
+    getTokenBalance(BUSDContarct, authCtx.account).then((res) => {
       setCoin2((prev) => {
         return { ...prev, balance: res };
       });
@@ -80,18 +78,10 @@ const Pool = () => {
   };
 
   useEffect(() => {
-    if (BULCContarct && BUSDContarct) {
+    if (BULCContarct && BUSDContarct && authCtx.account) {
       updateTokenBalances();
     }
-  }, [BULCContarct]);
-
-  useEffect(() => {
-    if (pairContarct) {
-      getTokenBalance(pairContarct, coin2.address).then((res) => {
-        setLPTokenBalance(roundNumber(res, 5));
-      });
-    }
-  }, [pairContarct]);
+  }, [BULCContarct, BUSDContarct, authCtx.account]);
 
   const changeBUSDAmount = async (data) => {
     if (!data.value || data.value <= 0) {
@@ -105,6 +95,7 @@ const Pool = () => {
       return { ...prev, amount: data.value };
     });
     await getBalances().then(async (res) => {
+      if (res.resBUSD < 2000 || res.resBULC < 2000) return;
       await quote(data.value, res.resBUSD, res.resBULC).then((res2) => {
         setCoin1((prev) => {
           return { ...prev, amount: Web3.utils.fromWei(res2, "ether") };
@@ -130,6 +121,7 @@ const Pool = () => {
 
   const quote = async (amount, reserve0, reserve1) => {
     if (!amount || amount === 0) return;
+
     return await swapContract.methods
       .quote(Web3.utils.toWei(amount, "ether"), reserve0, reserve1)
       .call()
@@ -141,7 +133,7 @@ const Pool = () => {
       });
   };
 
-  const addLiqueidity = async () => {
+  const addLiquidity = async (account) => {
     await checkAllowence(
       BUSDContarct,
       account,
@@ -150,7 +142,7 @@ const Pool = () => {
       if (res < Number(Web3.utils.toWei(coin2.amount, "ether"))) {
         await approve(
           BUSDContarct,
-          Web3.utils.toWei(coin2.amount, "ether"),
+          Web3.utils.toWei("100000000000000", "tether"),
           account,
           addresses.contract_Address
         ).then((res2) => {
@@ -170,7 +162,7 @@ const Pool = () => {
       if (res < Number(Web3.utils.toWei(coin1.amount, "ether"))) {
         await approve(
           BULCContarct,
-          Web3.utils.toWei(coin1.amount, "ether"),
+          Web3.utils.toWei("100000000000000", "tether"),
           account,
           addresses.contract_Address
         )
@@ -178,9 +170,10 @@ const Pool = () => {
             toast.success(res2);
           })
           .catch((err) => {
-            console.log("no need approve BULC");
+            console.log("approve has error");
           });
       } else {
+        console.log("no need approve BULC");
         return;
       }
     });
@@ -199,7 +192,7 @@ const Pool = () => {
       .send({ from: account })
       .then((res) => {
         updateTokenBalances();
-        toast.success("add liqueidity was successfull !");
+        toast.success("add Liquidity was successfull !");
       })
       .catch((err) => {
         console.log(err);
@@ -214,7 +207,7 @@ const Pool = () => {
     setIsOpen(false);
   };
 
-  const removeLiquidity = async (input) => {
+  const removeLiquidity = async (input, account) => {
     console.log(input.current.value);
     let LPToken = input.current.value;
 
@@ -249,7 +242,7 @@ const Pool = () => {
       .send({ from: account })
       .then((res) => {
         closeModal();
-        toast.success("remove liqueidity was successfull !");
+        toast.success("remove Liquidity was successfull !");
       })
       .catch((err) => {
         console.log(err);
@@ -317,7 +310,8 @@ const Pool = () => {
             onCloseModal={closeModal}
             onRemoveLiquidity={removeLiquidity}
             coinsAddress={{ coin1: coin1.address, coin2: coin2.add }}
-            tokenBalance={LPTokenBalance}
+            contract={pairContarct}
+            address={addresses.pair_address}
           />
         </Modal>
       )}
@@ -326,7 +320,10 @@ const Pool = () => {
         <button onClick={openModal} className="main-button">
           Remove
         </button>
-        <button onClick={addLiqueidity} className="main-button supply">
+        <button
+          onClick={() => addLiquidity(authCtx.account)}
+          className="main-button supply"
+        >
           Supply
         </button>
       </div>

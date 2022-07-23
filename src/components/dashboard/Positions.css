@@ -1,0 +1,13 @@
+.positions-container .title {
+  font-size: x-large;
+  font-weight: 700;
+}
+
+.position-list {
+  height: 250px;
+  overflow-y: scroll;
+}
+
+.position-list::-webkit-scrollbar {
+  display: none;
+}

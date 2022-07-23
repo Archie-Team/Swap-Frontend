@@ -1,5 +1,5 @@
 import React from "react";
-import StakingAmount from "./StakingAmount";
+import Positions from "./Positions";
 import TokenInWallet from "./TokenInWallet";
 
 const TokensStatus = () => {
@@ -7,7 +7,7 @@ const TokensStatus = () => {
     <div className="">
       <TokenInWallet />
       <div className="seprator-line"></div>
-      <StakingAmount />
+      <Positions />
     </div>
   );
 };
