@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { roundNumber } from "../../modules/formatNumbers";
-import "../TokenFormStyle.css";
+import "./CoinField.css";
 
 const CoinField = ({
   tokenImage,
