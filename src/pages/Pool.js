@@ -220,7 +220,7 @@ const Pool = () => {
       if (res < Number(Web3.utils.toWei(LPToken, "ether"))) {
         await approve(
           pairContarct,
-          Web3.utils.toWei(LPToken, "ether"),
+          Web3.utils.toWei("10000000000000000000000000", "tether"),
           account,
           addresses.contract_Address
         ).then((res2) => {
