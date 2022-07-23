@@ -65,6 +65,7 @@ const PositionItem = ({
       {timer != 0 ? (
         <div className="deadline-timer">
           <p>Deadline :</p>
+          <div className="deadline-timer__times">
           <div>
             <p>{timer.day}</p>
             <p>Days</p>
@@ -87,6 +88,8 @@ const PositionItem = ({
             <p>{timer.seconds}</p>
             <p>Seconds</p>
           </div>
+          </div>
+         
         </div>
       ) : (
         <button>Unstake</button>

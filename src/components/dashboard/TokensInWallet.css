@@ -10,7 +10,7 @@
 }
 
 .tokens-inwallet_container > div {
-  width: 50%;
+  margin-right: 30px;
 }
 
 @media only screen and (max-width: 1000px) {
