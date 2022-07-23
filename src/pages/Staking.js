@@ -19,14 +19,12 @@ const Staking = () => {
   const [pairContract, setPairContract] = useState(null);
   const [BUSDContract, setBUSDContract] = useState(null);
   const [pairContarct, setPairContarct] = useState(null);
-  const authCtx = useContext(AuthContext)
-
+  const authCtx = useContext(AuthContext);
 
   const [selectedStake, setSelectedStake] = useState({
     value: null,
     stake: {},
   });
-
 
   useEffect(() => {
     initContract(pair_abi.abi, addresses.pair_address).then((res) => {
@@ -58,8 +56,7 @@ const Staking = () => {
       });
   };
 
-  const stakeHandler = async (amount, choice,account) => {
-   
+  const stakeHandler = async (amount, choice, account) => {
     await checkAllowence(pairContract, account, addresses.staking_address).then(
       async (res) => {
         // console.log("stakingAllownce", res);
@@ -120,6 +117,10 @@ const Staking = () => {
         contract={pairContarct}
         address={addresses.pair_address}
       />
+      <div className="LP-token-balance">
+        <p>Fee :</p>
+        <p> 1% BUSD</p>
+      </div>
       {stakes.map((stake) => (
         <Stake
           key={stake.monthNumber}
@@ -133,8 +134,13 @@ const Staking = () => {
 
       <div className="staking-actions">
         <button
-          onClick={() =>
-            stakeHandler(selectedStake.value, selectedStake.choice, authCtx.account) //, authCtx.account
+          onClick={
+            () =>
+              stakeHandler(
+                selectedStake.value,
+                selectedStake.choice,
+                authCtx.account
+              ) //, authCtx.account
           }
           className="main-button"
         >

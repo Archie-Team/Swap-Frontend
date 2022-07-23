@@ -12,26 +12,24 @@ import { AuthContextProvider } from "./context/auth-context";
 function App() {
   return (
     <AuthContextProvider>
-    <PageLayout className="App">
-      <Switch>
-        <Route path="/" exact>
-          <Home />
-        </Route>
-        <Route path="/swap" exact>
-          <Swap />
-        </Route>
-        <Route path="/staking" exact>
-          <Staking />
-        </Route>
-        <Route path="/pool" exact>
-          <Pool />
-        </Route>
-        <Route component={NotFound} />
-      </Switch>
-
-    </PageLayout>
+      <PageLayout className="App">
+        <Switch>
+          <Route path="/" exact>
+            <Home />
+          </Route>
+          <Route path="/swap" exact>
+            <Swap />
+          </Route>
+          <Route path="/staking" exact>
+            <Staking />
+          </Route>
+          <Route path="/pool" exact>
+            <Pool />
+          </Route>
+          <Route component={NotFound} />
+        </Switch>
+      </PageLayout>
     </AuthContextProvider>
-
   );
 }
 

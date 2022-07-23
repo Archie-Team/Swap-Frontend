@@ -38,7 +38,6 @@ export const approve = async (contarct, amount, account, address) => {
 };
 
 export const getTokenBalance = async (contract,account) => {
-  // console.log(account);
   return await contract.methods
     .balanceOf(account) //client(owner) address , contarct address
     .call()
