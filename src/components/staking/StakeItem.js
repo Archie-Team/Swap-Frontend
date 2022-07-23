@@ -9,13 +9,9 @@ const changeStakeItem =(e) => {
 }
 
 useEffect(() => {
-
   if(value !== 0){
     setValue(unselectedStakeAmount)
-
-  }
-  
-  
+  }  
 }, [unselectedStakeAmount])
 
 
@@ -26,7 +22,6 @@ useEffect(() => {
           <label className="stake-title">
             {stake.monthNumber} Months - {stake.APRAmountPersent}% APR
           </label>
-
           <input
             data-index="2"
             id="stake_field_1"
@@ -38,7 +33,6 @@ useEffect(() => {
           />
         </div>
       </div>
-
     </div>
   );
 };

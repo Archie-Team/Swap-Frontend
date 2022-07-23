@@ -5,7 +5,7 @@
 }
 
 .position-item:last-child {
-border: none;
+  border: none;
 }
 
 .position-item > div {
@@ -32,14 +32,18 @@ border: none;
 }
 
 .position-item .deadline-timer {
-  display: flex;
   margin-block: 20px;
-align-items: flex-end;
 }
 
-.position-item .deadline-timer > div {
+.position-item .deadline-timer .deadline-timer__times {
+  display: flex;
+  align-items: flex-end;
+}
+
+.position-item .deadline-timer .deadline-timer__times > div {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-inline: 15px;
 }

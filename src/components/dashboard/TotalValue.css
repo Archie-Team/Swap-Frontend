@@ -1,20 +1,24 @@
-.total-value__container{
-    padding: 30px;
-    width: 100%;
-    background-color: #415c4e;
-    border-radius: 15px;
-    margin-block: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.total-value__container {
+  padding: 30px;
+  width: 100%;
+  background-color: #415c4e;
+  border-radius: 15px;
+  margin-block: 20px;
+}
+
+.total-value__container > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 .total-value__container .amount {
-    color: var(--green);
-    font-size: xx-large;
-  }
-  
-  .total-value__container .title{
-    font-size: x-large;
-    font-weight: bold;
-  }
+  color: var(--green);
+  font-size: xx-large;
+}
+
+.total-value__container .title {
+  font-size: x-large;
+  font-weight: bold;
+}

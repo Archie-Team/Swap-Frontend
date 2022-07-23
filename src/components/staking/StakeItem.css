@@ -32,3 +32,12 @@
   justify-content: space-between;
   align-items: center;
 }
+
+@media only screen and (max-width: 768px) {
+  .stake_form-group {
+    flex-direction: column;
+  }
+  .stake_form-group input {
+    margin-top: 10px;
+  }
+}

@@ -50,20 +50,13 @@ const Home = () => {
   }, [stakeContract]);
 
 
-
   return (
-
     <div>
       <div className="top-container">
         <TokensStatus />
-        <PoolStatus
-          marketCap={"422063"}
-          totalFrozen={totalFrozen}
-          totalTokenSupply={"5812654"}
-        />
       </div>
       <div className="bottom-container">
-        <TotalValue totalValue={totalValueLocked} />
+        <TotalValue totalValue={totalValueLocked}  totalFrozen={totalFrozen} />
       </div>
     </div>
   );
