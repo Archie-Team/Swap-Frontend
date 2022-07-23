@@ -38,6 +38,17 @@ const Swap = () => {
     contract: null,
   });
 
+  useEffect(() => {
+    initContract(ERC20_abi.abi, coin1.address).then((res) => {
+      setToken1Contract(res);
+    });
+
+    initContract(ERC20_abi.abi, coin2.address).then((res) => {
+      setToken2Contract(res);
+    });
+  }, []);
+
+
   const [coin1Amount, setCoin1Amount] = useState("");
   const [coin2Amount, setCoin2Amount] = useState("");
   const [calculatedCoin1Amount, setCalculatedCoin1Amount] = useState("");
@@ -56,6 +67,7 @@ const Swap = () => {
         return { ...prev, balance: res };
       });
     });
+  
   };
 
   useEffect(() => {
@@ -111,10 +123,10 @@ const Swap = () => {
 
 
   useEffect(() => {
-    if (token1Contract && token2Contract && authCtx.account) {
+      if (token1Contract && token2Contract && authCtx.account) {
       updateTokenBalances();
     }
-  }, [authCtx.account]);
+  }, [token1Contract,authCtx.account]);
 
 
   const swap = async (
@@ -232,16 +244,6 @@ const Swap = () => {
     setCalculatedCoin1Amount(0);
     setCalculatedCoin2Amount(0);
   };
-
-  useEffect(() => {
-    initContract(ERC20_abi.abi, coin1.address).then((res) => {
-      setToken1Contract(res);
-    });
-
-    initContract(ERC20_abi.abi, coin2.address).then((res) => {
-      setToken2Contract(res);
-    });
-  }, [coin1, coin2]);
 
   return (
     <MainCard className="swap-card">
