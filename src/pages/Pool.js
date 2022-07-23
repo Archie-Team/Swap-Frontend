@@ -207,9 +207,10 @@ const Pool = () => {
     setIsOpen(false);
   };
 
-  const removeLiquidity = async (input, account) => {
-    console.log(input.current.value);
+  const removeLiquidity = async (input) => {
+    // console.log(input.current.value);
     let LPToken = input.current.value;
+    let account = authCtx.account;
 
     await checkAllowence(
       pairContarct,
@@ -230,6 +231,7 @@ const Pool = () => {
       }
     });
 
+    console.log('res ');
     await swapContract.methods
       .removeLiquidity(
         coin1.address,
