@@ -137,19 +137,19 @@ const Pool = () => {
     await checkAllowence(
       BUSDContarct,
       account,
-      addresses.contract_Address
+      addresses.swap_address
     ).then(async (res) => {
       if (res < Number(Web3.utils.toWei(coin2.amount, "ether"))) {
         await approve(
           BUSDContarct,
           Web3.utils.toWei("100000000000000", "tether"),
           account,
-          addresses.contract_Address
+          addresses.swap_address
         ).then((res2) => {
           toast.success(res2);
         });
       } else {
-        console.log("no need approve BUSD");
+        console.log("No Need to Approve BUSD");
         return;
       }
     });
@@ -157,14 +157,14 @@ const Pool = () => {
     await checkAllowence(
       BULCContarct,
       account,
-      addresses.contract_Address
+      addresses.swap_address
     ).then(async (res) => {
       if (res < Number(Web3.utils.toWei(coin1.amount, "ether"))) {
         await approve(
           BULCContarct,
           Web3.utils.toWei("100000000000000", "tether"),
           account,
-          addresses.contract_Address
+          addresses.swap_address
         )
           .then((res2) => {
             toast.success(res2);
@@ -208,21 +208,20 @@ const Pool = () => {
   };
 
   const removeLiquidity = async (input) => {
-    // console.log(input.current.value);
     let LPToken = input.current.value;
     let account = authCtx.account;
 
     await checkAllowence(
       pairContarct,
       account,
-      addresses.contract_Address
+      addresses.swap_address
     ).then(async (res) => {
       if (res < Number(Web3.utils.toWei(LPToken, "ether"))) {
         await approve(
           pairContarct,
           Web3.utils.toWei("10000000000000000000000000", "tether"),
           account,
-          addresses.contract_Address
+          addresses.swap_address
         ).then((res2) => {
           toast.success(res2);
         });
@@ -231,7 +230,6 @@ const Pool = () => {
       }
     });
 
-    console.log('res ');
     await swapContract.methods
       .removeLiquidity(
         coin1.address,
@@ -252,7 +250,7 @@ const Pool = () => {
   };
 
   useEffect(() => {
-    initContract(swap_abi.abi, addresses.contract_Address).then((res) => {
+    initContract(swap_abi.abi, addresses.swap_address).then((res) => {
       setSwapContract(res);
     });
 

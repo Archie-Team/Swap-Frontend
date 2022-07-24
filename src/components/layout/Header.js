@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import BULC from "../../assets/images/BULKLogo.svg";
+import BULC from "../../assets/images/Logo.png";
 
 import { navigationItems } from "../../modules/varibales";
 import { NavLink } from "react-router-dom";

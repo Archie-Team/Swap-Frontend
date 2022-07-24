@@ -15,7 +15,7 @@
 
 .total-value__container .amount {
   color: var(--green);
-  font-size: xx-large;
+  font-size: 2rem;
 }
 
 .total-value__container .title {

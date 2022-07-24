@@ -47,3 +47,31 @@
   align-items: center;
   margin-inline: 15px;
 }
+
+button.unstake-btn {
+  background-color: var(--green);
+  margin-inline: auto;
+  display: flex;
+  width: 200px;
+  justify-content: center;
+}
+
+button.unstake-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media only screen and (max-width: 576px) {
+  .position-item .deadline-timer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .position-item .deadline-timer > p {
+    margin-bottom: 10px;
+  }
+
+  .position-item .deadline-timer .deadline-timer__times > div {
+    margin-inline: 0 15px;
+  }
+}

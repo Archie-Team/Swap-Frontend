@@ -1,4 +1,4 @@
-import BULC from '../assets/images/BULKLogo.svg'
+import BULC from '../assets/images/Logo.png'
 
 export const coins = {
   BULC :{
