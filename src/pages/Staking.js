@@ -51,7 +51,6 @@ const Staking = () => {
       .calculateValue(Web3.utils.toWei(amount.toString(), "ether"))
       .call()
       .then((res) => {
-        console.log("BUSDValue", res);
         return res;
       });
   };
@@ -59,7 +58,6 @@ const Staking = () => {
   const stakeHandler = async (amount, choice, account) => {
     await checkAllowence(pairContract, account, addresses.staking_address).then(
       async (res) => {
-        // console.log("stakingAllownce", res);
         if (res < Number(Web3.utils.toWei(amount, "ether"))) {
           await approve(
             pairContract,
@@ -70,7 +68,7 @@ const Staking = () => {
             toast.success(res);
           });
         } else {
-          console.log("no need to Approve");
+          console.log("No Need to Approve Stake");
           return;
         }
       }
@@ -81,7 +79,6 @@ const Staking = () => {
     //approve BUSD amount
     await checkAllowence(BUSDContract, account, addresses.staking_address).then(
       async (res) => {
-        // console.log("BUSDAllowence", res);
         if (res < Number(BUSDValue)) {
           await approve(
             BUSDContract,
@@ -92,7 +89,7 @@ const Staking = () => {
             toast.success(res);
           });
         } else {
-          console.log("no need to Approve");
+          console.log("No Need to Approve");
           return;
         }
       }

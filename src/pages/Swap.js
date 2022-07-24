@@ -71,7 +71,7 @@ const Swap = () => {
   };
 
   useEffect(() => {
-    initContract(swapAbi.abi, addresses.contract_Address).then((res) => {
+    initContract(swapAbi.abi, addresses.swap_address).then((res) => {
       setSwapContract(res);
     });
   }, []);
@@ -159,14 +159,14 @@ const Swap = () => {
     await checkAllowence(
       token1Contract,
       authCtx.account,
-      addresses.contract_Address
+      addresses.swap_address
     ).then(async (res) => {
       if (res < Web3.utils.toWei(coin1Amount, "ether")) {
         await approve(
           token1Contract,
           Web3.utils.toWei(coin1Amount, "tether"),
           authCtx.account,
-          addresses.contract_Address
+          addresses.swap_address
         );
       } else {
         return;
@@ -196,14 +196,14 @@ const Swap = () => {
     await checkAllowence(
       token1Contract,
       authCtx.account,
-      addresses.contract_Address
+      addresses.swap_address
     ).then(async (res) => {
       if (res < Web3.utils.toWei(coin2Amount, "ether")) {
         await approve(
           token1Contract,
           Web3.utils.toWei(coin2Amount, "tether"),
           authCtx.account,
-          addresses.contract_Address
+          addresses.swap_address
         );
       } else {
         return;
