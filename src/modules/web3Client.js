@@ -42,7 +42,7 @@ export const getTokenBalance = async (contract,account) => {
     .balanceOf(account) //client(owner) address , contarct address
     .call()
     .then((res) => {
-      return Promise.resolve(Web3.utils.fromWei(res, "ether"));
+      return Promise.resolve(res);
     })
     .catch((err) => {
       console.log(err);

@@ -27,6 +27,7 @@ const StakingAmount = () => {
       .positions(account)
       .call()
       .then((res) => {
+        console.log(res);
         return Promise.resolve(res);
       });
   };

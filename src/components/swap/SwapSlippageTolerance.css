@@ -1,0 +1,40 @@
+.slippage-tolerance {
+  display: flex;
+  align-items: center;
+}
+
+.slippage-tolerance p:first-child {
+  color: #22a24d;
+}
+
+.slippage-tolerance > .slippage-tolerance__amount{
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.slippage-tolerance > .slippage-tolerance__amount p{
+  color: white;
+}
+
+.slippage-tolerance .slippage-tolerance__amount button{
+  padding: 5px;
+  background-color: inherit;
+  font-size: x-large;
+  color: #22a24d;
+}
+/* 
+.slippage-tolerance input {
+  padding: 8px;
+  width: 100%;
+  border-radius: 10px;
+  min-width: 360px;
+  padding: 20px 0;
+  border-radius: 10px;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  font-size: larger;
+  color: white;
+  background-color: var(--main-dark-green);
+} */

@@ -7,6 +7,7 @@ import { getTokenBalance, initContract } from "../../modules/web3Client";
 import ERC20_abi from "../../assets/files/ERC20.json";
 import { roundNumber } from "../../modules/formatNumbers";
 import AuthContext from "../../context/auth-context";
+import { fromWei } from "../../modules/convertors";
 
 const TokenInWallet = () => {
   const [BUSDAmount, setBUSDAmount] = useState(0);
@@ -28,11 +29,11 @@ const TokenInWallet = () => {
   useEffect(() => {
     if (BULCContract && BUSDContract && authCtx.account) {
       getTokenBalance(BUSDContract, authCtx.account).then((res) => {
-        setBUSDAmount(roundNumber(res, 5));
+        setBUSDAmount(roundNumber(fromWei(res), 5));
       });
 
       getTokenBalance(BULCContract, authCtx.account).then((res) => {
-        setBULCAmount(roundNumber(res, 5));
+        setBULCAmount(roundNumber(fromWei(res), 5));
       });
     }
   }, [BUSDContract, BULCContract, authCtx.account]);

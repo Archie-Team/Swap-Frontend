@@ -1,0 +1,28 @@
+.slippage-tolerance__form .form-group {
+    display: flex;
+    margin-block: 10px 5px;
+    align-items: center;
+}
+
+.slippage-tolerance__form input{
+    border-radius: 10px;
+    min-width: 50px;
+    padding: 5px 0;
+    border-radius: 10px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    font-size: larger;
+    color: white;
+    border-radius: 30px;
+    margin-right: 5px;
+    background-color: var(--main-dark-green);
+}
+
+.slippage-tolerance__form button{
+background-color: var(--green);
+border-radius: 20px;
+height: 100%;
+padding: 5px 20px;
+margin-left: 20px;
+}

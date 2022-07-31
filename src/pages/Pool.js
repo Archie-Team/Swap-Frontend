@@ -20,6 +20,7 @@ import Modal from "react-modal";
 import RemoveLiquidity from "../components/pool/RemoveLiquidity";
 import { BiLinkExternal } from "react-icons/bi";
 import AuthContext from "../context/auth-context";
+import { Link } from "react-router-dom";
 
 const Pool = () => {
   const [swapContract, setSwapContract] = useState("");
@@ -134,49 +135,45 @@ const Pool = () => {
   };
 
   const addLiquidity = async (account) => {
-    await checkAllowence(
-      BUSDContarct,
-      account,
-      addresses.swap_address
-    ).then(async (res) => {
-      if (res < Number(Web3.utils.toWei(coin2.amount, "ether"))) {
-        await approve(
-          BUSDContarct,
-          Web3.utils.toWei("100000000000000", "tether"),
-          account,
-          addresses.swap_address
-        ).then((res2) => {
-          toast.success(res2);
-        });
-      } else {
-        console.log("No Need to Approve BUSD");
-        return;
-      }
-    });
-
-    await checkAllowence(
-      BULCContarct,
-      account,
-      addresses.swap_address
-    ).then(async (res) => {
-      if (res < Number(Web3.utils.toWei(coin1.amount, "ether"))) {
-        await approve(
-          BULCContarct,
-          Web3.utils.toWei("100000000000000", "tether"),
-          account,
-          addresses.swap_address
-        )
-          .then((res2) => {
+    await checkAllowence(BUSDContarct, account, addresses.swap_address).then(
+      async (res) => {
+        if (res < Number(Web3.utils.toWei(coin2.amount, "ether"))) {
+          await approve(
+            BUSDContarct,
+            Web3.utils.toWei("100000000000000", "tether"),
+            account,
+            addresses.swap_address
+          ).then((res2) => {
             toast.success(res2);
-          })
-          .catch((err) => {
-            console.log("approve has error");
           });
-      } else {
-        console.log("no need approve BULC");
-        return;
+        } else {
+          console.log("No Need to Approve BUSD");
+          return;
+        }
       }
-    });
+    );
+
+    await checkAllowence(BULCContarct, account, addresses.swap_address).then(
+      async (res) => {
+        if (res < Number(Web3.utils.toWei(coin1.amount, "ether"))) {
+          await approve(
+            BULCContarct,
+            Web3.utils.toWei("100000000000000", "tether"),
+            account,
+            addresses.swap_address
+          )
+            .then((res2) => {
+              toast.success(res2);
+            })
+            .catch((err) => {
+              console.log("approve has error");
+            });
+        } else {
+          console.log("no need approve BULC");
+          return;
+        }
+      }
+    );
 
     await swapContract.methods
       .addLiquidity(
@@ -211,24 +208,22 @@ const Pool = () => {
     let LPToken = input.current.value;
     let account = authCtx.account;
 
-    await checkAllowence(
-      pairContarct,
-      account,
-      addresses.swap_address
-    ).then(async (res) => {
-      if (res < Number(Web3.utils.toWei(LPToken, "ether"))) {
-        await approve(
-          pairContarct,
-          Web3.utils.toWei("10000000000000000000000000", "tether"),
-          account,
-          addresses.swap_address
-        ).then((res2) => {
-          toast.success(res2);
-        });
-      } else {
-        return;
+    await checkAllowence(pairContarct, account, addresses.swap_address).then(
+      async (res) => {
+        if (res < Number(Web3.utils.toWei(LPToken, "ether"))) {
+          await approve(
+            pairContarct,
+            Web3.utils.toWei("10000000000000000000000000", "tether"),
+            account,
+            addresses.swap_address
+          ).then((res2) => {
+            toast.success(res2);
+          });
+        } else {
+          return;
+        }
       }
-    });
+    );
 
     await swapContract.methods
       .removeLiquidity(
@@ -271,8 +266,17 @@ const Pool = () => {
     <MainCard className="pool-card">
       <div className="pool__containers">
         <div className="link-to-address">
-          <p>View Contract</p>
+          <Link
+          className="link"
+            to={{
+              pathname: 'https://ropsten.etherscan.io/address/'+ addresses.pair_address
+            }}
+            target="_blank"
+          >
+            View Contract
           <BiLinkExternal className="icon" />
+
+          </Link>
         </div>
         <Toaster position="top-center" reverseOrder={false} />
         <CoinField
