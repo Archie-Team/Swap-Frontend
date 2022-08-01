@@ -3,24 +3,25 @@
 }
 
 .pool__containers .link-to-address {
-  display: flex;
   margin-block: 10px 15px;
-  align-items: center;
   font-size: large;
   color: var(--green);
   cursor: pointer;
 }
-.pool__containers .link-to-address:hover p {
-  color: var(--green);
-}
 
-.pool__containers .link-to-address p {
-  margin-right: 8px;
-  color: white;
+.pool__containers .link-to-address .link {
+  color: #fff;
+  font-style: none;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
 }
 
 .pool__containers .link-to-address .icon {
   font-size: x-large;
+  color: var(--green);
+  margin-left: 5px;
+
 }
 
 .pool-icon {

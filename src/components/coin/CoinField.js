@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { fromWei } from "../../modules/convertors";
 import { roundNumber } from "../../modules/formatNumbers";
 import "./CoinField.css";
 
@@ -7,17 +8,18 @@ const CoinField = ({
   tokenName,
   onChangeInputHandler,
   calculatedAmount,
-  coinBalance
+  coinBalance,
 }) => {
   const [coinValue, setCoinValue] = useState("");
-
   const changeInputHandler = (e) => {
     setCoinValue(e.target.value);
     onChangeInputHandler({ name: e.target.name, value: e.target.value });
   };
 
   useEffect(() => {
-    setCoinValue(roundNumber(calculatedAmount,5));
+    calculatedAmount === "0"
+      ? setCoinValue("")
+      : setCoinValue(roundNumber(calculatedAmount, 5));
   }, [calculatedAmount]);
 
   return (
@@ -40,7 +42,7 @@ const CoinField = ({
       <div className="balance">
         <p>Balance :</p>
         <p className="balance-amount">
-          {roundNumber(coinBalance, 5) } {tokenName}
+          {roundNumber(fromWei(coinBalance), 5)} {tokenName}
         </p>
       </div>
     </div>

@@ -5,10 +5,9 @@ import React, { useEffect, useState } from "react";
 import stakeAbi from "../assets/files/Staking.json";
 import { addresses } from "../modules/addresses";
 import { initContract } from "../modules/web3Client";
-import Web3 from "web3";
-import MainCard from '../components/layout/MainCard'
+import MainCard from "../components/layout/MainCard";
+import { fromWei } from "../modules/convertors";
 const Home = () => {
-
   const [stakeContract, setStakeContract] = useState(null);
   const [totalFrozen, setTotalFrozen] = useState(0);
   const [totalValueLocked, setTotalValueLocked] = useState(0);
@@ -19,23 +18,22 @@ const Home = () => {
     });
   }, []);
 
-
   useEffect(() => {
     const getTotalFrozen = async () => {
       await stakeContract.methods
         .StakedRewardFreezed()
         .call()
         .then((res) => {
-          setTotalFrozen(Web3.utils.fromWei(res, "ether"));
+          setTotalFrozen(fromWei(res));
         });
     };
 
     const getTotalValueLocked = async () => {
       await stakeContract.methods
-        .totalValueLuckBUSD()
+        .totalValueLockBUSD()
         .call()
         .then((res) => {
-          setTotalValueLocked(Web3.utils.fromWei(res, "ether"));
+          setTotalValueLocked(fromWei(res));
         });
     };
 
@@ -45,14 +43,13 @@ const Home = () => {
     }
   }, [stakeContract]);
 
-
   return (
     <MainCard>
       <div className="top-container">
         <TokensStatus />
       </div>
       <div className="bottom-container">
-        <TotalValue totalValue={totalValueLocked}  totalFrozen={totalFrozen} />
+        <TotalValue totalValue={totalValueLocked} totalFrozen={totalFrozen} />
       </div>
     </MainCard>
   );

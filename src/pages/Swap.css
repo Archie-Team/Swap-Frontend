@@ -31,6 +31,11 @@ button.swap-icon:hover {
   width: 100%;
 }
 
+.swap-actions button:disabled{
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 .swap-actions button:hover {
   opacity: 0.8;
 }
@@ -38,5 +43,4 @@ button.swap-icon:hover {
 .token-swap__containers{
   display: flex;
   flex-direction: column;
-  /*  */
 }

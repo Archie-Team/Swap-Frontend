@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../context/auth-context";
+import { fromWei } from "../modules/convertors";
 import { roundNumber } from "../modules/formatNumbers";
 import { getTokenBalance } from "../modules/web3Client";
 
@@ -10,7 +11,7 @@ const LPToeknBalance = ({contract}) => {
   useEffect(() => {
     if (contract && authCtx.account) {
       getTokenBalance(contract,authCtx.account ).then((res) => {
-        setLPTokenBalance(roundNumber(res, 5));
+        setLPTokenBalance(roundNumber(fromWei(res), 5));
       });
     }
   }, [contract,authCtx.account]);

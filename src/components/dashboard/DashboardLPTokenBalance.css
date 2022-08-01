@@ -1,0 +1,12 @@
+.lp-token_balance{
+    display: flex;
+    align-items: center;
+}
+
+.lp-token_balance p:first-child {
+  font-size: x-large;
+  margin-left: 10px;
+  font-weight: bold;
+  margin-right: 10px;
+
+}

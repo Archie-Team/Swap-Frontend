@@ -1,5 +1,5 @@
 import React from "react";
-import './Token.css'
+import "./Token.css";
 
 const Token = ({ tokenAmount, tokenUrl }) => {
   return (

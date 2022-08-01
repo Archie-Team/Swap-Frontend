@@ -27,6 +27,7 @@ const StakingAmount = () => {
       .positions(account)
       .call()
       .then((res) => {
+        // console.log(res);
         return Promise.resolve(res);
       });
   };
@@ -59,7 +60,8 @@ const StakingAmount = () => {
       .call()
       .then((res) => {
         return res;
-      });
+      })
+      .catch("get position has error");
   };
 
   const shortAccountAddress = (account) => {
@@ -108,7 +110,7 @@ const StakingAmount = () => {
           <PositionItem
             onUnstakePosition={() => unstakePosition(index)}
             lpToken={item.LPTokenBalnce}
-            deadline={item.remainedTime}
+            deadline={item.deadLine}
             profit={item.reward}
             choice={stakes[item.choise - 1]}
             key={item.index}
