@@ -24,7 +24,7 @@ const PositionItem = ({
 
     if (timeleft > 0) {
       days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
-      hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)) ;
       minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
       seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
     } else {
@@ -49,8 +49,7 @@ const PositionItem = ({
         setTimer(time);
       }, 1000);
     };
-
-    countdownTimer(deadline * 1000);
+    countdownTimer(((Number(deadline) +30) * 1000));
   }, []);
 
   const unstakePositionHandler = () => {

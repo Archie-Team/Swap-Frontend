@@ -30,7 +30,7 @@ const Home = () => {
 
     const getTotalValueLocked = async () => {
       await stakeContract.methods
-        .totalValueLuckBUSD()
+        .totalValueLockBUSD()
         .call()
         .then((res) => {
           setTotalValueLocked(fromWei(res));
