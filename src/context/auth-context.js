@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const AuthContext = React.createContext({
-  account: '',
+  account: "",
+  networkId: 0,
   onLogout: () => {},
-  onLogin: () => {}
+  onLogin: () => {},
 });
 
 export const AuthContextProvider = (props) => {
-  const [account, setAccount] = useState('');
+  const [account, setAccount] = useState("");
+  const [networkId, setNetworkId] = useState(0);
+
 
   const logoutHandler = () => {
     setAccount(null);
@@ -17,12 +20,18 @@ export const AuthContextProvider = (props) => {
     setAccount(account);
   };
 
+  const setNetworkIdHandler = (id) => {
+    setNetworkId(id);
+  };
+
   return (
     <AuthContext.Provider
       value={{
         account: account,
+        networkId : networkId,
         onLogout: logoutHandler,
         onLogin: loginHandler,
+        onSetNetworkId: setNetworkIdHandler,
       }}
     >
       {props.children}

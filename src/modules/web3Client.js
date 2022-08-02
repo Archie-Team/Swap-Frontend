@@ -11,6 +11,18 @@ export const initContract = async (abi, address) => {
   return contract;
 };
 
+
+export const getCurrentChainId = async () => {
+  const currentChainId = await window.ethereum.request({
+    method: "eth_chainId",
+  });
+  return currentChainId;
+};
+
+
+
+
+
 export const checkAllowence = async (contract, account, contarctAddress) => {
   return await contract.methods
     .allowance(account, contarctAddress) //client(owner) address , contarct address
