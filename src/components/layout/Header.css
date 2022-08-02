@@ -52,8 +52,7 @@
   border-radius: 10px;
 }
 
-.navbar__connect-wallet
-{
+.navbar__connect-wallet {
   margin-inline: auto 10px;
 }
 ul.nav-menu {
@@ -68,6 +67,10 @@ ul.nav-menu {
 
 li.nav-item {
   margin-left: 5rem;
+}
+
+.nav-item:last-child {
+  margin-inline: auto 20px;
 }
 
 .nav-link {
@@ -99,15 +102,16 @@ li.nav-item {
   color: var(--green);
 }
 
-
 @media only screen and (max-width: 768px) {
-  .navbar{
-    padding-inline: 2% ;
+  .navbar {
+    padding-inline: 2%;
   }
   .nav-menu {
     position: fixed;
     left: -100%;
     top: 5rem;
+    display: flex;
+    align-items: center;
     flex-direction: column;
     background-color: var(--navbar-green);
     width: 100%;
@@ -122,13 +126,17 @@ li.nav-item {
     left: 0;
   }
 
-  .nav-item {
+  li.nav-item {
     margin: 1rem 0;
+    display: flex;
+  }
+
+  li.nav-item:last-child {
+    margin-inline: 0;
   }
 
   .hamburger {
     display: block;
     cursor: pointer;
   }
-
 }
