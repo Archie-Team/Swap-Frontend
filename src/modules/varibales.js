@@ -1,20 +1,28 @@
 
 export const navigationItems = [
-    {
-        link: "/",
-        name: "Dashboard",
-      },
+    
       {
-        link: "/swap",
-        name: "Swap",
+        link: "/trade",
+        name: "Trade",
       },
-
       {
         link: "/pool",
         name: "Pool",
       },
       {
-        link: "/staking",
-        name: "Staking",
+        link: "/farm",
+        name: "Farm",
+      }, 
+      {
+        link: "/stake",
+        name: "Stake",
+      }, 
+      {
+        link: "/nft",
+        name: "NFT",
       },  
+      {
+        link: "/",
+        name: "Dashboard",
+      },
 ]

@@ -20,10 +20,10 @@ function App() {
           <Route path="/" exact>
             <Home />
           </Route>
-          <Route path="/swap" exact>
+          <Route path="/trade" exact>
             <Swap />
           </Route>
-          <Route path="/staking" exact>
+          <Route path="/farm" exact>
             <Staking />
           </Route>
           <Route path="/pool" exact>
