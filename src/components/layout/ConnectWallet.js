@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import "./ConnectWallet.css";
 import web3 from "web3";
+import { getCurrentChainId } from "../../modules/web3Client";
 import { IoWalletOutline } from "react-icons/io5";
 import AuthContext from "../../context/auth-context";
 
@@ -13,6 +14,15 @@ const ConnectWallet = () => {
     return "0x..." + authCtx.account.substr(authCtx.account.length - 4);
   };
 
+  // const switchNetwork = async () => {
+  //   await window.ethereum.request({
+  //     method: "wallet_switchEthereumChain",
+  //     params: [{ chainId: networksId.testNetworkId }],
+  //   });
+  //   // refresh
+  //   window.location.reload();
+  // };
+
   async function connectToWallet() {
     try {
       await ethereum
@@ -22,31 +32,39 @@ const ConnectWallet = () => {
         .then((res) => {
           let account = web3.utils.toChecksumAddress(res[0]);
           authCtx.onLogin(account);
+          getCurrentChainId().then((res) => {
+            authCtx.onSetNetworkId(res);
+          });
         });
     } catch (err) {
       console.log(err);
     }
   }
 
-  // async function disconnectFromWallet() {
-  //   authCtx.onLogout()
-  // }
-
   useEffect(() => {
     const connectWalletOnPageLoad = async () => {
       if (!ethereum) {
         toast.error("Please install Metamask!");
       }
-
+   
       // check if user disconnect or change account
       ethereum.on("accountsChanged", (accounts) => {
         accounts[0] ? authCtx.onLogin(accounts[0]) : authCtx.onLogout();
+      });
+
+      ethereum.on("chainChanged", (chainId) => {
+        authCtx.onSetNetworkId(chainId);
       });
 
       //check if wallet is connected
       await ethereum.request({ method: "eth_accounts" }).then((res) => {
         authCtx.onLogin(res[0]);
       });
+
+      await getCurrentChainId().then((res) => {
+        authCtx.onSetNetworkId(res);
+      });
+      
     };
     connectWalletOnPageLoad();
   }, []);

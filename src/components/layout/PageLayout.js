@@ -1,15 +1,23 @@
 import Header from "./Header";
-import { Fragment } from 'react';
-
+import { Fragment,useContext } from "react";
 import "./PageLayout.css";
+import { networksId } from "../../modules/networks";
+import NetworkMessage from "./NetworkMessage";
+import AuthContext from "../../context/auth-context";
 
 const PageLayout = (props) => {
-    return (
-        <Fragment>
-          <Header />
-          <main className='main'>{props.children}</main>
-        </Fragment>
-      );
+   const authCtx = useContext(AuthContext)
+
+  return (
+    <Fragment>
+      <Header />
+      {authCtx.networkId === networksId.testNetworkId ? (
+        <main className="main">{props.children}</main>
+      ) : (
+        <NetworkMessage />
+      )}{" "}
+    </Fragment>
+  );
 };
 
 export default PageLayout;
