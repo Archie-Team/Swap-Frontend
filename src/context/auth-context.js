@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { networksId } from "../modules/networks";
 
 const AuthContext = React.createContext({
   account: "",
@@ -24,6 +25,10 @@ export const AuthContextProvider = (props) => {
     setNetworkId(id);
   };
 
+  const checkNetworkValidation = () => {
+    return networkId === networksId.testNetworkId ? true : false
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -32,6 +37,7 @@ export const AuthContextProvider = (props) => {
         onLogout: logoutHandler,
         onLogin: loginHandler,
         onSetNetworkId: setNetworkIdHandler,
+        onCheckNetworkValidation : checkNetworkValidation
       }}
     >
       {props.children}

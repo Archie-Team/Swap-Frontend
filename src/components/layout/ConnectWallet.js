@@ -47,7 +47,7 @@ const ConnectWallet = () => {
   }
 
   useEffect(() => {
-      switchNetwork(networksId.testNetworkId);
+    switchNetwork(networksId.testNetworkId);
   }, [authCtx.networkId]);
 
   useEffect(() => {
@@ -59,20 +59,17 @@ const ConnectWallet = () => {
       // check if user disconnect or change account
       ethereum.on("accountsChanged", (accounts) => {
         accounts[0] ? authCtx.onLogin(accounts[0]) : authCtx.onLogout();
-        switchNetwork(networksId.testNetworkId)
+        switchNetwork(networksId.testNetworkId);
       });
 
       ethereum.on("chainChanged", (chainId) => {
         authCtx.onSetNetworkId(chainId);
+        window.location.reload();
       });
 
       //check if wallet is connected
       await ethereum.request({ method: "eth_accounts" }).then((res) => {
         authCtx.onLogin(res[0]);
-      });
-
-      await getCurrentChainId().then((res) => {
-        authCtx.onSetNetworkId(res);
       });
     };
     connectWalletOnPageLoad();
