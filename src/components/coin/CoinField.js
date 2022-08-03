@@ -22,6 +22,8 @@ const CoinField = ({
       : setCoinValue(roundNumber(calculatedAmount, 5));
   }, [calculatedAmount]);
 
+  const computedBalance = coinBalance ? roundNumber(fromWei(coinBalance), 5) : 0
+
   return (
     <div className="token-container">
       <div className="amount">
@@ -42,7 +44,7 @@ const CoinField = ({
       <div className="balance">
         <p>Balance :</p>
         <p className="balance-amount">
-          {roundNumber(fromWei(coinBalance), 5)} {tokenName}
+          {computedBalance} {tokenName}
         </p>
       </div>
     </div>

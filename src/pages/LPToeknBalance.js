@@ -4,18 +4,17 @@ import { fromWei } from "../modules/convertors";
 import { roundNumber } from "../modules/formatNumbers";
 import { getTokenBalance } from "../modules/web3Client";
 
-const LPToeknBalance = ({contract}) => {
+const LPToeknBalance = ({ contract }) => {
   const [LPTokenBalance, setLPTokenBalance] = useState(0);
-  const authCtx = useContext(AuthContext)
+  const authCtx = useContext(AuthContext);
 
   useEffect(() => {
-    if (contract && authCtx.account) {
-      getTokenBalance(contract,authCtx.account ).then((res) => {
+    if (contract && authCtx.account && authCtx.onCheckNetworkValidation()) {
+      getTokenBalance(contract, authCtx.account).then((res) => {
         setLPTokenBalance(roundNumber(fromWei(res), 5));
       });
     }
-  }, [contract,authCtx.account]);
-
+  }, [contract, authCtx.account]);
 
   return (
     <div className="LP-token-balance">
