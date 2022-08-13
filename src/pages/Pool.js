@@ -6,7 +6,6 @@ import {
   approve,
   checkAllowence,
   getTokenBalance,
-  initContract,
 } from "../modules/web3Client";
 import { addresses } from "../modules/addresses";
 import ERC20_abi from "../assets/files/ERC20.json";
@@ -21,14 +20,20 @@ import RemoveLiquidity from "../components/pool/RemoveLiquidity";
 import { BiLinkExternal } from "react-icons/bi";
 import AuthContext from "../context/auth-context";
 import { Link } from "react-router-dom";
+import useContract from "../hooks/use-contract";
 
 const Pool = () => {
-  const [swapContract, setSwapContract] = useState("");
-  const [BULCContarct, setBULCContarct] = useState(null);
-  const [BUSDContarct, setBUSDContarct] = useState(null);
-  const [pairContarct, setPairContarct] = useState(null);
   const [modalIsOpen, setIsOpen] = useState(false);
   const authCtx = useContext(AuthContext);
+
+  const { contract: swapContract, getContract: getSwapContract } =
+    useContract();
+  const { contract: BULCContract, getContract: getBULCContract } =
+    useContract();
+  const { contract: BUSDContract, getContract: getBUSDContract } =
+    useContract();
+  const { contract: pairContract, getContract: getpairContract } =
+    useContract();
 
   const [coin1, setCoin1] = useState({
     ...coins.BULC,
@@ -65,13 +70,13 @@ const Pool = () => {
   };
 
   const updateTokenBalances = () => {
-    getTokenBalance(BULCContarct, authCtx.account).then((res) => {
+    getTokenBalance(BULCContract, authCtx.account).then((res) => {
       setCoin1((prev) => {
         return { ...prev, balance: res };
       });
     });
 
-    getTokenBalance(BUSDContarct, authCtx.account).then((res) => {
+    getTokenBalance(BUSDContract, authCtx.account).then((res) => {
       setCoin2((prev) => {
         return { ...prev, balance: res };
       });
@@ -79,10 +84,10 @@ const Pool = () => {
   };
 
   useEffect(() => {
-    if (BULCContarct && BUSDContarct && authCtx.account) {
+    if (BULCContract && BUSDContract && authCtx.account) {
       updateTokenBalances();
     }
-  }, [BULCContarct, BUSDContarct, authCtx.account]);
+  }, [BULCContract, BUSDContract, authCtx.account]);
 
   const changeBUSDAmount = async (data) => {
     if (!data.value || data.value <= 0) {
@@ -106,7 +111,7 @@ const Pool = () => {
   };
 
   const getBalances = async () => {
-    return await pairContarct.methods
+    return await pairContract.methods
       .getReserves()
       .call()
       .then((res) => {
@@ -135,11 +140,11 @@ const Pool = () => {
   };
 
   const addLiquidity = async (account) => {
-    await checkAllowence(BUSDContarct, account, addresses.swap_address).then(
+    await checkAllowence(BUSDContract, account, addresses.swap_address).then(
       async (res) => {
         if (res < Number(Web3.utils.toWei(coin2.amount, "ether"))) {
           await approve(
-            BUSDContarct,
+            BUSDContract,
             Web3.utils.toWei("100000000000000", "tether"),
             account,
             addresses.swap_address
@@ -153,11 +158,11 @@ const Pool = () => {
       }
     );
 
-    await checkAllowence(BULCContarct, account, addresses.swap_address).then(
+    await checkAllowence(BULCContract, account, addresses.swap_address).then(
       async (res) => {
         if (res < Number(Web3.utils.toWei(coin1.amount, "ether"))) {
           await approve(
-            BULCContarct,
+            BULCContract,
             Web3.utils.toWei("100000000000000", "tether"),
             account,
             addresses.swap_address
@@ -208,11 +213,11 @@ const Pool = () => {
     let LPToken = input.current.value;
     let account = authCtx.account;
 
-    await checkAllowence(pairContarct, account, addresses.swap_address).then(
+    await checkAllowence(pairContract, account, addresses.swap_address).then(
       async (res) => {
         if (res < Number(Web3.utils.toWei(LPToken, "ether"))) {
           await approve(
-            pairContarct,
+            pairContract,
             Web3.utils.toWei("10000000000000000000000000", "tether"),
             account,
             addresses.swap_address
@@ -245,21 +250,25 @@ const Pool = () => {
   };
 
   useEffect(() => {
-    initContract(swap_abi.abi, addresses.swap_address).then((res) => {
-      setSwapContract(res);
-    });
+    getSwapContract(swap_abi.abi, addresses.swap_address);
+    // .then((res) => {
+    //   setSwapContract(res);
+    // });
 
-    initContract(ERC20_abi.abi, addresses.BULC_address).then((res) => {
-      setBULCContarct(res);
-    });
+    getBULCContract(ERC20_abi.abi, addresses.BULC_address);
+    // .then((res) => {
+    //   setBULCContract(res);
+    // });
 
-    initContract(ERC20_abi.abi, addresses.BUSD_address).then((res) => {
-      setBUSDContarct(res);
-    });
+    getBUSDContract(ERC20_abi.abi, addresses.BUSD_address);
+    // .then((res) => {
+    //   setBUSDContract(res);
+    // });
 
-    initContract(pair_abi.abi, addresses.pair_address).then((res) => {
-      setPairContarct(res);
-    });
+    getpairContract(pair_abi.abi, addresses.pair_address);
+    // .then((res) => {
+    //   setPairContract(res);
+    // });
   }, []);
 
   return (
@@ -267,15 +276,16 @@ const Pool = () => {
       <div className="pool__containers">
         <div className="link-to-address">
           <Link
-          className="link"
+            className="link"
             to={{
-              pathname: 'https://ropsten.etherscan.io/address/'+ addresses.pair_address
+              pathname:
+                "https://ropsten.etherscan.io/address/" +
+                addresses.pair_address,
             }}
             target="_blank"
           >
             View Contract
-          <BiLinkExternal className="icon" />
-
+            <BiLinkExternal className="icon" />
           </Link>
         </div>
         <Toaster position="top-center" reverseOrder={false} />
@@ -283,7 +293,7 @@ const Pool = () => {
           coinBalance={coin1.balance}
           tokenImage={coin1.image}
           tokenName={coin1.name}
-          tokenContract={BULCContarct}
+          tokenContract={BULCContract}
           tokenAddress={coin1.address}
           calculatedAmount={coin1.amount}
           onChangeInputHandler={changeBULCAmount}
@@ -295,7 +305,7 @@ const Pool = () => {
           coinBalance={coin2.balance}
           tokenImage={coin2.image}
           tokenName={coin2.name}
-          tokenContract={BUSDContarct}
+          tokenContract={BUSDContract}
           tokenAddress={coin2.address}
           calculatedAmount={coin2.amount}
           onChangeInputHandler={changeBUSDAmount}
@@ -314,7 +324,7 @@ const Pool = () => {
             onCloseModal={closeModal}
             onRemoveLiquidity={removeLiquidity}
             coinsAddress={{ coin1: coin1.address, coin2: coin2.add }}
-            contract={pairContarct}
+            contract={pairContract}
             address={addresses.pair_address}
           />
         </Modal>

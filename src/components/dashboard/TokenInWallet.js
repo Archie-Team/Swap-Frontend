@@ -3,27 +3,27 @@ import Token from "./Token";
 import "./TokensInWallet.css";
 import { coins } from "../../modules/coins";
 import { addresses } from "../../modules/addresses";
-import { getTokenBalance, initContract } from "../../modules/web3Client";
+import { getTokenBalance } from "../../modules/web3Client";
 import ERC20_abi from "../../assets/files/ERC20.json";
 import { roundNumber } from "../../modules/formatNumbers";
 import AuthContext from "../../context/auth-context";
 import { fromWei } from "../../modules/convertors";
+import useContract from "../../hooks/use-contract";
 
 const TokenInWallet = () => {
   const [BUSDAmount, setBUSDAmount] = useState(0);
   const [BULCAmount, setBULCAmount] = useState(0);
-  const [BUSDContract, setBUSDContract] = useState(null);
-  const [BULCContract, setBULCContract] = useState(null);
   const authCtx = useContext(AuthContext);
 
-  useEffect(() => {
-    initContract(ERC20_abi.abi, addresses.BUSD_address).then((res) => {
-      setBUSDContract(res);
-    });
+  const { contract: BULCContract, getContract: getBULCContract } =
+  useContract();
 
-    initContract(ERC20_abi.abi, addresses.BULC_address).then((res) => {
-      setBULCContract(res);
-    });
+  const { contract: BUSDContract, getContract: getBUSDContract } =
+  useContract();
+
+  useEffect(() => {
+    getBUSDContract(ERC20_abi.abi, addresses.BUSD_address)
+    getBULCContract(ERC20_abi.abi, addresses.BULC_address)
   }, []);
 
   useEffect(() => {

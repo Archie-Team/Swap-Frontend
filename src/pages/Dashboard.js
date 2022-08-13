@@ -4,18 +4,19 @@ import TotalValue from "../components/dashboard/TotalValue";
 import React, { useEffect, useState } from "react";
 import stakeAbi from "../assets/files/Staking.json";
 import { addresses } from "../modules/addresses";
-import { initContract } from "../modules/web3Client";
 import MainCard from "../components/layout/MainCard";
 import { fromWei } from "../modules/convertors";
+import useContract from "../hooks/use-contract";
 const Home = () => {
-  const [stakeContract, setStakeContract] = useState(null);
+
   const [totalFrozen, setTotalFrozen] = useState(0);
   const [totalValueLocked, setTotalValueLocked] = useState(0);
+  const { contract: stakeContract, getContract: getStakeContract } =
+  useContract();
+
 
   useEffect(() => {
-    initContract(stakeAbi.abi, addresses.staking_address).then((res) => {
-      setStakeContract(res);
-    });
+    getStakeContract(stakeAbi.abi, addresses.staking_address)
   }, []);
 
   useEffect(() => {

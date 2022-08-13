@@ -11,7 +11,6 @@ import {
   approve,
   checkAllowence,
   getTokenBalance,
-  initContract,
 } from "../modules/web3Client";
 import ERC20_abi from "../assets/files/ERC20.json";
 import swapAbi from "../assets/files/Swap.json";
@@ -21,13 +20,9 @@ import SwapPrice from "../components/swap/SwapPrice";
 import SwapSlippageTolerance from "../components/swap/SwapSlippageTolerance";
 import { roundNumber } from "../modules/formatNumbers";
 import { fromWei } from "../modules/convertors";
-// import SwapPriceImpact from "../components/swap/SwapPriceImpact";
-// fromWei
+import useContract from "../hooks/use-contract";
 
 const Swap = () => {
-  const [swapContract, setSwapContract] = useState(null);
-  const [token1Contract, setToken1Contract] = useState(null);
-  const [token2Contract, setToken2Contract] = useState(null);
   const authCtx = useContext(AuthContext);
   const [slippageTolerance, setSlippageTolerance] = useState(2);
 
@@ -47,14 +42,16 @@ const Swap = () => {
     contract: null,
   });
 
-  useEffect(() => {
-    initContract(ERC20_abi.abi, coin1.address).then((res) => {
-      setToken1Contract(res);
-    });
+  const { contract: token1Contract, getContract: getToken1Contract } =
+    useContract();
+  const { contract: token2Contract, getContract: getToken2Contract } =
+    useContract();
+  const { contract: swapContract, getContract: getSwapContract } =
+    useContract();
 
-    initContract(ERC20_abi.abi, coin2.address).then((res) => {
-      setToken2Contract(res);
-    });
+  useEffect(() => {
+    getToken1Contract(ERC20_abi.abi, coin1.address);
+    getToken2Contract(ERC20_abi.abi, coin2.address);
   }, []);
 
   const [calculatedCoin1Amount, setCalculatedCoin1Amount] = useState("");
@@ -75,9 +72,7 @@ const Swap = () => {
   };
 
   useEffect(() => {
-    initContract(swapAbi.abi, addresses.swap_address).then((res) => {
-      setSwapContract(res);
-    });
+    getSwapContract(swapAbi.abi, addresses.swap_address);
   }, []);
 
   const changeFirstInputHandler = async (input) => {

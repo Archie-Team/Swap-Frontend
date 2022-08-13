@@ -1,34 +1,30 @@
 import React, { useContext, useEffect, useState } from "react";
 import { addresses } from "../../modules/addresses";
 import pair_abi from "../../assets/files/Pair.json";
-import { getTokenBalance, initContract } from "../../modules/web3Client";
+import { getTokenBalance } from "../../modules/web3Client";
 import AuthContext from "../../context/auth-context";
 import { roundNumber } from "../../modules/formatNumbers";
 import "./DashboardLPTokenBalance.css";
 import { fromWei } from "../../modules/convertors";
+import useContract from "../../hooks/use-contract";
 
 const LPTokenBalance = () => {
   const [lpBalance, setLPTokenBalance] = useState(0);
   const authCtx = useContext(AuthContext);
-  const [pairContarct, setPairContarct] = useState(null);
-
- 
+  const { contract: pairContract, getContract: getPairContract } =
+    useContract();
 
   useEffect(() => {
-    if (pairContarct && authCtx.account) {
-      getTokenBalance(pairContarct, authCtx.account).then((res) => {
+    if (pairContract && authCtx.account) {
+      getTokenBalance(pairContract, authCtx.account).then((res) => {
         setLPTokenBalance(roundNumber(fromWei(res), 5));
       });
     }
-  }, [pairContarct, authCtx.account]);
-
+  }, [pairContract, authCtx.account]);
 
   useEffect(() => {
-    initContract(pair_abi.abi, addresses.pair_address).then((res) => {
-      setPairContarct(res);
-    })
-  }, [])
-  
+    getPairContract(pair_abi.abi, addresses.pair_address);
+  }, [getPairContract]);
 
   return (
     <div className="lp-token_balance">

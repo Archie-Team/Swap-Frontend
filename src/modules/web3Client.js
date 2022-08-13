@@ -5,23 +5,12 @@ const web3 = new Web3(
     "https://rinkeby.infura.io/v3/9497529ebd9b4ccfaabb477128cc6c22"
 );
 
-export const initContract = async (abi, address) => {
-  const contract = await new web3.eth.Contract(abi, address);
-
-  return contract;
-};
-
-
 export const getCurrentChainId = async () => {
   const currentChainId = await window.ethereum.request({
     method: "eth_chainId",
   });
   return currentChainId;
 };
-
-
-
-
 
 export const checkAllowence = async (contract, account, contarctAddress) => {
   return await contract.methods
@@ -49,7 +38,7 @@ export const approve = async (contarct, amount, account, address) => {
     });
 };
 
-export const getTokenBalance = async (contract,account) => {
+export const getTokenBalance = async (contract, account) => {
   return await contract.methods
     .balanceOf(account) //client(owner) address , contarct address
     .call()

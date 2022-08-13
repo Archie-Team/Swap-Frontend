@@ -2,24 +2,25 @@ import React, { useContext, useEffect, useState } from "react";
 import "./Positions.css";
 import stakeAbi from "../../assets/files/Staking.json";
 import { addresses } from "../../modules/addresses";
-import { initContract } from "../../modules/web3Client";
 import PositionItem from "./PositionItem";
 import { stakes } from "../../modules/stakes";
 import AuthContext from "../../context/auth-context";
 import toast from "react-hot-toast";
 import { roundNumber } from "../../modules/formatNumbers";
 import Web3 from "web3";
+import useContract from "../../hooks/use-contract";
 
 const StakingAmount = () => {
-  const [stakeContract, setStakeContract] = useState(null);
+  // const [stakeContract, setStakeContract] = useState(null);
   const [positionNumber, setPositionNumber] = useState(0);
   const [positions, setPositions] = useState([]);
   const authCtx = useContext(AuthContext);
 
+  const { contract: stakeContract, getContract: getStakeContract } =
+  useContract();
+
   useEffect(() => {
-    initContract(stakeAbi.abi, addresses.staking_address).then((res) => {
-      setStakeContract(res);
-    });
+    getStakeContract(stakeAbi.abi, addresses.staking_address)
   }, []);
 
   const getPositions = async (account) => {
@@ -27,7 +28,6 @@ const StakingAmount = () => {
       .positions(account)
       .call()
       .then((res) => {
-        // console.log(res);
         return Promise.resolve(res);
       });
   };
