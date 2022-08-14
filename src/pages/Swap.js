@@ -6,7 +6,6 @@ import CoinField from "../components/coin/CoinField";
 import { coins } from "../modules/coins";
 import { addresses } from "../modules/addresses";
 import SwapPriceImpact from "../components/swap/SwapPriceImpact";
-import { getTokenBalance } from "../modules/web3Client";
 import ERC20_abi from "../assets/files/ERC20.json";
 import swapAbi from "../assets/files/Swap.json";
 import toast, { Toaster } from "react-hot-toast";
@@ -17,6 +16,7 @@ import { roundNumber } from "../modules/formatNumbers";
 import useContract from "../hooks/use-contract";
 import { fromWei, toWei } from "../modules/web3Wei";
 import useWeb3 from "../hooks/use-web3";
+import useBalance from "../hooks/use-balance";
 
 const Swap = () => {
   const authCtx = useContext(AuthContext);
@@ -53,20 +53,27 @@ const Swap = () => {
   const [calculatedCoin1Amount, setCalculatedCoin1Amount] = useState("");
   const [calculatedCoin2Amount, setCalculatedCoin2Amount] = useState("");
 
-  const updateTokenBalances = () => {
-    getTokenBalance(token1Contract, authCtx.account).then((res) => {
-      setCoin1((prev) => {
-        return { ...prev, balance: res };
-      });
-    });
+  const { balance: token1Balance, getBalance: getToken1Balance } = useBalance();
+  const { balance: token2Balance, getBalance: getToken2Balance } = useBalance();
 
-    getTokenBalance(token2Contract, authCtx.account).then((res) => {
-      setCoin2((prev) => {
-        return { ...prev, balance: res };
-      });
-    });
+  const updateTokenBalances = () => {
+    getToken1Balance(token1Contract, authCtx.account);
+    getToken2Balance(token2Contract, authCtx.account)
   };
 
+  useEffect(() => {
+    setCoin1((prev) => {
+      return { ...prev, balance: token1Balance };
+    });
+  }, [token1Balance]);
+
+  useEffect(() => {
+    setCoin2((prev) => {
+      return { ...prev, balance: token2Balance };
+    });
+  }, [token2Balance]);
+
+  
   useEffect(() => {
     getSwapContract(swapAbi.abi, addresses.swap_address);
   }, []);

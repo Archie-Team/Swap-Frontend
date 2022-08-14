@@ -2,12 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import MainCard from "../components/layout/MainCard";
 import { BsPlusLg } from "react-icons/bs";
 import "./Pool.css";
-import { getTokenBalance } from "../modules/web3Client";
 import { addresses } from "../modules/addresses";
 import ERC20_abi from "../assets/files/ERC20.json";
 import swap_abi from "../assets/files/Swap.json";
 import pair_abi from "../assets/files/Pair.json";
-import Web3 from "web3";
 import { coins } from "../modules/coins";
 import CoinField from "../components/coin/CoinField";
 import toast, { Toaster } from "react-hot-toast";
@@ -19,6 +17,7 @@ import { Link } from "react-router-dom";
 import useContract from "../hooks/use-contract";
 import useWeb3 from "../hooks/use-web3";
 import { fromWei, toWei } from "../modules/web3Wei";
+import useBalance from "../hooks/use-balance";
 
 const Pool = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -67,19 +66,25 @@ const Pool = () => {
     });
   };
 
-  const updateTokenBalances = () => {
-    getTokenBalance(BULCContract, authCtx.account).then((res) => {
-      setCoin1((prev) => {
-        return { ...prev, balance: res };
-      });
-    });
+  const { balance: BUSDBalance, getBalance: getBUSDBalance } = useBalance();
+  const { balance: BULCBalance, getBalance: getBULCBalance } = useBalance();
 
-    getTokenBalance(BUSDContract, authCtx.account).then((res) => {
-      setCoin2((prev) => {
-        return { ...prev, balance: res };
-      });
-    });
+  const updateTokenBalances = () => {
+    getBULCBalance(BULCContract, authCtx.account);
+    getBUSDBalance(BUSDContract, authCtx.account);
   };
+
+  useEffect(() => {
+    setCoin2((prev) => {
+      return { ...prev, balance: BUSDBalance };
+    });
+  }, [BUSDBalance]);
+
+  useEffect(() => {
+    setCoin1((prev) => {
+      return { ...prev, balance: BULCBalance };
+    });
+  }, [BULCBalance]);
 
   useEffect(() => {
     if (BULCContract && BUSDContract && authCtx.account) {
