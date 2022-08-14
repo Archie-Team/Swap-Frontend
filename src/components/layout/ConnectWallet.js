@@ -2,30 +2,24 @@ import React, { useEffect, useContext } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import "./ConnectWallet.css";
 import web3 from "web3";
-import { getCurrentChainId } from "../../modules/web3Client";
 import { IoWalletOutline } from "react-icons/io5";
 import AuthContext from "../../context/auth-context";
 import { networksId } from "../../modules/networks";
+import {
+  getCurrentNetworkId,
+  switchNetwork,
+} from "../../store/network-actions";
+import setCurrentNetworkId from '../../store/network-slice'
+import { useDispatch, useSelector } from "react-redux";
 
 const ConnectWallet = () => {
   const { ethereum } = window;
   const authCtx = useContext(AuthContext);
+  const dispatch = useDispatch();
+  const networkId = useSelector((state) => state.network.networkId);
 
   const shortAccountAddress = () => {
     return "0x..." + authCtx.account.substr(authCtx.account.length - 4);
-  };
-
-  const switchNetwork = async (id) => {
-    if (authCtx.account && authCtx.networkId !== id) {
-      await window.ethereum.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: id }],
-      });
-      window.location.reload();
-    } else {
-      return;
-    }
-    // refresh
   };
 
   async function connectToWallet() {
@@ -37,9 +31,7 @@ const ConnectWallet = () => {
         .then((res) => {
           let account = web3.utils.toChecksumAddress(res[0]);
           authCtx.onLogin(account);
-          getCurrentChainId().then((res) => {
-            authCtx.onSetNetworkId(res);
-          });
+          dispatch(getCurrentNetworkId());
         });
     } catch (err) {
       console.log(err);
@@ -47,8 +39,10 @@ const ConnectWallet = () => {
   }
 
   useEffect(() => {
-    switchNetwork(networksId.testNetworkId);
-  }, [authCtx.networkId]);
+    if (authCtx.account && networkId !== networksId.testNetworkId) {
+      dispatch(switchNetwork(networksId.testNetworkId));
+    }
+  }, [networkId]);
 
   useEffect(() => {
     const connectWalletOnPageLoad = async () => {
@@ -59,11 +53,12 @@ const ConnectWallet = () => {
       // check if user disconnect or change account
       ethereum.on("accountsChanged", (accounts) => {
         accounts[0] ? authCtx.onLogin(accounts[0]) : authCtx.onLogout();
-        switchNetwork(networksId.testNetworkId);
+      dispatch(switchNetwork(networksId.testNetworkId));
+
       });
 
       ethereum.on("chainChanged", (chainId) => {
-        authCtx.onSetNetworkId(chainId);
+        dispatch(setCurrentNetworkId(chainId))
         window.location.reload();
       });
 

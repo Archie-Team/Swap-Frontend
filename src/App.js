@@ -1,6 +1,6 @@
 import "./App.css";
 import { Route, Switch } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Home from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import PageLayout from "./components/layout/PageLayout";
@@ -8,10 +8,8 @@ import Swap from "./pages/Swap";
 import Staking from "./pages/Staking";
 import Pool from "./pages/Pool";
 import { AuthContextProvider } from "./context/auth-context";
-import { getNetwork } from "./modules/web3Client";
 
 function App() {
- 
 
   return (
     <AuthContextProvider>

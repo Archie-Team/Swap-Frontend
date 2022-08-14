@@ -1,21 +1,19 @@
 import Header from "./Header";
-import { Fragment, useContext, useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import "./PageLayout.css";
-import AuthContext from "../../context/auth-context";
-import { getCurrentChainId } from "../../modules/web3Client";
+import { useDispatch } from "react-redux";
+import {  getCurrentNetworkId } from '../../store/network-actions';
+
 
 const PageLayout = (props) => {
-  const authCtx = useContext(AuthContext);
+  const dispatch = useDispatch();
 
   useEffect (() => {
     const initialNetworkId= async() => {
-      await getCurrentChainId().then((res) => {
-        authCtx.onSetNetworkId(res);
-      });
+      dispatch(getCurrentNetworkId())
     }
     initialNetworkId()      
   }, [])
-  
 
   return (
     <Fragment>
