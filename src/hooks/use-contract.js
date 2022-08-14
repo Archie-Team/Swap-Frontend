@@ -7,20 +7,17 @@ const web3 = new Web3(
 );
 
 const useContract = () => {
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [error, setError] = useState(true);
   const [contract, setContract] = useState(null);
-
   const getContract = useCallback(async (abi, address) => {
     try {
       const initialContract = await new web3.eth.Contract(abi, address);
       setContract(initialContract);
-    } catch (err) {console.log('err');}
+    } catch (err) {
+      console.log("err");
+    }
   }, []);
 
   return {
-    // isLoading,
-    // error,
     contract,
     getContract,
   };

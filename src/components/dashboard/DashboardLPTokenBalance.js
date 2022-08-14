@@ -1,24 +1,23 @@
 import React, { useContext, useEffect, useState } from "react";
 import { addresses } from "../../modules/addresses";
 import pair_abi from "../../assets/files/Pair.json";
-import { getTokenBalance } from "../../modules/web3Client";
 import AuthContext from "../../context/auth-context";
 import { roundNumber } from "../../modules/formatNumbers";
 import "./DashboardLPTokenBalance.css";
-import { fromWei } from "../../modules/convertors";
 import useContract from "../../hooks/use-contract";
+import { fromWei } from "../../modules/web3Wei";
+import useBalance from "../../hooks/use-balance";
 
 const LPTokenBalance = () => {
-  const [lpBalance, setLPTokenBalance] = useState(0);
   const authCtx = useContext(AuthContext);
   const { contract: pairContract, getContract: getPairContract } =
     useContract();
 
+  const { balance: lpBalance, getBalance: getLPBalance } = useBalance();
+
   useEffect(() => {
     if (pairContract && authCtx.account) {
-      getTokenBalance(pairContract, authCtx.account).then((res) => {
-        setLPTokenBalance(roundNumber(fromWei(res), 5));
-      });
+      getLPBalance(pairContract, authCtx.account);
     }
   }, [pairContract, authCtx.account]);
 
@@ -28,7 +27,7 @@ const LPTokenBalance = () => {
 
   return (
     <div className="lp-token_balance">
-      <p>{lpBalance} </p>
+      <p>{roundNumber(fromWei(lpBalance, "ether"), 5)} </p>
       <p> BUSD_BULC LP</p>
     </div>
   );

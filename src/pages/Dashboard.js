@@ -5,8 +5,8 @@ import React, { useEffect, useState } from "react";
 import stakeAbi from "../assets/files/Staking.json";
 import { addresses } from "../modules/addresses";
 import MainCard from "../components/layout/MainCard";
-import { fromWei } from "../modules/convertors";
 import useContract from "../hooks/use-contract";
+import { fromWei } from "../modules/web3Wei";
 const Home = () => {
 
   const [totalFrozen, setTotalFrozen] = useState(0);
@@ -25,7 +25,7 @@ const Home = () => {
         .StakedRewardFreezed()
         .call()
         .then((res) => {
-          setTotalFrozen(fromWei(res));
+          setTotalFrozen(fromWei(res,'ether'));
         });
     };
 
@@ -34,7 +34,7 @@ const Home = () => {
         .totalValueLockBUSD()
         .call()
         .then((res) => {
-          setTotalValueLocked(fromWei(res));
+          setTotalValueLocked(fromWei(res,'ether'));
         });
     };
 

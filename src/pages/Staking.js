@@ -3,7 +3,6 @@ import MainCard from "../components/layout/MainCard";
 import Stake from "../components/staking/StakeItem";
 import "./Staking.css";
 import { addresses } from "../modules/addresses";
-import { approve } from "../modules/web3Client";
 import { stakes } from "../modules/stakes";
 import stakeAbi from "../assets/files/Staking.json";
 import pairAbi from "../assets/files/Pair.json";
@@ -14,6 +13,7 @@ import toast, { Toaster } from "react-hot-toast";
 import AuthContext from "../context/auth-context";
 import useContract from "../hooks/use-contract";
 import useWeb3 from "../hooks/use-web3";
+import { toWei } from "../modules/web3Wei";
 
 const Staking = () => {
   const authCtx = useContext(AuthContext);
@@ -40,43 +40,41 @@ const Staking = () => {
 
   const calculateBUSDValue = async (amount) => {
     return await stakeContract.methods
-      .calculateValue(Web3.utils.toWei(amount.toString(), "ether"))
+      .calculateValue(toWei(amount.toString(), "ether"))
       .call()
       .then((res) => {
         return res;
       });
   };
 
-  const { getAllowence: getPairAllowence } = useWeb3();
-  const { getAllowence: getBUSDAllowence } = useWeb3();
+  const { getAllowence, approve } = useWeb3();
 
   const stakeHandler = async (amount, choice, account) => {
-    await getPairAllowence(
+
+    await getAllowence(
       pairContract,
       account,
       addresses.staking_address,
-      //apply data
       async (pairAllowence) => {
-        if (pairAllowence < Number(Web3.utils.toWei(amount, "ether"))) {
+        if (pairAllowence < Number(toWei(amount, "ether"))) {
           await approve(
             pairContract,
-            Web3.utils.toWei("10000000000000000000000000", "tether"),
+            toWei("100000000000000", "tether"),
             account,
-            addresses.staking_address
-          ).then((res) => {
-            toast.success(res);
-          });
+            addresses.staking_address,
+            (res) => {
+              toast.success(res);
+            }
+          );
         } else {
-          console.log("No Need to Approve Stake");
-          return;
+          console.log("No Need to Approve pair");
         }
       }
     );
 
     const BUSDValue = await calculateBUSDValue(amount);
 
-    //approve BUSD amount
-    await getBUSDAllowence(
+    await getAllowence(
       BUSDContract,
       account,
       addresses.staking_address,
@@ -84,15 +82,15 @@ const Staking = () => {
         if (BUSDAllowence < Number(BUSDValue)) {
           await approve(
             BUSDContract,
-            Web3.utils.toWei("1000000000000000", "tether"),
+            toWei("100000000000000", "tether"),
             account,
-            addresses.staking_address
-          ).then((res) => {
-            toast.success(res);
-          });
+            addresses.staking_address,
+            (res) => {
+              toast.success(res);
+            }
+          );
         } else {
           console.log("No Need to Approve BUSD");
-          return;
         }
       }
     );

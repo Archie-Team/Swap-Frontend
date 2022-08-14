@@ -6,12 +6,7 @@ import CoinField from "../components/coin/CoinField";
 import { coins } from "../modules/coins";
 import { addresses } from "../modules/addresses";
 import SwapPriceImpact from "../components/swap/SwapPriceImpact";
-import Web3 from "web3";
-import {
-  approve,
-  checkAllowence,
-  getTokenBalance,
-} from "../modules/web3Client";
+import { getTokenBalance } from "../modules/web3Client";
 import ERC20_abi from "../assets/files/ERC20.json";
 import swapAbi from "../assets/files/Swap.json";
 import toast, { Toaster } from "react-hot-toast";
@@ -19,8 +14,9 @@ import AuthContext from "../context/auth-context";
 import SwapPrice from "../components/swap/SwapPrice";
 import SwapSlippageTolerance from "../components/swap/SwapSlippageTolerance";
 import { roundNumber } from "../modules/formatNumbers";
-import { fromWei } from "../modules/convertors";
 import useContract from "../hooks/use-contract";
+import { fromWei, toWei } from "../modules/web3Wei";
+import useWeb3 from "../hooks/use-web3";
 
 const Swap = () => {
   const authCtx = useContext(AuthContext);
@@ -89,7 +85,7 @@ const Swap = () => {
     }
 
     let inputStringValue = input.value.toString();
-    let data = Web3.utils.toWei(inputStringValue, "ether");
+    let data = toWei(inputStringValue, "ether");
     setCoin1((prev) => {
       return { ...prev, amount: data };
     });
@@ -98,7 +94,6 @@ const Swap = () => {
       .getAmountsOut(data, [coin1.address, coin2.address]) //execute amount of second (amountIn, convertible token address, result token address)
       .call()
       .then((res) => {
-        // let val = Web3.utils.fromWei(res[1], "ether");
         setCalculatedCoin2Amount(res[1]);
       })
       .catch((err) => {
@@ -126,7 +121,7 @@ const Swap = () => {
     }
 
     let inputStringValue = input.value.toString();
-    let data = Web3.utils.toWei(inputStringValue, "ether");
+    let data = toWei(inputStringValue, "ether");
     setCoin2((prev) => {
       return { ...prev, amount: data };
     });
@@ -170,25 +165,31 @@ const Swap = () => {
       });
   };
 
+  const { getAllowence, approve } = useWeb3();
+
   const swapFirstCoinFunction = async () => {
     console.log("swapfirstCoinFunction");
 
-    await checkAllowence(
+    await getAllowence(
       token1Contract,
       authCtx.account,
-      addresses.swap_address
-    ).then(async (res) => {
-      if (res < Web3.utils.toWei(coin1.amount, "wei")) {
-        await approve(
-          token1Contract,
-          Web3.utils.toWei(coin1.amount, "tether"),
-          authCtx.account,
-          addresses.swap_address
-        );
-      } else {
-        return;
+      addresses.swap_address,
+      async (tokenAllowence) => {
+        if (tokenAllowence < Number(toWei(coin1.amount, "wei"))) {
+          await approve(
+            token1Contract,
+            toWei("100000000000000", "tether"),
+            authCtx.account,
+            addresses.swap_address,
+            (res) => {
+              toast.success(res);
+            }
+          );
+        } else {
+          console.log("No Need to Approve");
+        }
       }
-    });
+    );
 
     let temp = Number(calculatedCoin2Amount);
     let amountOutMin = temp - (slippageTolerance / 100) * temp;
@@ -216,22 +217,27 @@ const Swap = () => {
 
   const swapSecCoinFunction = async () => {
     console.log("swapSecCoinFunction");
-    await checkAllowence(
+
+    await getAllowence(
       token1Contract,
       authCtx.account,
-      addresses.swap_address
-    ).then(async (res) => {
-      if (res < Web3.utils.toWei(coin2.amount, "ether")) {
-        await approve(
-          token1Contract,
-          Web3.utils.toWei(coin2.amount, "tether"),
-          authCtx.account,
-          addresses.swap_address
-        );
-      } else {
-        return;
+      addresses.swap_address,
+      async (tokenAllowence) => {
+        if (tokenAllowence < Number(toWei(coin2.amount, "ether"))) {
+          await approve(
+            token1Contract,
+            toWei("100000000000000", "tether"),
+            authCtx.account,
+            addresses.swap_address,
+            (res) => {
+              toast.success(res);
+            }
+          );
+        } else {
+          console.log("No Need to Approve");
+        }
       }
-    });
+    );
 
     let temp = Number(calculatedCoin1Amount);
     let amountOutMax = temp + (slippageTolerance / 100) * temp;
@@ -287,10 +293,10 @@ const Swap = () => {
   }
 
   const insufficientBalance =
-    roundNumber(fromWei(coin1.amount), 4) >
-      roundNumber(fromWei(coin1.balance), 4) ||
-    roundNumber(fromWei(coin2.amount), 4) >
-      roundNumber(fromWei(coin2.balance), 4);
+    roundNumber(fromWei(coin1.amount, "ether"), 4) >
+      roundNumber(fromWei(coin1.balance, "ether"), 4) ||
+    roundNumber(fromWei(coin2.amount, "ether"), 4) >
+      roundNumber(fromWei(coin2.balance, "ether"), 4);
 
   return (
     <MainCard className="swap-card">
@@ -304,7 +310,7 @@ const Swap = () => {
           tokenContract={token1Contract}
           coinBalance={coin1.balance}
           onChangeInputHandler={changeFirstInputHandler}
-          calculatedAmount={Web3.utils.fromWei(calculatedCoin1Amount, "ether")}
+          calculatedAmount={fromWei(calculatedCoin1Amount, "ether")}
         />
 
         <button className="swap-icon" onClick={changeSwapState}>
@@ -317,7 +323,7 @@ const Swap = () => {
           tokenContract={token2Contract}
           tokenAddress={coin2.address}
           coinBalance={coin2.balance}
-          calculatedAmount={Web3.utils.fromWei(calculatedCoin2Amount, "ether")}
+          calculatedAmount={fromWei(calculatedCoin2Amount, "ether")}
           onChangeInputHandler={changeSecCoinHandler}
         />
         <SwapPrice

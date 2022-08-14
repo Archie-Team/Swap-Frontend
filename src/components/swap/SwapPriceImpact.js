@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Web3 from "web3";
 import { roundNumber } from "../../modules/formatNumbers";
+import { fromWei } from "../../modules/web3Wei";
 import "./SwapPriceImpact.css";
 
 const SwapPriceImpact = ({ contract, amount, pathAddrress }) => {
@@ -13,13 +14,8 @@ const SwapPriceImpact = ({ contract, amount, pathAddrress }) => {
         .priceImpact(amount, pathAddrress)
         .call()
         .then((res) => {
-          let price_impact = Web3.utils.fromWei(res, "ether") * 100;
-          // if(price_impact < 0.01){
-          //   setPriceImpact('<0.01');
-          // }
-          // else{
+          let price_impact = fromWei(res, "ether") * 100;
           setPriceImpact(price_impact);
-          // }
         })
         .catch((err) => {
           console.log("err in price impact");

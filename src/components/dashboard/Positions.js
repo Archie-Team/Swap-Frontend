@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import { roundNumber } from "../../modules/formatNumbers";
 import Web3 from "web3";
 import useContract from "../../hooks/use-contract";
+import { fromWei } from "../../modules/web3Wei";
 
 const StakingAmount = () => {
   // const [stakeContract, setStakeContract] = useState(null);
@@ -82,11 +83,11 @@ const StakingAmount = () => {
             shortAccountAddress(returnValues.user) +
             "\n" +
             "Amount : " +
-            roundNumber(Web3.utils.fromWei(returnValues.amount, "ether"), 5) +
+            roundNumber(fromWei(returnValues.amount, "ether"), 5) +
             " LP" +
             "\n" +
             "Reward : " +
-            roundNumber(Web3.utils.fromWei(returnValues.reward, "ether"), 5),
+            roundNumber(fromWei(returnValues.reward, "ether"), 5),
           {
             duration: 10000,
           }

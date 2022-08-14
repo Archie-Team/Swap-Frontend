@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Web3 from "web3";
 import { roundNumber } from "../../modules/formatNumbers";
+import { fromWei } from "../../modules/web3Wei";
 import "./SwapPrice.css";
 
 const SwapPrice = ({
@@ -17,7 +18,7 @@ const SwapPrice = ({
       .tokenAPerTokenB(amount, pathAddrress)
       .call()
       .then((res) => {
-        setPrice(Web3.utils.fromWei(res, "ether"));
+        setPrice(fromWei(res, "ether"));
       })
       .catch((err) => {
         console.log("err in price");

@@ -12,31 +12,31 @@ export const getCurrentChainId = async () => {
   return currentChainId;
 };
 
-export const checkAllowence = async (contract, account, contarctAddress) => {
-  return await contract.methods
-    .allowance(account, contarctAddress) //client(owner) address , contarct address
-    .call()
-    .then((res) => {
-      return Promise.resolve(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
+// export const checkAllowence = async (contract, account, contarctAddress) => {
+//   return await contract.methods
+//     .allowance(account, contarctAddress) //client(owner) address , contarct address
+//     .call()
+//     .then((res) => {
+//       return Promise.resolve(res);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// };
 
-export const approve = async (contarct, amount, account, address) => {
-  return await contarct.methods
-    .approve(address, amount) //client(owner) address , contarct address
-    .send({ from: account })
-    .then((res) => {
-      console.log(res);
-      return Promise.resolve("Successfully approved!");
-    })
-    .catch((err) => {
-      console.log(err);
-      return Promise.reject(" approve has problem!");
-    });
-};
+// export const approve = async (contarct, amount, account, address) => {
+//   return await contarct.methods
+//     .approve(address, amount) //client(owner) address , contarct address
+//     .send({ from: account })
+//     .then((res) => {
+//       console.log(res);
+//       return Promise.resolve("Successfully approved!");
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//       return Promise.reject(" approve has problem!");
+//     });
+// };
 
 export const getTokenBalance = async (contract, account) => {
   return await contract.methods

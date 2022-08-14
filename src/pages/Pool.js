@@ -2,11 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import MainCard from "../components/layout/MainCard";
 import { BsPlusLg } from "react-icons/bs";
 import "./Pool.css";
-import {
-  approve,
-  checkAllowence,
-  getTokenBalance,
-} from "../modules/web3Client";
+import { getTokenBalance } from "../modules/web3Client";
 import { addresses } from "../modules/addresses";
 import ERC20_abi from "../assets/files/ERC20.json";
 import swap_abi from "../assets/files/Swap.json";
@@ -21,6 +17,8 @@ import { BiLinkExternal } from "react-icons/bi";
 import AuthContext from "../context/auth-context";
 import { Link } from "react-router-dom";
 import useContract from "../hooks/use-contract";
+import useWeb3 from "../hooks/use-web3";
+import { fromWei, toWei } from "../modules/web3Wei";
 
 const Pool = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -63,7 +61,7 @@ const Pool = () => {
       if (res.resBUSD < 2000 || res.resBULC < 2000) return;
       await quote(data.value, res.resBULC, res.resBUSD).then((res2) => {
         setCoin2((prev) => {
-          return { ...prev, amount: Web3.utils.fromWei(res2, "ether") };
+          return { ...prev, amount: fromWei(res2, "ether") };
         });
       });
     });
@@ -104,7 +102,7 @@ const Pool = () => {
       if (res.resBUSD < 2000 || res.resBULC < 2000) return;
       await quote(data.value, res.resBUSD, res.resBULC).then((res2) => {
         setCoin1((prev) => {
-          return { ...prev, amount: Web3.utils.fromWei(res2, "ether") };
+          return { ...prev, amount: fromWei(res2, "ether") };
         });
       });
     });
@@ -129,7 +127,7 @@ const Pool = () => {
     if (!amount || amount === 0) return;
 
     return await swapContract.methods
-      .quote(Web3.utils.toWei(amount, "ether"), reserve0, reserve1)
+      .quote(toWei(amount, "ether"), reserve0, reserve1)
       .call()
       .then((res) => {
         return Promise.resolve(res);
@@ -139,43 +137,47 @@ const Pool = () => {
       });
   };
 
+  const { getAllowence, approve } = useWeb3();
+
   const addLiquidity = async (account) => {
-    await checkAllowence(BUSDContract, account, addresses.swap_address).then(
-      async (res) => {
-        if (res < Number(Web3.utils.toWei(coin2.amount, "ether"))) {
+    await getAllowence(
+      BUSDContract,
+      account,
+      addresses.swap_address,
+      async (BUSDAllowence) => {
+        if (BUSDAllowence < Number(toWei(coin2.amount, "ether"))) {
           await approve(
             BUSDContract,
-            Web3.utils.toWei("100000000000000", "tether"),
+            toWei("100000000000000", "tether"),
             account,
-            addresses.swap_address
-          ).then((res2) => {
-            toast.success(res2);
-          });
+            addresses.swap_address,
+            (res) => {
+              toast.success(res);
+            }
+          );
         } else {
           console.log("No Need to Approve BUSD");
-          return;
         }
       }
     );
 
-    await checkAllowence(BULCContract, account, addresses.swap_address).then(
-      async (res) => {
-        if (res < Number(Web3.utils.toWei(coin1.amount, "ether"))) {
+    await getAllowence(
+      BULCContract,
+      account,
+      addresses.swap_address,
+      async (BULCAllowence) => {
+        if (BULCAllowence < Number(toWei(coin1.amount, "ether"))) {
           await approve(
             BULCContract,
-            Web3.utils.toWei("100000000000000", "tether"),
+            toWei("100000000000000", "tether"),
             account,
-            addresses.swap_address
-          )
-            .then((res2) => {
-              toast.success(res2);
-            })
-            .catch((err) => {
-              console.log("approve has error");
-            });
+            addresses.swap_address,
+            (res) => {
+              toast.success(res);
+            }
+          );
         } else {
-          console.log("no need approve BULC");
-          return;
+          console.log("No Need to Approve BULC");
         }
       }
     );
@@ -184,8 +186,8 @@ const Pool = () => {
       .addLiquidity(
         addresses.BULC_address,
         addresses.BUSD_address,
-        Web3.utils.toWei(coin1.amount, "ether"),
-        Web3.utils.toWei(coin2.amount, "ether"),
+        toWei(coin1.amount, "ether"),
+        toWei(coin2.amount, "ether"),
         1,
         1,
         account,
@@ -213,19 +215,23 @@ const Pool = () => {
     let LPToken = input.current.value;
     let account = authCtx.account;
 
-    await checkAllowence(pairContract, account, addresses.swap_address).then(
-      async (res) => {
-        if (res < Number(Web3.utils.toWei(LPToken, "ether"))) {
+    await getAllowence(
+      pairContract,
+      account,
+      addresses.swap_address,
+      async (pairAllowence) => {
+        if (pairAllowence < Number(toWei(LPToken, "ether"))) {
           await approve(
             pairContract,
-            Web3.utils.toWei("10000000000000000000000000", "tether"),
+            toWei("100000000000000", "tether"),
             account,
-            addresses.swap_address
-          ).then((res2) => {
-            toast.success(res2);
-          });
+            addresses.swap_address,
+            (res) => {
+              toast.success(res);
+            }
+          );
         } else {
-          return;
+          console.log("No Need to Approve pair");
         }
       }
     );
@@ -234,7 +240,7 @@ const Pool = () => {
       .removeLiquidity(
         coin1.address,
         coin2.address,
-        Web3.utils.toWei(LPToken, "ether"),
+        toWei(LPToken, "ether"),
         1,
         1,
         account
@@ -251,24 +257,12 @@ const Pool = () => {
 
   useEffect(() => {
     getSwapContract(swap_abi.abi, addresses.swap_address);
-    // .then((res) => {
-    //   setSwapContract(res);
-    // });
 
     getBULCContract(ERC20_abi.abi, addresses.BULC_address);
-    // .then((res) => {
-    //   setBULCContract(res);
-    // });
 
     getBUSDContract(ERC20_abi.abi, addresses.BUSD_address);
-    // .then((res) => {
-    //   setBUSDContract(res);
-    // });
 
     getpairContract(pair_abi.abi, addresses.pair_address);
-    // .then((res) => {
-    //   setPairContract(res);
-    // });
   }, []);
 
   return (
