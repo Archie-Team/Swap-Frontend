@@ -1,4 +1,3 @@
-import TokensStatus from "../components/dashboard/TokensStatus";
 import "./Dashboard.css";
 import TotalValue from "../components/dashboard/TotalValue";
 import React, { useEffect, useState } from "react";
@@ -7,16 +6,18 @@ import { addresses } from "../modules/addresses";
 import MainCard from "../components/layout/MainCard";
 import useContract from "../hooks/use-contract";
 import { fromWei } from "../modules/web3Wei";
-const Home = () => {
+import TokenInWallet from "../components/dashboard/TokenInWallet";
+import Positions from "../components/dashboard//Positions";
+import LPTokenBalance from "../components/dashboard/DashboardLPTokenBalance";
 
+const Home = () => {
   const [totalFrozen, setTotalFrozen] = useState(0);
   const [totalValueLocked, setTotalValueLocked] = useState(0);
   const { contract: stakeContract, getContract: getStakeContract } =
-  useContract();
-
+    useContract();
 
   useEffect(() => {
-    getStakeContract(stakeAbi.abi, addresses.staking_address)
+    getStakeContract(stakeAbi.abi, addresses.staking_address);
   }, []);
 
   useEffect(() => {
@@ -25,7 +26,7 @@ const Home = () => {
         .StakedRewardFreezed()
         .call()
         .then((res) => {
-          setTotalFrozen(fromWei(res,'ether'));
+          setTotalFrozen(fromWei(res, "ether"));
         });
     };
 
@@ -34,7 +35,7 @@ const Home = () => {
         .totalValueLockBUSD()
         .call()
         .then((res) => {
-          setTotalValueLocked(fromWei(res,'ether'));
+          setTotalValueLocked(fromWei(res, "ether"));
         });
     };
 
@@ -47,7 +48,10 @@ const Home = () => {
   return (
     <MainCard>
       <div className="top-container">
-        <TokensStatus />
+        <TokenInWallet />
+        <LPTokenBalance />
+        <div className="seprator-line"></div>
+        <Positions />
       </div>
       <div className="bottom-container">
         <TotalValue totalValue={totalValueLocked} totalFrozen={totalFrozen} />

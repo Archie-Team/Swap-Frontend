@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import BULC from "../../assets/images/Logo.png";
-
 import { navigationItems } from "../../modules/varibales";
 import { NavLink } from "react-router-dom";
 import "./Header.css";
@@ -11,9 +10,7 @@ const Header = () => {
 
   const toggleNavbarHandler = () => {
     setNavbarActivate(navbarActivate === "active" ? "" : "active");
-
   };
-
 
   return (
     <header className="header">
@@ -47,7 +44,6 @@ const Header = () => {
           <span className="bar"></span>
           <span className="bar"></span>
         </div>
-        
       </nav>
     </header>
   );

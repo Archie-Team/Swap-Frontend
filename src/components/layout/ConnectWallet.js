@@ -27,7 +27,7 @@ const ConnectWallet = () => {
           <div className="wallet-icon">
             <IoWalletOutline />
           </div>
-          <p className="">{shortAccountAddress()}</p>
+          <p>{shortAccountAddress()}</p>
         </div>
       )}
     </div>
