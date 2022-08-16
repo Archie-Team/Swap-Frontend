@@ -5,7 +5,7 @@ import web3 from "web3";
 import { getCurrentChainId } from "../../modules/web3Client";
 import { IoWalletOutline } from "react-icons/io5";
 import AuthContext from "../../context/auth-context";
-import { networksId } from "../../modules/networks";
+import { usedNetworkId } from "../../modules/networks";
 
 const ConnectWallet = () => {
   const { ethereum } = window;
@@ -16,6 +16,7 @@ const ConnectWallet = () => {
   };
 
   const switchNetwork = async (id) => {
+
     if (authCtx.account && authCtx.networkId !== id) {
       await window.ethereum.request({
         method: "wallet_switchEthereumChain",
@@ -47,7 +48,7 @@ const ConnectWallet = () => {
   }
 
   useEffect(() => {
-    switchNetwork(networksId.testNetworkId);
+    switchNetwork(usedNetworkId);
   }, [authCtx.networkId]);
 
   useEffect(() => {
@@ -59,10 +60,11 @@ const ConnectWallet = () => {
       // check if user disconnect or change account
       ethereum.on("accountsChanged", (accounts) => {
         accounts[0] ? authCtx.onLogin(accounts[0]) : authCtx.onLogout();
-        switchNetwork(networksId.testNetworkId);
+        switchNetwork(usedNetworkId);
       });
 
       ethereum.on("chainChanged", (chainId) => {
+
         authCtx.onSetNetworkId(chainId);
         window.location.reload();
       });
