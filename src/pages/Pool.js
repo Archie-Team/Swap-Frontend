@@ -12,16 +12,16 @@ import toast, { Toaster } from "react-hot-toast";
 import Modal from "react-modal";
 import RemoveLiquidity from "../components/pool/RemoveLiquidity";
 import { BiLinkExternal } from "react-icons/bi";
-import AuthContext from "../context/auth-context";
 import { Link } from "react-router-dom";
 import useContract from "../hooks/use-contract";
 import useWeb3 from "../hooks/use-web3";
 import { fromWei, toWei } from "../modules/web3Wei";
 import useBalance from "../hooks/use-balance";
+import { useSelector } from "react-redux";
 
 const Pool = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
-  const authCtx = useContext(AuthContext);
+  const account = useSelector((state) => state.auth.account);
 
   const { contract: swapContract, getContract: getSwapContract } =
     useContract();
@@ -70,8 +70,8 @@ const Pool = () => {
   const { balance: BULCBalance, getBalance: getBULCBalance } = useBalance();
 
   const updateTokenBalances = () => {
-    getBULCBalance(BULCContract, authCtx.account);
-    getBUSDBalance(BUSDContract, authCtx.account);
+    getBULCBalance(BULCContract, account);
+    getBUSDBalance(BUSDContract, account);
   };
 
   useEffect(() => {
@@ -87,10 +87,10 @@ const Pool = () => {
   }, [BULCBalance]);
 
   useEffect(() => {
-    if (BULCContract && BUSDContract && authCtx.account) {
+    if (BULCContract && BUSDContract && account) {
       updateTokenBalances();
     }
-  }, [BULCContract, BUSDContract, authCtx.account]);
+  }, [BULCContract, BUSDContract, account]);
 
   const changeBUSDAmount = async (data) => {
     if (!data.value || data.value <= 0) {
@@ -218,7 +218,7 @@ const Pool = () => {
 
   const removeLiquidity = async (input) => {
     let LPToken = input.current.value;
-    let account = authCtx.account;
+    let account = account;
 
     await getAllowence(
       pairContract,
@@ -334,7 +334,7 @@ const Pool = () => {
           Remove
         </button>
         <button
-          onClick={() => addLiquidity(authCtx.account)}
+          onClick={() => addLiquidity(account)}
           className="main-button supply"
         >
           Supply

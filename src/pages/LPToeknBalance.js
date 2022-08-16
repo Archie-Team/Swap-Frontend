@@ -1,5 +1,4 @@
-import React, { useContext, useEffect } from "react";
-import AuthContext from "../context/auth-context";
+import React, { useEffect } from "react";
 import useBalance from "../hooks/use-balance";
 import { roundNumber } from "../modules/formatNumbers";
 import { networksId } from "../modules/networks";
@@ -7,15 +6,15 @@ import { fromWei } from "../modules/web3Wei";
 import { useSelector } from "react-redux";
 
 const LPToeknBalance = ({ contract }) => {
-  const authCtx = useContext(AuthContext);
+  const account = useSelector((state) => state.auth.account);
   const networkId  = useSelector((state) => state.network.networkId)
   const { balance: LPTokenBalance, getBalance: getLPBalance } = useBalance();
 
   useEffect(() => {
-    if (contract && authCtx.account && networkId === networksId.testNetworkId) {
-      getLPBalance(contract, authCtx.account);
+    if (contract && account && networkId === networksId.testNetworkId) {
+      getLPBalance(contract, account);
     }
-  }, [contract, authCtx.account]);
+  }, [contract, account]);
 
   return (
     <div className="LP-token-balance">

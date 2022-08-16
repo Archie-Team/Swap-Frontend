@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const networkSlice = createSlice({
+const walletSlice = createSlice({
   name: "ui",
   initialState: { networkId: 0 },
   reducers: {
@@ -10,6 +10,6 @@ const networkSlice = createSlice({
   },
 });
 
-export const networkActions = networkSlice.actions;
+export const walletActions = walletSlice.actions;
 
-export default networkSlice;
+export default walletSlice;

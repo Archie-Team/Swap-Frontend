@@ -1,9 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore } from "@reduxjs/toolkit";
 
-import network from './network-slice';
+import wallet from "./wallet-slice";
+import auth from "./auth-slice";
 
 const store = configureStore({
-  reducer: { network: network.reducer },
+  reducer: { wallet: wallet.reducer, auth: auth.reducer },
 });
 
 export default store;

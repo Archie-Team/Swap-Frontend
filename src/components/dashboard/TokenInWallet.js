@@ -1,15 +1,16 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import Token from "./Token";
 import "./TokensInWallet.css";
 import { coins } from "../../modules/coins";
 import { addresses } from "../../modules/addresses";
 import ERC20_abi from "../../assets/files/ERC20.json";
-import AuthContext from "../../context/auth-context";
 import useContract from "../../hooks/use-contract";
 import useBalance from "../../hooks/use-balance";
+import { useSelector } from "react-redux";
 
 const TokenInWallet = () => {
-  const authCtx = useContext(AuthContext);
+  const account = useSelector((state) => state.auth.account);
+
 
   const { contract: BULCContract, getContract: getBULCContract } =
     useContract();
@@ -25,11 +26,11 @@ const TokenInWallet = () => {
   }, []);
 
   useEffect(() => {
-    if (BULCContract && BUSDContract && authCtx.account) {
-      getBUSDBalance(BUSDContract, authCtx.account);
-      getBULCBalance(BULCContract, authCtx.account);
+    if (BULCContract && BUSDContract && account) {
+      getBUSDBalance(BUSDContract, account);
+      getBULCBalance(BULCContract, account);
     }
-  }, [BUSDContract, BULCContract, authCtx.account]);
+  }, [BUSDContract, BULCContract, account]);
 
   return (
     <div className="tokens-inwallet">

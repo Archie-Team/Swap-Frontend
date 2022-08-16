@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MainCard from "../components/layout/MainCard";
 import Stake from "../components/staking/StakeItem";
 import "./Staking.css";
@@ -10,13 +10,13 @@ import Web3 from "web3";
 import ERC20Abi from "../assets/files/ERC20.json";
 import LPToeknBalance from "./LPToeknBalance";
 import toast, { Toaster } from "react-hot-toast";
-import AuthContext from "../context/auth-context";
 import useContract from "../hooks/use-contract";
 import useWeb3 from "../hooks/use-web3";
 import { toWei } from "../modules/web3Wei";
+import { useSelector } from "react-redux";
 
 const Staking = () => {
-  const authCtx = useContext(AuthContext);
+  const account = useSelector((state) => state.auth.account);
 
   const [selectedStake, setSelectedStake] = useState({
     value: null,
@@ -136,8 +136,8 @@ const Staking = () => {
               stakeHandler(
                 selectedStake.value,
                 selectedStake.choice,
-                authCtx.account
-              ) //, authCtx.account
+                account
+              )
           }
           className="main-button"
         >

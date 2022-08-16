@@ -9,7 +9,6 @@ import SwapPriceImpact from "../components/swap/SwapPriceImpact";
 import ERC20_abi from "../assets/files/ERC20.json";
 import swapAbi from "../assets/files/Swap.json";
 import toast, { Toaster } from "react-hot-toast";
-import AuthContext from "../context/auth-context";
 import SwapPrice from "../components/swap/SwapPrice";
 import SwapSlippageTolerance from "../components/swap/SwapSlippageTolerance";
 import { roundNumber } from "../modules/formatNumbers";
@@ -17,9 +16,10 @@ import useContract from "../hooks/use-contract";
 import { fromWei, toWei } from "../modules/web3Wei";
 import useWeb3 from "../hooks/use-web3";
 import useBalance from "../hooks/use-balance";
+import { useSelector } from "react-redux";
 
 const Swap = () => {
-  const authCtx = useContext(AuthContext);
+  const account = useSelector((state) => state.auth.account);
   const [slippageTolerance, setSlippageTolerance] = useState(2);
 
   const [coin1, setCoin1] = useState({
@@ -57,8 +57,8 @@ const Swap = () => {
   const { balance: token2Balance, getBalance: getToken2Balance } = useBalance();
 
   const updateTokenBalances = () => {
-    getToken1Balance(token1Contract, authCtx.account);
-    getToken2Balance(token2Contract, authCtx.account)
+    getToken1Balance(token1Contract, account);
+    getToken2Balance(token2Contract, account)
   };
 
   useEffect(() => {
@@ -142,10 +142,10 @@ const Swap = () => {
   };
 
   useEffect(() => {
-    if (token1Contract && token2Contract && authCtx.account) {
+    if (token1Contract && token2Contract && account) {
       updateTokenBalances();
     }
-  }, [token1Contract, authCtx.account]);
+  }, [token1Contract, account]);
 
   const swap = async (
     contract,
@@ -179,14 +179,14 @@ const Swap = () => {
 
     await getAllowence(
       token1Contract,
-      authCtx.account,
+      account,
       addresses.swap_address,
       async (tokenAllowence) => {
         if (tokenAllowence < Number(toWei(coin1.amount, "wei"))) {
           await approve(
             token1Contract,
             toWei("100000000000000", "tether"),
-            authCtx.account,
+            account,
             addresses.swap_address,
             (res) => {
               toast.success(res);
@@ -212,7 +212,7 @@ const Swap = () => {
       coin1.address,
       coin2.address,
       amountOutMin_string,
-      authCtx.account
+      account
     )
       .then((res) => {
         toast.success(res);
@@ -227,14 +227,14 @@ const Swap = () => {
 
     await getAllowence(
       token1Contract,
-      authCtx.account,
+      account,
       addresses.swap_address,
       async (tokenAllowence) => {
         if (tokenAllowence < Number(toWei(coin2.amount, "ether"))) {
           await approve(
             token1Contract,
             toWei("100000000000000", "tether"),
-            authCtx.account,
+            account,
             addresses.swap_address,
             (res) => {
               toast.success(res);
@@ -260,7 +260,7 @@ const Swap = () => {
       coin1.address,
       coin2.address,
       amountOutMax_string,
-      authCtx.account
+      account
     )
       .then((res) => {
         toast.success(res);
