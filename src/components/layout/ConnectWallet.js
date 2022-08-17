@@ -20,7 +20,7 @@ const ConnectWallet = () => {
     if (authCtx.account && authCtx.networkId !== id) {
       await window.ethereum.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: id }],
+        params: [{ chainId: id}],
       });
       window.location.reload();
     } else {
@@ -51,6 +51,7 @@ const ConnectWallet = () => {
     switchNetwork(usedNetworkId);
   }, [authCtx.networkId]);
 
+
   useEffect(() => {
     const connectWalletOnPageLoad = async () => {
       if (!ethereum) {
@@ -64,7 +65,6 @@ const ConnectWallet = () => {
       });
 
       ethereum.on("chainChanged", (chainId) => {
-
         authCtx.onSetNetworkId(chainId);
         window.location.reload();
       });

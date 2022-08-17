@@ -1,8 +1,6 @@
 import Header from "./Header";
 import { Fragment, useContext, useEffect } from "react";
 import "./PageLayout.css";
-// import { networksId } from "../../modules/networks";
-// import NetworkMessage from "./NetworkMessage";
 import AuthContext from "../../context/auth-context";
 import { getCurrentChainId } from "../../modules/web3Client";
 
