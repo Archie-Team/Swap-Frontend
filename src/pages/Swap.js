@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MainCard from "../components/layout/MainCard";
 import "./Swap.css";
 import { MdSwapVert } from "react-icons/md";
@@ -38,16 +38,23 @@ const Swap = () => {
     contract: null,
   });
 
-  const { contract: token1Contract, getContract: getToken1Contract } =
-    useContract();
-  const { contract: token2Contract, getContract: getToken2Contract } =
-    useContract();
-  const { contract: swapContract, getContract: getSwapContract } =
-    useContract();
+  const { getContract } = useContract();
+  // const { contract: token2Contract, getContract: getToken2Contract } =
+  //   useContract();
+  // const { contract: swapContract, getContract: getSwapContract } =
+  //   useContract();
+
+  const [token1Contract, setToken1Contract] = useState(null);
+  const [token2Contract, setToken2Contract] = useState(null);
+  const [swapContract, setSwapContract] = useState(null);
 
   useEffect(() => {
-    getToken1Contract(ERC20_abi.abi, coin1.address);
-    getToken2Contract(ERC20_abi.abi, coin2.address);
+    getContract(ERC20_abi.abi, coin1.address, (contract) =>
+      setToken1Contract(contract)
+    );
+    getContract(ERC20_abi.abi, coin2.address, (contract) =>
+      setToken2Contract(contract)
+    );
   }, []);
 
   const [calculatedCoin1Amount, setCalculatedCoin1Amount] = useState("");
@@ -58,7 +65,7 @@ const Swap = () => {
 
   const updateTokenBalances = () => {
     getToken1Balance(token1Contract, account);
-    getToken2Balance(token2Contract, account)
+    getToken2Balance(token2Contract, account);
   };
 
   useEffect(() => {
@@ -73,9 +80,10 @@ const Swap = () => {
     });
   }, [token2Balance]);
 
-  
   useEffect(() => {
-    getSwapContract(swapAbi.abi, addresses.swap_address);
+    getContract(swapAbi.abi, addresses.swap_address, (contract) =>
+      setSwapContract(contract)
+    );
   }, []);
 
   const changeFirstInputHandler = async (input) => {

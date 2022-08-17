@@ -23,19 +23,24 @@ const Staking = () => {
     stake: {},
   });
 
-  const { contract: stakeContract, getContract: getStakeContract } =
-    useContract();
+  const [stakeContract, setStakeContract] = useState(null);
+  const [pairContract, setPairContract] = useState(null);
+  const [BUSDContract, setBUSDContract] = useState(null);
 
-  const { contract: pairContract, getContract: getPairContract } =
-    useContract();
-
-  const { contract: BUSDContract, getContract: getBUSDContract } =
-    useContract();
+  const { getContract } = useContract();
 
   useEffect(() => {
-    getStakeContract(stakeAbi.abi, addresses.staking_address);
-    getPairContract(pairAbi.abi, addresses.pair_address);
-    getBUSDContract(ERC20Abi.abi, addresses.BUSD_address);
+    getContract(stakeAbi.abi, addresses.staking_address, (contract) =>
+      setStakeContract(contract)
+    );
+
+    getContract(pairAbi.abi, addresses.pair_address, (contract) =>
+      setPairContract(contract)
+    );
+
+    getContract(ERC20Abi.abi, addresses.BUSD_address, (contract) =>
+      setBUSDContract(contract)
+    );
   }, []);
 
   const calculateBUSDValue = async (amount) => {
@@ -50,7 +55,6 @@ const Staking = () => {
   const { getAllowence, approve } = useWeb3();
 
   const stakeHandler = async (amount, choice, account) => {
-
     await getAllowence(
       pairContract,
       account,
@@ -131,13 +135,8 @@ const Staking = () => {
 
       <div className="staking-actions">
         <button
-          onClick={
-            () =>
-              stakeHandler(
-                selectedStake.value,
-                selectedStake.choice,
-                account
-              )
+          onClick={() =>
+            stakeHandler(selectedStake.value, selectedStake.choice, account)
           }
           className="main-button"
         >

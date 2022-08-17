@@ -1,17 +1,17 @@
 import React, { useEffect } from "react";
 import useBalance from "../hooks/use-balance";
 import { roundNumber } from "../modules/formatNumbers";
-import { networksId } from "../modules/networks";
+import { usedNetworkId } from "../modules/networks";
 import { fromWei } from "../modules/web3Wei";
 import { useSelector } from "react-redux";
 
 const LPToeknBalance = ({ contract }) => {
   const account = useSelector((state) => state.auth.account);
-  const networkId  = useSelector((state) => state.network.networkId)
+  const networkId  = useSelector((state) => state.wallet.networkId)
   const { balance: LPTokenBalance, getBalance: getLPBalance } = useBalance();
 
   useEffect(() => {
-    if (contract && account && networkId === networksId.testNetworkId) {
+    if (contract && account && networkId === usedNetworkId) {
       getLPBalance(contract, account);
     }
   }, [contract, account]);

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { addresses } from "../../modules/addresses";
 import pair_abi from "../../assets/files/Pair.json";
 import { roundNumber } from "../../modules/formatNumbers";
@@ -19,7 +19,7 @@ const LPTokenBalance = () => {
     if (pairContract && account) {
       getLPBalance(pairContract, account);
     }
-  }, [pairContract, account]);
+  }, [getLPBalance,pairContract, account]);
 
   useEffect(() => {
     getPairContract(pair_abi.abi, addresses.pair_address);

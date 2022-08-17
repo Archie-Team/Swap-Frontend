@@ -1,6 +1,6 @@
 import { walletActions } from "./wallet-slice";
 import { authActions } from "./auth-slice";
-import { networksId } from "../modules/networks";
+import { networksId, usedNetworkId } from "../modules/networks";
 
 export const getCurrentNetworkId = () => {
   return async (dispatch) => {
@@ -10,8 +10,8 @@ export const getCurrentNetworkId = () => {
       });
       dispatch(walletActions.setCurrentNetworkId(networkId));
 
-      if (networkId !== networksId.testNetworkId) {
-        dispatch(switchNetwork(networksId.testNetworkId));
+      if (networkId !== usedNetworkId) {
+        dispatch(switchNetwork(usedNetworkId));
       }
     } catch (error) {}
   };

@@ -1,30 +1,95 @@
-import React, { useRef } from "react";
+import React, { useEffect, useState } from "react";
 import "./RemoveLiquidity.css";
-import { IoMdClose } from "react-icons/io";
-import LPToeknBalance from "../../pages/LPToeknBalance";
+import RemoveLiquidityModal from "./RemoveLiquidityModal";
+import Modal from "react-modal";
+import toast from "react-hot-toast";
+import useWeb3 from "../../hooks/use-web3";
+import { addresses } from "../../modules/addresses";
+import { toWei } from "../../modules/web3Wei";
+import { useSelector } from "react-redux";
 
-const RemoveLiquidity = ({ onRemoveLiquidity,onCloseModal,address, contract }) => {
-  const LPToken = useRef(0);
+
+const RemoveLiquidity = ({ coin1, coin2, pairContract, swapContract }) => {
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const { getAllowence, approve } = useWeb3();
+  const account = useSelector((state) => state.auth.account);
+
 
   const closeModal = () => {
-    onCloseModal()
+    setIsOpen(false);
   };
 
-  const removeLiquidity = () => {
-    onRemoveLiquidity(LPToken);
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const removeLiquidity = async (input) => {
+    let LPToken = input.current.value;
+    // let account = account;
+
+    await getAllowence(
+      pairContract,
+      account,
+      addresses.swap_address,
+      async (pairAllowence) => {
+        if (pairAllowence < Number(toWei(LPToken, "ether"))) {
+          await approve(
+            pairContract,
+            toWei("100000000000000", "tether"),
+            account,
+            addresses.swap_address,
+            (res) => {
+              toast.success(res);
+            }
+          );
+        } else {
+          console.log("No Need to Approve pair");
+        }
+      }
+    );
+
+    await swapContract.methods
+      .removeLiquidity(
+        coin1.address,
+        coin2.address,
+        toWei(LPToken, "ether"),
+        1,
+        1,
+        account
+      )
+      .send({ from: account })
+      .then((res) => {
+        closeModal();
+        toast.success("remove Liquidity was successfull !");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
     <div>
-      <button className="close-modal__button" onClick={closeModal}><IoMdClose /></button>
-     <LPToeknBalance
-        contract={contract}
-        address={address}
-      />
-      <form className="remove-l-form">
-        <input ref={LPToken} placeholder="BUSD_BULC LP" />
-      </form>
-      <button className="remove-l-button" onClick={removeLiquidity }>Remove Liquidity</button>
+      {modalIsOpen && (
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          className="Modal"
+          overlayClassName="Overlay"
+          ariaHideApp={false}
+        >
+          <RemoveLiquidityModal
+            onCloseModal={closeModal}
+            onRemoveLiquidity={removeLiquidity}
+            coinsAddress={{ coin1: coin1.address, coin2: coin2.address }}
+            contract={pairContract}
+            address={addresses.pair_address}
+          />
+        </Modal>
+      )}
+
+      <button onClick={openModal} className="main-button">
+        Remove
+      </button>
     </div>
   );
 };
