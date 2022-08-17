@@ -4,6 +4,6 @@ export const addresses = {
     BULC_address: "0x33A12CEe993da069BF7EBAB3D7423e25278acf61",
     pair_address :'0x24B411e4CeFbE88B84Ed5d833870A008a0e543eb',
     // staking_address : '0x6BDBc6D288F5A4184FdF7A52Ef129D43f579cDD7'
-    staking_address : '0xDdfD35c1518141580146d087916C2E7f4f55dEa5'
+    staking_address : '0x2964BF9E8b888C01F3e56b00B65b3dAf94C5D15F'
   };
   
