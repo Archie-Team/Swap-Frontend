@@ -18,6 +18,6 @@ export const stakes = [
   {
     choice: 4,
     monthNumber: 12,
-    APRAmountPersent: 200,
+    APRAmountPersent: 300,
   },
 ];
