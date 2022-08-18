@@ -1,6 +1,6 @@
 import { walletActions } from "./wallet-slice";
 import { authActions } from "./auth-slice";
-import { networksId, usedNetworkId } from "../modules/networks";
+import { usedNetworkId } from "../modules/networks";
 
 export const getCurrentNetworkId = () => {
   return async (dispatch) => {
