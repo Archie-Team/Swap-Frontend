@@ -1,11 +1,13 @@
 import React from "react";
+import { roundNumber } from "../../modules/formatNumbers";
+import { fromWei } from "../../modules/web3Wei";
 import "./Token.css";
 
-const Token = ({ tokenAmount, tokenUrl }) => {
+const Token = ({ tokenBalance, tokenUrl }) => {
   return (
     <div className="token-inwallet_container">
       <img src={tokenUrl} alt="" />
-      <p>{tokenAmount}</p>
+      <p>{roundNumber(fromWei(tokenBalance, "ether"), 5)}</p>
     </div>
   );
 };

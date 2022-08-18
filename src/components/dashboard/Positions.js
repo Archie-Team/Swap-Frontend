@@ -1,25 +1,26 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Positions.css";
 import stakeAbi from "../../assets/files/Staking.json";
 import { addresses } from "../../modules/addresses";
-import { initContract } from "../../modules/web3Client";
 import PositionItem from "./PositionItem";
 import { stakes } from "../../modules/stakes";
-import AuthContext from "../../context/auth-context";
 import toast from "react-hot-toast";
 import { roundNumber } from "../../modules/formatNumbers";
-import Web3 from "web3";
+import useContract from "../../hooks/use-contract";
+import { fromWei } from "../../modules/web3Wei";
+import { useSelector } from "react-redux";
 
 const StakingAmount = () => {
-  const [stakeContract, setStakeContract] = useState(null);
   const [positionNumber, setPositionNumber] = useState(0);
   const [positions, setPositions] = useState([]);
-  const authCtx = useContext(AuthContext);
+  const account = useSelector((state) => state.auth.account);
+  const [stakeContract, setStakeContract] = useState(null);
+  const { getContract } = useContract();
 
   useEffect(() => {
-    initContract(stakeAbi.abi, addresses.staking_address).then((res) => {
-      setStakeContract(res);
-    });
+    getContract(stakeAbi.abi, addresses.staking_address, (contract) =>
+      setStakeContract(contract)
+    );
   }, []);
 
   const getPositions = async (account) => {
@@ -27,18 +28,17 @@ const StakingAmount = () => {
       .positions(account)
       .call()
       .then((res) => {
-        // console.log(res);
         return Promise.resolve(res);
       });
   };
 
   useEffect(() => {
-    if (stakeContract && authCtx.account) {
-      getPositions(authCtx.account).then((res) => {
+    if (stakeContract && account) {
+      getPositions(account).then((res) => {
         setPositionNumber(res);
       });
     }
-  }, [stakeContract, authCtx.account]);
+  }, [stakeContract, account]);
 
   useEffect(() => {
     const setPositionsObject = async (account) => {
@@ -49,10 +49,10 @@ const StakingAmount = () => {
       }
     };
 
-    if (authCtx.account) {
-      setPositionsObject(authCtx.account);
+    if (account) {
+      setPositionsObject(account);
     }
-  }, [positionNumber, authCtx.account]);
+  }, [positionNumber, account]);
 
   const getPosition = async (number, account) => {
     return await stakeContract.methods
@@ -71,7 +71,7 @@ const StakingAmount = () => {
   const unstakePosition = async (index) => {
     return await stakeContract.methods
       .unstake(index)
-      .send({ from: authCtx.account })
+      .send({ from: account })
       .then(async (res) => {
         let returnValues = res.events.Unstake.returnValues;
 
@@ -82,17 +82,17 @@ const StakingAmount = () => {
             shortAccountAddress(returnValues.user) +
             "\n" +
             "Amount : " +
-            roundNumber(Web3.utils.fromWei(returnValues.amount, "ether"), 5) +
+            roundNumber(fromWei(returnValues.amount, "ether"), 5) +
             " LP" +
             "\n" +
             "Reward : " +
-            roundNumber(Web3.utils.fromWei(returnValues.reward, "ether"), 5),
+            roundNumber(fromWei(returnValues.reward, "ether"), 5),
           {
             duration: 10000,
           }
         );
 
-        await getPositions(authCtx.account).then((res) => {
+        await getPositions(account).then((res) => {
           setPositionNumber(res);
         });
         return res;

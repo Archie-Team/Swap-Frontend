@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Web3 from "web3";
 import { roundNumber } from "../../modules/formatNumbers";
+import { fromWei } from "../../modules/web3Wei";
 import "./PositionItem.css";
 
 const PositionItem = ({
@@ -67,12 +68,12 @@ const PositionItem = ({
 
       <div>
         <p>Stake Token :</p>
-        <p>{Web3.utils.fromWei(lpToken, "ether")} BULC-BUSD</p>
+        <p>{fromWei(lpToken, "ether")} BULC-BUSD</p>
       </div>
 
       <div>
         <p>Profit :</p>
-        <p> {roundNumber(Web3.utils.fromWei(profit, "ether"), 5)} BULC</p>
+        <p> {roundNumber(fromWei(profit, "ether"), 5)} BULC</p>
       </div>
 
       <div className="deadline-timer">

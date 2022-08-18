@@ -1,96 +1,100 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MainCard from "../components/layout/MainCard";
 import Stake from "../components/staking/StakeItem";
 import "./Staking.css";
 import { addresses } from "../modules/addresses";
-import { approve, checkAllowence, initContract } from "../modules/web3Client";
 import { stakes } from "../modules/stakes";
 import stakeAbi from "../assets/files/Staking.json";
 import pairAbi from "../assets/files/Pair.json";
 import Web3 from "web3";
 import ERC20Abi from "../assets/files/ERC20.json";
-import pair_abi from "../assets/files/Pair.json";
 import LPToeknBalance from "./LPToeknBalance";
 import toast, { Toaster } from "react-hot-toast";
-import AuthContext from "../context/auth-context";
+import useContract from "../hooks/use-contract";
+import useWeb3 from "../hooks/use-web3";
+import { toWei } from "../modules/web3Wei";
+import { useSelector } from "react-redux";
 
 const Staking = () => {
-  const [stakeContract, setStakeContract] = useState(null);
-  const [pairContract, setPairContract] = useState(null);
-  const [BUSDContract, setBUSDContract] = useState(null);
-  const [pairContarct, setPairContarct] = useState(null);
-  const authCtx = useContext(AuthContext);
+  const account = useSelector((state) => state.auth.account);
 
   const [selectedStake, setSelectedStake] = useState({
     value: null,
     stake: {},
   });
 
-  useEffect(() => {
-    initContract(pair_abi.abi, addresses.pair_address).then((res) => {
-      setPairContarct(res);
-    });
-  }, []);
+  const [stakeContract, setStakeContract] = useState(null);
+  const [pairContract, setPairContract] = useState(null);
+  const [BUSDContract, setBUSDContract] = useState(null);
+
+  const { getContract } = useContract();
 
   useEffect(() => {
-    initContract(stakeAbi.abi, addresses.staking_address).then((res) => {
-      setStakeContract(res);
-    });
+    getContract(stakeAbi.abi, addresses.staking_address, (contract) =>
+      setStakeContract(contract)
+    );
 
-    initContract(pairAbi.abi, addresses.pair_address).then((res) => {
-      setPairContract(res);
-    });
+    getContract(pairAbi.abi, addresses.pair_address, (contract) =>
+      setPairContract(contract)
+    );
 
-    initContract(ERC20Abi.abi, addresses.BUSD_address).then((res) => {
-      setBUSDContract(res);
-    });
+    getContract(ERC20Abi.abi, addresses.BUSD_address, (contract) =>
+      setBUSDContract(contract)
+    );
   }, []);
 
   const calculateBUSDValue = async (amount) => {
     return await stakeContract.methods
-      .calculateValue(Web3.utils.toWei(amount.toString(), "ether"))
+      .calculateValue(toWei(amount.toString(), "ether"))
       .call()
       .then((res) => {
         return res;
       });
   };
 
+  const { getAllowence, approve } = useWeb3();
+
   const stakeHandler = async (amount, choice, account) => {
-    await checkAllowence(pairContract, account, addresses.staking_address).then(
-      async (res) => {
-        if (res < Number(Web3.utils.toWei(amount, "ether"))) {
+    await getAllowence(
+      pairContract,
+      account,
+      addresses.staking_address,
+      async (pairAllowence) => {
+        if (pairAllowence < Number(toWei(amount, "ether"))) {
           await approve(
             pairContract,
-            Web3.utils.toWei("10000000000000000000000000", "tether"), //approve a big number
+            toWei("100000000000000", "tether"),
             account,
-            addresses.staking_address
-          ).then((res) => {
-            toast.success(res);
-          });
+            addresses.staking_address,
+            (res) => {
+              toast.success(res);
+            }
+          );
         } else {
-          console.log("No Need to Approve Stake");
-          return;
+          console.log("No Need to Approve pair");
         }
       }
     );
 
     const BUSDValue = await calculateBUSDValue(amount);
 
-    //approve BUSD amount
-    await checkAllowence(BUSDContract, account, addresses.staking_address).then(
-      async (res) => {
-        if (res < Number(BUSDValue)) {
+    await getAllowence(
+      BUSDContract,
+      account,
+      addresses.staking_address,
+      async (BUSDAllowence) => {
+        if (BUSDAllowence < Number(BUSDValue)) {
           await approve(
             BUSDContract,
-            Web3.utils.toWei("1000000000000000", "tether"), //approve a big number
+            toWei("100000000000000", "tether"),
             account,
-            addresses.staking_address
-          ).then((res) => {
-            toast.success(res);
-          });
+            addresses.staking_address,
+            (res) => {
+              toast.success(res);
+            }
+          );
         } else {
-          console.log("No Need to Approve");
-          return;
+          console.log("No Need to Approve BUSD");
         }
       }
     );
@@ -111,7 +115,7 @@ const Staking = () => {
     <MainCard>
       <Toaster position="top-center" reverseOrder={false} />
       <LPToeknBalance
-        contract={pairContarct}
+        contract={pairContract}
         address={addresses.pair_address}
       />
       <div className="LP-token-balance">
@@ -131,13 +135,8 @@ const Staking = () => {
 
       <div className="staking-actions">
         <button
-          onClick={
-            () =>
-              stakeHandler(
-                selectedStake.value,
-                selectedStake.choice,
-                authCtx.account
-              ) //, authCtx.account
+          onClick={() =>
+            stakeHandler(selectedStake.value, selectedStake.choice, account)
           }
           className="main-button"
         >

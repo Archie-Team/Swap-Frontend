@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { fromWei } from "../../modules/convertors";
 import { roundNumber } from "../../modules/formatNumbers";
+import { fromWei } from "../../modules/web3Wei";
 import "./CoinField.css";
 
 const CoinField = ({
@@ -22,7 +22,7 @@ const CoinField = ({
       : setCoinValue(roundNumber(calculatedAmount, 5));
   }, [calculatedAmount]);
 
-  const computedBalance = coinBalance ? roundNumber(fromWei(coinBalance), 5) : 0
+  const computedBalance = coinBalance ? roundNumber(fromWei(coinBalance,'ether'), 5) : 0
 
   return (
     <div className="token-container">

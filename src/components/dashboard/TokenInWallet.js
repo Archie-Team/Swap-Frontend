@@ -1,49 +1,45 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Token from "./Token";
 import "./TokensInWallet.css";
 import { coins } from "../../modules/coins";
 import { addresses } from "../../modules/addresses";
-import { getTokenBalance, initContract } from "../../modules/web3Client";
 import ERC20_abi from "../../assets/files/ERC20.json";
-import { roundNumber } from "../../modules/formatNumbers";
-import AuthContext from "../../context/auth-context";
-import { fromWei } from "../../modules/convertors";
+import useContract from "../../hooks/use-contract";
+import useBalance from "../../hooks/use-balance";
+import { useSelector } from "react-redux";
 
 const TokenInWallet = () => {
-  const [BUSDAmount, setBUSDAmount] = useState(0);
-  const [BULCAmount, setBULCAmount] = useState(0);
-  const [BUSDContract, setBUSDContract] = useState(null);
+  const account = useSelector((state) => state.auth.account);
   const [BULCContract, setBULCContract] = useState(null);
-  const authCtx = useContext(AuthContext);
+  const [BUSDContract, setBUSDContract] = useState(null);
+
+  const { getContract } = useContract();
+  
+  const { balance: BULCBalance, getBalance: getBULCBalance } = useBalance();
+  const { balance: BUSDBalance, getBalance: getBUSDBalance } = useBalance();
 
   useEffect(() => {
-    initContract(ERC20_abi.abi, addresses.BUSD_address).then((res) => {
-      setBUSDContract(res);
-    });
-
-    initContract(ERC20_abi.abi, addresses.BULC_address).then((res) => {
-      setBULCContract(res);
-    });
+    getContract(ERC20_abi.abi, addresses.BUSD_address, (contract) =>
+      setBUSDContract(contract)
+    );
+    getContract(ERC20_abi.abi, addresses.BULC_address, (contract) =>
+      setBULCContract(contract)
+    );
   }, []);
 
   useEffect(() => {
-    if (BULCContract && BUSDContract && authCtx.account) {
-      getTokenBalance(BUSDContract, authCtx.account).then((res) => {
-        setBUSDAmount(roundNumber(fromWei(res), 5));
-      });
-
-      getTokenBalance(BULCContract, authCtx.account).then((res) => {
-        setBULCAmount(roundNumber(fromWei(res), 5));
-      });
+    if (BULCContract && BUSDContract && account) {
+      getBUSDBalance(BUSDContract, account);
+      getBULCBalance(BULCContract, account);
     }
-  }, [BUSDContract, BULCContract, authCtx.account]);
+  }, [BUSDContract, BULCContract, account]);
 
   return (
     <div className="tokens-inwallet">
       <p className="title">Tokens In Wallet</p>
       <div className="tokens-inwallet_container">
-        <Token tokenAmount={BUSDAmount} tokenUrl={coins.BUSD.image} />
-        <Token tokenAmount={BULCAmount} tokenUrl={coins.BULC.image} />
+        <Token tokenBalance={BUSDBalance} tokenUrl={coins.BUSD.image} />
+        <Token tokenBalance={BULCBalance} tokenUrl={coins.BULC.image} />
       </div>
     </div>
   );

@@ -2,20 +2,17 @@
   background-color: #fff;
   width: 100%;
   height: 1px;
-  margin-block: 15px;
-  border-radius: 50%;
+  margin-block: 35px;
+  border-radius: 50px;
 }
 
 .top-container {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-}
-
-.top-container > div {
-  padding: 30px;
-  width: 100%;
-  background-color: #415c4e;
   border-radius: 15px;
+  background-color: #415c4e;
+  padding: 30px;
 }
 
 .bottom-container {
@@ -24,12 +21,6 @@
 
 @media only screen and (max-width: 768px) {
   .top-container {
-    flex-direction: column;
-  }
-
-  .top-container > div {
-    padding: 30px 20px;
-    width: 100%;
-    margin-block: 10px;
+    padding: 35px 20px;
   }
 }

@@ -1,38 +1,36 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { addresses } from "../../modules/addresses";
 import pair_abi from "../../assets/files/Pair.json";
-import { getTokenBalance, initContract } from "../../modules/web3Client";
-import AuthContext from "../../context/auth-context";
 import { roundNumber } from "../../modules/formatNumbers";
 import "./DashboardLPTokenBalance.css";
-import { fromWei } from "../../modules/convertors";
+import useContract from "../../hooks/use-contract";
+import { fromWei } from "../../modules/web3Wei";
+import useBalance from "../../hooks/use-balance";
+import { useSelector } from "react-redux";
 
 const LPTokenBalance = () => {
-  const [lpBalance, setLPTokenBalance] = useState(0);
-  const authCtx = useContext(AuthContext);
-  const [pairContarct, setPairContarct] = useState(null);
-
- 
+  const account = useSelector((state) => state.auth.account);
+  const [pairContract, setPairContract] = useState(null);
+  const { balance: lpBalance, getBalance: getLPBalance } = useBalance();
+  const { getContract } = useContract();
 
   useEffect(() => {
-    if (pairContarct && authCtx.account) {
-      getTokenBalance(pairContarct, authCtx.account).then((res) => {
-        setLPTokenBalance(roundNumber(fromWei(res), 5));
-      });
+    getContract(pair_abi.abi, addresses.pair_address, (contract) =>
+      setPairContract(contract)
+    );
+  }, [getContract]);
+
+  useEffect(() => {
+    if (pairContract && account) {
+      getLPBalance(pairContract, account);
     }
-  }, [pairContarct, authCtx.account]);
+  }, [getLPBalance, pairContract, account]);
 
-
-  useEffect(() => {
-    initContract(pair_abi.abi, addresses.pair_address).then((res) => {
-      setPairContarct(res);
-    })
-  }, [])
   
 
   return (
     <div className="lp-token_balance">
-      <p>{lpBalance} </p>
+      <p>{roundNumber(fromWei(lpBalance, "ether"), 5)} </p>
       <p> BUSD_BULC LP</p>
     </div>
   );

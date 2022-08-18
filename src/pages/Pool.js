@@ -1,34 +1,29 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MainCard from "../components/layout/MainCard";
 import { BsPlusLg } from "react-icons/bs";
 import "./Pool.css";
-import {
-  approve,
-  checkAllowence,
-  getTokenBalance,
-  initContract,
-} from "../modules/web3Client";
 import { addresses } from "../modules/addresses";
 import ERC20_abi from "../assets/files/ERC20.json";
 import swap_abi from "../assets/files/Swap.json";
-import pair_abi from "../assets/files/Pair.json";
-import Web3 from "web3";
 import { coins } from "../modules/coins";
 import CoinField from "../components/coin/CoinField";
-import toast, { Toaster } from "react-hot-toast";
-import Modal from "react-modal";
-import RemoveLiquidity from "../components/pool/RemoveLiquidity";
-import { BiLinkExternal } from "react-icons/bi";
-import AuthContext from "../context/auth-context";
-import { Link } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+import useContract from "../hooks/use-contract";
+import pair_abi from "../assets/files/Pair.json";
+import { fromWei, toWei } from "../modules/web3Wei";
+import useBalance from "../hooks/use-balance";
+import { useSelector } from "react-redux";
+import PoolActions from "../components/pool/PoolActions";
+import PoolViewContract from "../components/pool/PoolViewContract";
 
 const Pool = () => {
-  const [swapContract, setSwapContract] = useState("");
-  const [BULCContarct, setBULCContarct] = useState(null);
-  const [BUSDContarct, setBUSDContarct] = useState(null);
-  const [pairContarct, setPairContarct] = useState(null);
-  const [modalIsOpen, setIsOpen] = useState(false);
-  const authCtx = useContext(AuthContext);
+  const account = useSelector((state) => state.auth.account);
+  const [swapContract, setSwapContract] = useState(null);
+  const [pairContract, setPairContract] = useState(null);
+  const [BUSDContract, setBUSDContract] = useState(null);
+  const [BULCContract, setBULCContract] = useState(null);
+
+  const { getContract: getContract } = useContract();
 
   const [coin1, setCoin1] = useState({
     ...coins.BULC,
@@ -58,31 +53,37 @@ const Pool = () => {
       if (res.resBUSD < 2000 || res.resBULC < 2000) return;
       await quote(data.value, res.resBULC, res.resBUSD).then((res2) => {
         setCoin2((prev) => {
-          return { ...prev, amount: Web3.utils.fromWei(res2, "ether") };
+          return { ...prev, amount: fromWei(res2, "ether") };
         });
       });
     });
   };
 
-  const updateTokenBalances = () => {
-    getTokenBalance(BULCContarct, authCtx.account).then((res) => {
-      setCoin1((prev) => {
-        return { ...prev, balance: res };
-      });
-    });
+  const { balance: BUSDBalance, getBalance: getBUSDBalance } = useBalance();
+  const { balance: BULCBalance, getBalance: getBULCBalance } = useBalance();
 
-    getTokenBalance(BUSDContarct, authCtx.account).then((res) => {
-      setCoin2((prev) => {
-        return { ...prev, balance: res };
-      });
-    });
+  const updateTokenBalances = () => {
+    getBULCBalance(BULCContract, account);
+    getBUSDBalance(BUSDContract, account);
   };
 
   useEffect(() => {
-    if (BULCContarct && BUSDContarct && authCtx.account) {
+    if (BULCContract && BUSDContract && account) {
       updateTokenBalances();
     }
-  }, [BULCContarct, BUSDContarct, authCtx.account]);
+  }, [BULCContract, BUSDContract, account]);
+
+  useEffect(() => {
+    setCoin2((prev) => {
+      return { ...prev, balance: BUSDBalance };
+    });
+  }, [BUSDBalance]);
+
+  useEffect(() => {
+    setCoin1((prev) => {
+      return { ...prev, balance: BULCBalance };
+    });
+  }, [BULCBalance]);
 
   const changeBUSDAmount = async (data) => {
     if (!data.value || data.value <= 0) {
@@ -99,14 +100,14 @@ const Pool = () => {
       if (res.resBUSD < 2000 || res.resBULC < 2000) return;
       await quote(data.value, res.resBUSD, res.resBULC).then((res2) => {
         setCoin1((prev) => {
-          return { ...prev, amount: Web3.utils.fromWei(res2, "ether") };
+          return { ...prev, amount: fromWei(res2, "ether") };
         });
       });
     });
   };
 
   const getBalances = async () => {
-    return await pairContarct.methods
+    return await pairContract.methods
       .getReserves()
       .call()
       .then((res) => {
@@ -124,7 +125,7 @@ const Pool = () => {
     if (!amount || amount === 0) return;
 
     return await swapContract.methods
-      .quote(Web3.utils.toWei(amount, "ether"), reserve0, reserve1)
+      .quote(toWei(amount, "ether"), reserve0, reserve1)
       .call()
       .then((res) => {
         return Promise.resolve(res);
@@ -134,156 +135,36 @@ const Pool = () => {
       });
   };
 
-  const addLiquidity = async (account) => {
-    await checkAllowence(BUSDContarct, account, addresses.swap_address).then(
-      async (res) => {
-        if (res < Number(Web3.utils.toWei(coin2.amount, "ether"))) {
-          await approve(
-            BUSDContarct,
-            Web3.utils.toWei("100000000000000", "tether"),
-            account,
-            addresses.swap_address
-          ).then((res2) => {
-            toast.success(res2);
-          });
-        } else {
-          console.log("No Need to Approve BUSD");
-          return;
-        }
-      }
-    );
-
-    await checkAllowence(BULCContarct, account, addresses.swap_address).then(
-      async (res) => {
-        if (res < Number(Web3.utils.toWei(coin1.amount, "ether"))) {
-          await approve(
-            BULCContarct,
-            Web3.utils.toWei("100000000000000", "tether"),
-            account,
-            addresses.swap_address
-          )
-            .then((res2) => {
-              toast.success(res2);
-            })
-            .catch((err) => {
-              console.log("approve has error");
-            });
-        } else {
-          console.log("no need approve BULC");
-          return;
-        }
-      }
-    );
-
-    await swapContract.methods
-      .addLiquidity(
-        addresses.BULC_address,
-        addresses.BUSD_address,
-        Web3.utils.toWei(coin1.amount, "ether"),
-        Web3.utils.toWei(coin2.amount, "ether"),
-        1,
-        1,
-        account,
-        324324324234234
-      )
-      .send({ from: account })
-      .then((res) => {
-        updateTokenBalances();
-        toast.success("add Liquidity was successfull !");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const openModal = () => {
-    setIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsOpen(false);
-  };
-
-  const removeLiquidity = async (input) => {
-    let LPToken = input.current.value;
-    let account = authCtx.account;
-
-    await checkAllowence(pairContarct, account, addresses.swap_address).then(
-      async (res) => {
-        if (res < Number(Web3.utils.toWei(LPToken, "ether"))) {
-          await approve(
-            pairContarct,
-            Web3.utils.toWei("10000000000000000000000000", "tether"),
-            account,
-            addresses.swap_address
-          ).then((res2) => {
-            toast.success(res2);
-          });
-        } else {
-          return;
-        }
-      }
-    );
-
-    await swapContract.methods
-      .removeLiquidity(
-        coin1.address,
-        coin2.address,
-        Web3.utils.toWei(LPToken, "ether"),
-        1,
-        1,
-        account
-      )
-      .send({ from: account })
-      .then((res) => {
-        closeModal();
-        toast.success("remove Liquidity was successfull !");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   useEffect(() => {
-    initContract(swap_abi.abi, addresses.swap_address).then((res) => {
-      setSwapContract(res);
-    });
+    getContract(swap_abi.abi, addresses.swap_address, (contract) =>
+      setSwapContract(contract)
+    );
 
-    initContract(ERC20_abi.abi, addresses.BULC_address).then((res) => {
-      setBULCContarct(res);
-    });
+    getContract(ERC20_abi.abi, addresses.BULC_address, (contract) =>
+      setBULCContract(contract)
+    );
 
-    initContract(ERC20_abi.abi, addresses.BUSD_address).then((res) => {
-      setBUSDContarct(res);
-    });
+    getContract(ERC20_abi.abi, addresses.BUSD_address, (contract) =>
+      setBUSDContract(contract)
+    );
 
-    initContract(pair_abi.abi, addresses.pair_address).then((res) => {
-      setPairContarct(res);
-    });
+    getContract(pair_abi.abi, addresses.pair_address, (contract) =>
+      setPairContract(contract)
+    );
   }, []);
 
   return (
     <MainCard className="pool-card">
       <div className="pool__containers">
-        <div className="link-to-address">
-          <Link
-          className="link"
-            to={{
-              pathname: 'https://ropsten.etherscan.io/address/'+ addresses.pair_address
-            }}
-            target="_blank"
-          >
-            View Contract
-          <BiLinkExternal className="icon" />
+        <PoolViewContract />
 
-          </Link>
-        </div>
         <Toaster position="top-center" reverseOrder={false} />
+
         <CoinField
           coinBalance={coin1.balance}
           tokenImage={coin1.image}
           tokenName={coin1.name}
-          tokenContract={BULCContarct}
+          tokenContract={BULCContract}
           tokenAddress={coin1.address}
           calculatedAmount={coin1.amount}
           onChangeInputHandler={changeBULCAmount}
@@ -295,42 +176,22 @@ const Pool = () => {
           coinBalance={coin2.balance}
           tokenImage={coin2.image}
           tokenName={coin2.name}
-          tokenContract={BUSDContarct}
+          tokenContract={BUSDContract}
           tokenAddress={coin2.address}
           calculatedAmount={coin2.amount}
           onChangeInputHandler={changeBUSDAmount}
         />
       </div>
 
-      {modalIsOpen && (
-        <Modal
-          isOpen={modalIsOpen}
-          onRequestClose={closeModal}
-          className="Modal"
-          overlayClassName="Overlay"
-          ariaHideApp={false}
-        >
-          <RemoveLiquidity
-            onCloseModal={closeModal}
-            onRemoveLiquidity={removeLiquidity}
-            coinsAddress={{ coin1: coin1.address, coin2: coin2.add }}
-            contract={pairContarct}
-            address={addresses.pair_address}
-          />
-        </Modal>
-      )}
-
-      <div className="pool-actions">
-        <button onClick={openModal} className="main-button">
-          Remove
-        </button>
-        <button
-          onClick={() => addLiquidity(authCtx.account)}
-          className="main-button supply"
-        >
-          Supply
-        </button>
-      </div>
+      <PoolActions
+        coin1={coin1}
+        coin2={coin2}
+        pairContract={pairContract}
+        swapContract={swapContract}
+        BULCContract={BULCContract}
+        BUSDContract={BUSDContract}
+        onUpdateTokenBalances={updateTokenBalances}
+      />
     </MainCard>
   );
 };
