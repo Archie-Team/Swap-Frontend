@@ -1,36 +1,42 @@
 import React from "react";
 import CoinField from "../coin/CoinField";
 import { MdSwapVert } from "react-icons/md";
-
-import SwapPrice from "./swap/SwapPrice";
 import SwapSlippageTolerance from "./SwapSlippageTolerance";
+import SwapPrice from "./SwapPrice";
+import { fromWei } from "../../modules/web3Wei";
 
-
-const SwapForm = () => {
+const SwapForm = ({
+  onChangeFirstInput,
+  onChangeSecInput,
+  onChangeSwapState,
+  coin1,
+  coin2,
+  swapContract,
+}) => {
   return (
     <div>
       <CoinField
         tokenImage={coin1.image}
         tokenName={coin1.name}
         tokenAddress={coin1.address}
-        tokenContract={token1Contract}
+        tokenContract={coin1.contract}
         coinBalance={coin1.balance}
-        onChangeInputHandler={changeFirstInputHandler}
-        calculatedAmount={fromWei(calculatedCoin1Amount, "ether")}
+        onChangeInputHandler={(input) => onChangeFirstInput(input)}
+        calculatedAmount={fromWei(coin1.calculatedAmount, "ether")}
       />
 
-      <button className="swap-icon" onClick={changeSwapState}>
+      <button className="swap-icon" onClick={onChangeSwapState}>
         <MdSwapVert />
       </button>
 
       <CoinField
         tokenImage={coin2.image}
         tokenName={coin2.name}
-        tokenContract={token2Contract}
+        tokenContract={coin2.contract}
         tokenAddress={coin2.address}
         coinBalance={coin2.balance}
-        calculatedAmount={fromWei(calculatedCoin2Amount, "ether")}
-        onChangeInputHandler={changeSecCoinHandler}
+        calculatedAmount={fromWei(coin2.calculatedAmount, "ether")}
+        onChangeInputHandler={(input) => onChangeSecInput(input)}
       />
       <SwapPrice
         contract={swapContract}
@@ -39,10 +45,7 @@ const SwapForm = () => {
         amount={coin1.amount}
         pathAddrress={[coin1.address, coin2.address]}
       />
-      <SwapSlippageTolerance
-        slippageTolerance={slippageTolerance}
-        onSubmitslippageToleranceAmount={submitSlippageToleranceAmount}
-      />
+      <SwapSlippageTolerance />
     </div>
   );
 };

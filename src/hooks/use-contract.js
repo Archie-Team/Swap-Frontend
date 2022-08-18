@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
 import Web3 from "web3";
 
 const web3 = new Web3(
@@ -7,21 +7,16 @@ const web3 = new Web3(
 );
 
 const useContract = () => {
-  // const [contract, setContract] = useState(null);
-
   const getContract = useCallback(async (abi, address, setContract) => {
     try {
       const initialContract = await new web3.eth.Contract(abi, address);
       setContract(initialContract);
-      // setContract()
-      // console.log(initialContract);
     } catch (err) {
       console.log("err");
     }
   }, []);
 
   return {
-    // contract,
     getContract,
   };
 };

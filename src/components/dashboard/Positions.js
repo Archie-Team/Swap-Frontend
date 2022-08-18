@@ -14,12 +14,13 @@ const StakingAmount = () => {
   const [positionNumber, setPositionNumber] = useState(0);
   const [positions, setPositions] = useState([]);
   const account = useSelector((state) => state.auth.account);
-
-  const { contract: stakeContract, getContract: getStakeContract } =
-  useContract();
+  const [stakeContract, setStakeContract] = useState(null);
+  const { getContract } = useContract();
 
   useEffect(() => {
-    getStakeContract(stakeAbi.abi, addresses.staking_address)
+    getContract(stakeAbi.abi, addresses.staking_address, (contract) =>
+      setStakeContract(contract)
+    );
   }, []);
 
   const getPositions = async (account) => {

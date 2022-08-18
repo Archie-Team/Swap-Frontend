@@ -1,4 +1,4 @@
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { addresses } from "../../modules/addresses";
 import pair_abi from "../../assets/files/Pair.json";
 import { roundNumber } from "../../modules/formatNumbers";
@@ -10,20 +10,23 @@ import { useSelector } from "react-redux";
 
 const LPTokenBalance = () => {
   const account = useSelector((state) => state.auth.account);
-  const { contract: pairContract, getContract: getPairContract } =
-    useContract();
-
+  const [pairContract, setPairContract] = useState(null);
   const { balance: lpBalance, getBalance: getLPBalance } = useBalance();
+  const { getContract } = useContract();
+
+  useEffect(() => {
+    getContract(pair_abi.abi, addresses.pair_address, (contract) =>
+      setPairContract(contract)
+    );
+  }, [getContract]);
 
   useEffect(() => {
     if (pairContract && account) {
       getLPBalance(pairContract, account);
     }
-  }, [getLPBalance,pairContract, account]);
+  }, [getLPBalance, pairContract, account]);
 
-  useEffect(() => {
-    getPairContract(pair_abi.abi, addresses.pair_address);
-  }, [getPairContract]);
+  
 
   return (
     <div className="lp-token_balance">

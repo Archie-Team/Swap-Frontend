@@ -11,7 +11,6 @@ import LPTokenBalance from "../components/dashboard/DashboardLPTokenBalance";
 
 const Home = () => {
   const [stakeContract, setStakeContract] = useState(null);
-
   const { getContract } = useContract();
 
   useEffect(() => {

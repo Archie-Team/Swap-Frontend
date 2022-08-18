@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { coins } from "../modules/coins";
+import { useState } from "react";
 
 const useCoin = (initialCoin) => {
   const [coin, setCoin] = useState({
@@ -10,14 +9,9 @@ const useCoin = (initialCoin) => {
     contract: null,
   });
 
-//   useEffect(() => {
-//     console.log(coin);
-//   }, [coin]);
-
   const setCoinHandler = (coin) => {
     setCoin(coin);
   };
-
 
   const setCoinValueHandler = (key, value) => {
     setCoin((prev) => {
@@ -28,7 +22,7 @@ const useCoin = (initialCoin) => {
   return {
     coin,
     setCoinHandler,
-    setCoinValueHandler
+    setCoinValueHandler,
   };
 };
 

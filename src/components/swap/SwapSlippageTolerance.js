@@ -3,12 +3,15 @@ import "./SwapSlippageTolerance.css";
 import { IoMdSettings } from "react-icons/io";
 import Modal from "react-modal";
 import SwapSlippageToleranceForm from "./SwapSlippageToleranceForm";
+import { useDispatch, useSelector } from "react-redux";
+import { sTolActions } from "../../store/slippageTolerance-slice";
 
-const SwapSlippageTolerance = ({
-  slippageTolerance,
-  onSubmitslippageToleranceAmount,
-}) => {
+const SwapSlippageTolerance = () => {
+  const slippageTolerance = useSelector(
+    (state) => state.sTol.slippageTolerance
+  );
   const [modalIsOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
 
   const openModal = () => {
     setIsOpen(true);
@@ -24,7 +27,7 @@ const SwapSlippageTolerance = ({
 
   function submitSlippageTolerance(val) {
     closeModal();
-    onSubmitslippageToleranceAmount(val);
+    dispatch(sTolActions.setSlippageTolerance(val));
   }
 
   return (
