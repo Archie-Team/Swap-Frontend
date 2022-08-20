@@ -228,7 +228,6 @@ const Pool = () => {
 
 
     var now = new Date().getTime();
-    console.log(roundNumber((now + 300000)/1000,0));
 
     await swapContract.methods
       .removeLiquidity(
