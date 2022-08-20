@@ -21,6 +21,7 @@ import RemoveLiquidity from "../components/pool/RemoveLiquidity";
 import { BiLinkExternal } from "react-icons/bi";
 import AuthContext from "../context/auth-context";
 import { Link } from "react-router-dom";
+import { roundNumber } from "../modules/formatNumbers";
 
 const Pool = () => {
   const [swapContract, setSwapContract] = useState("");
@@ -225,6 +226,9 @@ const Pool = () => {
       }
     );
 
+
+    var now = new Date().getTime();
+
     await swapContract.methods
       .removeLiquidity(
         coin1.address,
@@ -232,7 +236,8 @@ const Pool = () => {
         Web3.utils.toWei(LPToken, "ether"),
         1,
         1,
-        account
+        account,
+        roundNumber((now + 300000)/1000,0)
       )
       .send({ from: account })
       .then((res) => {
