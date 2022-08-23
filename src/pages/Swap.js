@@ -212,6 +212,7 @@ const Swap = () => {
       authCtx.account
     )
       .then((res) => {
+        updateTokenBalances();
         toast.success(res);
       })
       .catch((err) => {
@@ -255,6 +256,7 @@ const Swap = () => {
       authCtx.account
     )
       .then((res) => {
+        updateTokenBalances();
         toast.success(res);
       })
       .catch((err) => {
@@ -263,9 +265,6 @@ const Swap = () => {
   };
 
   const callingSwapHanlder = () => {
-    console.log("coin1.amount", coin1.amount);
-    console.log("coin2.amount", coin2.amount);
-
     if (coin1.amount) {
       swapFirstCoinFunction();
     } else if (coin2.amount) {

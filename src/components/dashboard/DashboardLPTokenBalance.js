@@ -33,7 +33,7 @@ const LPTokenBalance = () => {
   return (
     <div className="lp-token_balance">
       <p>{lpBalance} </p>
-      <p> BUSD_BULC LP</p>
+      <p> BUSD-BULC LP</p>
     </div>
   );
 };
