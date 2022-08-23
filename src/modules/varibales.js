@@ -23,6 +23,6 @@ export const navigationItems = [
       },  
       {
         link: "/",
-        name: "Dashboard",
+        name: "My Dashboard",
       },
 ]

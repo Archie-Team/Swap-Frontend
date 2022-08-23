@@ -27,9 +27,11 @@ const StakingAmount = () => {
       .positions(account)
       .call()
       .then((res) => {
-        // console.log(res);
         return Promise.resolve(res);
-      });
+      })
+      .catch(err => {
+        console.log('error in getting positins')
+      })
   };
 
   useEffect(() => {
@@ -57,7 +59,7 @@ const StakingAmount = () => {
   const getPosition = async (number, account) => {
     return await stakeContract.methods
       .getAll(account, number)
-      .call()
+      .call({from : account})
       .then((res) => {
         return res;
       })

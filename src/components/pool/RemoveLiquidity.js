@@ -22,7 +22,7 @@ const RemoveLiquidity = ({ onRemoveLiquidity,onCloseModal,address, contract }) =
         address={address}
       />
       <form className="remove-l-form">
-        <input ref={LPToken} placeholder="BUSD_BULC LP" />
+        <input ref={LPToken} placeholder="BUSD-BULC LP" />
       </form>
       <button className="remove-l-button" onClick={removeLiquidity }>Remove Liquidity</button>
     </div>

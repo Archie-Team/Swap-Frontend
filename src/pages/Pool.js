@@ -226,7 +226,6 @@ const Pool = () => {
       }
     );
 
-
     var now = new Date().getTime();
 
     await swapContract.methods
@@ -237,11 +236,12 @@ const Pool = () => {
         1,
         1,
         account,
-        roundNumber((now + 300000)/1000,0)
+        roundNumber((now + 300000) / 1000, 0)
       )
       .send({ from: account })
       .then((res) => {
         closeModal();
+        updateTokenBalances();  
         toast.success("remove Liquidity was successfull !");
       })
       .catch((err) => {
@@ -271,17 +271,17 @@ const Pool = () => {
     <MainCard className="pool-card">
       <div className="pool__containers">
         <div className="link-to-address">
-          <Link
-          className="link"
-            to={{
-              pathname: 'https://ropsten.etherscan.io/address/'+ addresses.pair_address
-            }}
+          <a
+            className="link"
+            href={
+                "https://bscscan.com/address/" +
+                addresses.pair_address
+            }
             target="_blank"
           >
             View Contract
-          <BiLinkExternal className="icon" />
-
-          </Link>
+            <BiLinkExternal className="icon" />
+          </a>
         </div>
         <Toaster position="top-center" reverseOrder={false} />
         <CoinField
@@ -326,14 +326,14 @@ const Pool = () => {
       )}
 
       <div className="pool-actions">
-        <button onClick={openModal} className="main-button">
-          Remove
-        </button>
         <button
           onClick={() => addLiquidity(authCtx.account)}
           className="main-button supply"
         >
-          Supply
+          Supply LP
+        </button>
+        <button onClick={openModal} className="main-button">
+          Remove LP
         </button>
       </div>
     </MainCard>

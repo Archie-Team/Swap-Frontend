@@ -11,7 +11,6 @@ const Header = () => {
 
   const toggleNavbarHandler = () => {
     setNavbarActivate(navbarActivate === "active" ? "" : "active");
-
   };
 
 
