@@ -29,9 +29,9 @@ const StakingAmount = () => {
       .then((res) => {
         return Promise.resolve(res);
       })
-      .catch(err => {
-        console.log('error in getting positins')
-      })
+      .catch((err) => {
+        console.log("error in getting positins");
+      });
   };
 
   useEffect(() => {
@@ -59,7 +59,7 @@ const StakingAmount = () => {
   const getPosition = async (number, account) => {
     return await stakeContract.methods
       .getAll(account, number)
-      .call({from : account})
+      .call({ from: account })
       .then((res) => {
         return res;
       })
@@ -93,6 +93,7 @@ const StakingAmount = () => {
             duration: 10000,
           }
         );
+        window.location.reload();
 
         await getPositions(authCtx.account).then((res) => {
           setPositionNumber(res);
