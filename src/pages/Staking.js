@@ -100,6 +100,9 @@ const Staking = () => {
       .send({ from: account })
       .then((res) => {
         toast.success("Position Set Successfully !");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       });
   };
 
