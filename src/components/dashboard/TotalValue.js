@@ -2,7 +2,7 @@ import React from "react";
 import { CommaFormat } from "../../modules/formatNumbers";
 import "./TotalValue.css";
 
-const TotalValue = ({ totalValue, totalFrozen }) => {
+const TotalValue = ({ totalValue }) => {
   return (
     <div className="total-value__container">
       <div>
@@ -10,10 +10,10 @@ const TotalValue = ({ totalValue, totalFrozen }) => {
         <p className="amount">${CommaFormat(totalValue)}</p>
       </div>
 
-      <div>
+      {/* <div>
         <p>Total Frozen</p>
         <p className="amount">{CommaFormat(totalFrozen)}</p>
-      </div>
+      </div> */}
     </div>
   );
 };

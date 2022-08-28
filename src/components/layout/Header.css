@@ -71,7 +71,10 @@ li.nav-item {
 
 .nav-item:last-child {
   margin-inline: auto 20px;
-}
+  border: 1px solid var(--green);
+  border-radius: 10px;
+
+padding: 10px 20px ;}
 
 .nav-link {
   color: #475569;
@@ -90,6 +93,7 @@ li.nav-item {
   margin-left: 1.5rem;
   cursor: pointer;
 }
+
 
 .nav a {
   text-decoration: none;

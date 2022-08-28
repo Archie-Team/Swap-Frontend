@@ -1,10 +1,7 @@
 .slippage-tolerance {
   display: flex;
   align-items: center;
-}
-
-.slippage-tolerance p:first-child {
-  color: #22a24d;
+  margin-block: 15px;
 }
 
 .slippage-tolerance > .slippage-tolerance__amount{
@@ -18,10 +15,12 @@
 }
 
 .slippage-tolerance .slippage-tolerance__amount button{
-  padding: 5px;
+  padding: 0 5px;
+
   background-color: inherit;
   font-size: x-large;
   color: #22a24d;
+  margin: 0;
 }
 /* 
 .slippage-tolerance input {
