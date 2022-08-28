@@ -9,7 +9,7 @@ import MainCard from "../components/layout/MainCard";
 import { fromWei } from "../modules/convertors";
 const Home = () => {
   const [stakeContract, setStakeContract] = useState(null);
-  const [totalFrozen, setTotalFrozen] = useState(0);
+  // const [totalFrozen, setTotalFrozen] = useState(0);
   const [totalValueLocked, setTotalValueLocked] = useState(0);
 
   useEffect(() => {
@@ -19,14 +19,14 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    const getTotalFrozen = async () => {
-      await stakeContract.methods
-        .StakedRewardFreezed()
-        .call()
-        .then((res) => {
-          setTotalFrozen(fromWei(res));
-        });
-    };
+    // const getTotalFrozen = async () => {
+    //   await stakeContract.methods
+    //     .StakedRewardFreezed()
+    //     .call()
+    //     .then((res) => {
+    //       setTotalFrozen(fromWei(res));
+    //     });
+    // };
 
     const getTotalValueLocked = async () => {
       await stakeContract.methods
@@ -38,7 +38,7 @@ const Home = () => {
     };
 
     if (stakeContract) {
-      getTotalFrozen();
+      // getTotalFrozen();
       getTotalValueLocked();
     }
   }, [stakeContract]);
@@ -48,9 +48,9 @@ const Home = () => {
       <div className="top-container">
         <TokensStatus />
       </div>
-      <div className="bottom-container">
-        <TotalValue totalValue={totalValueLocked} totalFrozen={totalFrozen} />
-      </div>
+      {/* <div className="bottom-container">
+        <TotalValue totalValue={totalValueLocked}  />
+      </div> */}
     </MainCard>
   );
 };

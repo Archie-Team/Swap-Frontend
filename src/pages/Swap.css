@@ -23,7 +23,7 @@ button.swap-icon:hover {
 
 .swap-actions {
   display: flex;
-  margin-block: 20px 0;
+  /* margin-block: 20px 0; */
   justify-content: space-around;
 }
 
