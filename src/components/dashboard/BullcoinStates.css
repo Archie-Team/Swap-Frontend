@@ -1,0 +1,32 @@
+.bullcoin-states__container {
+  background-color: #415c4e;
+  border: 1px solid var(--green);
+  border-radius: 16px;
+  padding: 1rem 2rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  min-height: 100%;
+}
+
+.bullcoin-states__container div {
+  margin-top: 3rem;
+}
+
+.bullcoin-state {
+  margin-block: 1rem;
+  font-size: large;
+}
+
+.bullcoin-state .dash-span {
+  margin-inline: 0.5rem;
+}
+
+.bullcoin-state span {
+  color: var(--green);
+}
+
+.bullcoin-states__container > .title {
+  font-size: xx-large;
+  font-weight: bold;
+  text-align: center;
+}

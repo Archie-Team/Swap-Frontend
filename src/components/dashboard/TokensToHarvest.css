@@ -1,0 +1,15 @@
+.tokens-container {
+  /* background-color: #415c4e;
+  border: 1px solid var(--green);
+  border-radius: 16px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center; */
+}
+
+.tokens-container .title {
+  font-size: x-large;
+  font-weight: bold;
+}

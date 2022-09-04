@@ -1,16 +1,15 @@
-.token-inwallet_container{
-display: flex;
-align-items: center;
+.token-inwallet_container {
+  display: flex;
+  align-items: center;
+  margin-block: 1rem;
 }
 
-.token-inwallet_container img{
-width: 40px;
-height: 40px;
-
+.token-inwallet_container img {
+  width: 40px;
+  height: 40px;
 }
 
-.token-inwallet_container p{
-font-size: x-large;
-margin-left: 10px;
-font-weight: bold;
+.token-inwallet_container p {
+  font-size: large;
+  margin-left: 1.6rem;
 }

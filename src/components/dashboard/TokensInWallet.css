@@ -4,8 +4,13 @@
   font-weight: 700;
 }
 
+
+.tokens-container .title {
+  font-size: x-large;
+  font-weight: bold;
+}
+
 .tokens-inwallet_container {
-  display: flex;
   margin-block: 20px;
 }
 

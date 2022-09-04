@@ -1,0 +1,22 @@
+.total-value__container {
+  width: 100%;
+  background-color: #415c4e;
+  border-radius: 15px;
+  text-align: start;
+}
+
+.total-value__container p:first-of-type {
+  margin-block: 1rem 2rem;
+  font-weight: bolder;
+}
+
+.total-value__container p.amount {
+  color: var(--green);
+  font-size: 2rem;
+  text-align: center;
+}
+
+.total-value__container .title {
+  font-size: xx-large;
+  font-weight: bold;
+}

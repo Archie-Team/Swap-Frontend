@@ -1,13 +1,13 @@
 import "./Dashboard.css";
-import TotalValue from "../components/dashboard/TotalValue";
+import TotalValue from "../components/dashboard/TotalValueLocked";
 import React, { useEffect, useState } from "react";
 import stakeAbi from "../assets/files/Staking.json";
 import { addresses } from "../modules/addresses";
 import MainCard from "../components/layout/MainCard";
 import useContract from "../hooks/use-contract";
-import TokenInWallet from "../components/dashboard/TokenInWallet";
 import Positions from "../components/dashboard//Positions";
-import LPTokenBalance from "../components/dashboard/DashboardLPTokenBalance";
+import TokensAmount from "../components/dashboard/TokensAmount";
+import BullcoinStates from "../components/dashboard/BullcoinStates";
 
 const Home = () => {
   const [stakeContract, setStakeContract] = useState(null);
@@ -20,17 +20,14 @@ const Home = () => {
   }, []);
 
   return (
-    <MainCard>
-      <div className="top-container">
-        <TokenInWallet />
-        <LPTokenBalance />
-        <div className="seprator-line"></div>
-        <Positions />
+    <div className="dashboard-container">
+      <div>
+        <TokensAmount />
       </div>
-      {/* <div className="bottom-container">
-        <TotalValue stakeContract={stakeContract} />
-      </div> */}
-    </MainCard>
+      <div>
+        <BullcoinStates />
+      </div>
+    </div>
   );
 };
 
