@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@3rdweb/react": "^1.9.3",
+    "@coinbase/wallet-sdk": "^3.5.2",
     "@reduxjs/toolkit": "^1.8.4",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",

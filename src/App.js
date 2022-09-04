@@ -9,13 +9,14 @@ import Staking from "./pages/Staking";
 import Pool from "./pages/Pool";
 import { authActions } from "./store/auth-slice";
 import { walletActions } from "./store/wallet-slice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 import { getCurrentAccount, getCurrentNetworkId } from "./store/wallet-actions";
 
 function App() {
   const { ethereum } = window;
   const dispatch = useDispatch();
+  const account = useSelector((state) => state.auth.account);
 
   const handleChainChanged = (chainId) => {
     dispatch(walletActions.setCurrentNetworkId(chainId));
@@ -33,16 +34,16 @@ function App() {
       toast.error("Please Install Metamask!");
     }
 
-    ethereum.on("chainChanged", handleChainChanged);
-    ethereum.on("accountsChanged", handleAccountsChanged);
-  }, []);
-
-  useEffect(() => {
     //check current account and network
-      dispatch(getCurrentNetworkId());
-      dispatch(getCurrentAccount())
-  }, []);
+    dispatch(getCurrentAccount());
 
+    if (account) {
+      dispatch(getCurrentNetworkId());
+
+      ethereum.on("chainChanged", handleChainChanged);
+      ethereum.on("accountsChanged", handleAccountsChanged);
+    }
+  }, []);
 
   return (
     <PageLayout className="App">

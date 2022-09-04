@@ -27,9 +27,9 @@ const Home = () => {
         <div className="seprator-line"></div>
         <Positions />
       </div>
-      <div className="bottom-container">
+      {/* <div className="bottom-container">
         <TotalValue stakeContract={stakeContract} />
-      </div>
+      </div> */}
     </MainCard>
   );
 };

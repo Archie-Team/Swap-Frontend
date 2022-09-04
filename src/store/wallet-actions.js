@@ -43,6 +43,7 @@ export const ethRequestAccounts = () => {
       })
       .then((res) => {
         dispatch(authActions.login(res[0]));
+        dispatch(getCurrentNetworkId())
       });
   };
 };

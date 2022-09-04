@@ -6,6 +6,7 @@ import "./CoinField.css";
 const CoinField = ({
   tokenImage,
   tokenName,
+  coinAmount,
   onChangeInputHandler,
   calculatedAmount,
   coinBalance,
@@ -17,12 +18,20 @@ const CoinField = ({
   };
 
   useEffect(() => {
-    calculatedAmount === "0"
+    calculatedAmount === 0
       ? setCoinValue("")
       : setCoinValue(roundNumber(calculatedAmount, 5));
   }, [calculatedAmount]);
 
-  const computedBalance = coinBalance ? roundNumber(fromWei(coinBalance,'ether'), 5) : 0
+  useEffect(() => {
+    if (coinAmount === 0) {
+      setCoinValue("");
+    }
+  }, [coinAmount]);
+
+  const computedBalance = coinBalance
+    ? roundNumber(fromWei(coinBalance, "ether"), 5)
+    : 0;
 
   return (
     <div className="token-container">

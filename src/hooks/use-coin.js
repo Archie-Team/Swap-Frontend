@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useState } from "react";
 
 const useCoin = (initialCoin) => {
@@ -8,6 +9,16 @@ const useCoin = (initialCoin) => {
     calculatedAmount: "",
     contract: null,
   });
+
+  useEffect(() => {
+    setCoin({
+      ...initialCoin,
+      balance: "",
+      amount: "",
+      calculatedAmount: "",
+      contract: null,
+    });
+  }, []);
 
   const setCoinHandler = (coin) => {
     setCoin(coin);

@@ -27,24 +27,24 @@ const Swap = () => {
 
   const {
     coin: coin1,
+    setCoinHandler: setCoin1,
     setCoinValueHandler: setCoin1Value,
-    setCoinValueHandler: setCoin1,
   } = useCoin(coins.BUSD);
 
   const {
     coin: coin2,
     setCoinValueHandler: setCoin2Value,
-    setCoinValueHandler: setCoin2,
+    setCoinHandler: setCoin2,
   } = useCoin(coins.BULC);
 
   const [swapContract, setSwapContract] = useState(null);
 
   useEffect(() => {
     getContract(ERC20_abi.abi, coin1.address, (contract) =>
-      setCoin1("contract", contract)
+    setCoin1Value("contract", contract)
     );
     getContract(ERC20_abi.abi, coin2.address, (contract) =>
-      setCoin2("contract", contract)
+    setCoin2Value("contract", contract)
     );
   }, []);
 
@@ -61,7 +61,7 @@ const Swap = () => {
   }, [token1Balance]);
 
   useEffect(() => {
-    setCoin2("balance", token2Balance);
+    setCoin2Value("balance", token2Balance);
   }, [token2Balance]);
 
   useEffect(() => {
@@ -71,11 +71,11 @@ const Swap = () => {
   }, []);
 
   const changeFirstInputHandler = async (input) => {
-    setCoin1Value("amount", "");
-    setCoin2Value("amount", "");
+    setCoin1Value("amount", 0);
+    setCoin2Value("amount", 0);
 
     if (!input.value || input.value <= 0) {
-      setCoin2("calculatedAmount", "");
+      setCoin2Value("calculatedAmount", "");
       return;
     }
 
@@ -88,35 +88,35 @@ const Swap = () => {
       .getAmountsOut(data, [coin1.address, coin2.address]) //execute amount of second (amountIn, convertible token address, result token address)
       .call()
       .then((res) => {
-        setCoin2("calculatedAmount", res[1]);
+        setCoin2Value("calculatedAmount", res[1]);
       })
       .catch((err) => {
-        setCoin2("calculatedAmount", "");
+        setCoin1Value("calculatedAmount", "");
       });
   };
 
   const changeSecInputHandler = async (input) => {
-    setCoin1Value("amount", "");
-    setCoin2Value("amount", "");
+    setCoin1Value("amount", 0);
+    setCoin2Value("amount", 0);
 
     if (!input.value || input.value <= 0) {
-      setCoin1Value("amount", "");
-      setCoin2Value("amount", "");
+      setCoin1Value("amount", 0);
+      setCoin2Value("amount", 0);
 
-      setCoin1("calculatedAmount", "");
+      setCoin1Value("calculatedAmount", 0);
       return;
     }
 
     let inputStringValue = input.value.toString();
     let data = toWei(inputStringValue, "ether");
 
-    setCoin2("amount", data);
+    setCoin2Value("amount", data);
 
     await swapContract.methods
       .getAmountsIn(data, [coin1.address, coin2.address]) //execute amount of second (amount, convertible token address, result token address)
       .call()
       .then((res) => {
-        setCoin1("calculatedAmount", res[0]);
+        setCoin1Value("calculatedAmount", res[0]);
       });
   };
 
@@ -261,10 +261,10 @@ const Swap = () => {
     let temp = coin1;
     setCoin1(coin2);
     setCoin2(temp);
-    setCoin1Value("amount", "");
-    setCoin2Value("amount", "");
-    setCoin1Value("calculatedAmount", "");
-    setCoin2Value("calculatedAmount", "");
+    setCoin1Value("amount", 0);
+    setCoin2Value("amount", 0);
+    setCoin1Value("calculatedAmount", 0);
+    setCoin2Value("calculatedAmount", 0);
   };
 
   const insufficientBalance =
