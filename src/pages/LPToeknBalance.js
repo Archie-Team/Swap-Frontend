@@ -7,14 +7,17 @@ import { useSelector } from "react-redux";
 
 const LPToeknBalance = ({ contract }) => {
   const account = useSelector((state) => state.auth.account);
-  const networkId  = useSelector((state) => state.wallet.networkId)
+  const networkId = useSelector((state) => state.wallet.networkId);
   const { balance: LPTokenBalance, getBalance: getLPBalance } = useBalance();
 
   useEffect(() => {
+    console.log(networkId);
+
     if (contract && account && networkId === usedNetworkId) {
       getLPBalance(contract, account);
+      console.log(LPTokenBalance);
     }
-  }, [contract, account]);
+  }, [contract, account, networkId]);
 
   return (
     <div className="LP-token-balance">

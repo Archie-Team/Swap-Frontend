@@ -41,10 +41,10 @@ const Swap = () => {
 
   useEffect(() => {
     getContract(ERC20_abi.abi, coin1.address, (contract) =>
-    setCoin1Value("contract", contract)
+      setCoin1Value("contract", contract)
     );
     getContract(ERC20_abi.abi, coin2.address, (contract) =>
-    setCoin2Value("contract", contract)
+      setCoin2Value("contract", contract)
     );
   }, []);
 

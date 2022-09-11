@@ -1,50 +1,28 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { CommaFormat } from "../../modules/formatNumbers";
 import { fromWei } from "../../modules/web3Wei";
+import { getToatalValueLocked } from "../../store/token-actions";
 import "./TotalValueLocked.css";
 
-const TotalValue = ({ stakeContract }) => {
-  // const [totalFrozen, setTotalFrozen] = useState(0);
+const TotalValue = ({ pairContract }) => {
+  const dispatch = useDispatch();
+
   const [totalValueLocked, setTotalValueLocked] = useState();
-  
+
   useEffect(() => {
-    // const getTotalFrozen = async () => {
-    //   await stakeContract.methods
-    //     .StakedRewardFreezed()
-    //     .call()
-    //     .then((res) => {
-    //       setTotalFrozen(res);
-    //     });
-    // };
-
-    const getTotalValueLocked = async () => {
-      await stakeContract.methods
-        .totalValueLockBUSD()
-        .call()
-        .then((res) => {
-          setTotalValueLocked(res);
-        });
-    };
-
-    if (stakeContract) {
-      // getTotalFrozen();
-      getTotalValueLocked();
+    if (pairContract) {
+      dispatch(getToatalValueLocked(pairContract)).then((res) => {
+        setTotalValueLocked(fromWei(res.toString(), "ether") * 2);
+      });
     }
-  }, [stakeContract]);
+  }, [pairContract]);
 
-  
   return (
     <div className="total-value__container">
-      {/* <div> */}
-        <h2 className="title">Total Value Locked (TVL)</h2>
-        <p>Across All Farms & Pools</p>
-        <p className="amount">$ {CommaFormat(fromWei(totalValueLocked, "ether"))}</p>
-      {/* </div> */}
-
-      {/* <div>
-        <p>Total Frozen</p>
-        <p className="amount">{CommaFormat(fromWei(totalFrozen, "ether"))}</p>
-      </div> */}
+      <h2 className="title">Total Value Locked (TVL)</h2>
+      <p>Across All Farms & Pools</p>
+      <p className="amount">$ {CommaFormat(totalValueLocked)}</p>
     </div>
   );
 };

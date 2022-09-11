@@ -1,7 +1,8 @@
 import "./App.css";
 import { Route, Switch } from "react-router-dom";
 import React, { useEffect } from "react";
-import Home from "./pages/Dashboard";
+import Home from "./pages/Home";
+import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import PageLayout from "./components/layout/PageLayout";
 import Swap from "./pages/Swap";
@@ -36,14 +37,16 @@ function App() {
 
     //check current account and network
     dispatch(getCurrentAccount());
+  }, []);
 
+  useEffect(() => {
     if (account) {
       dispatch(getCurrentNetworkId());
 
       ethereum.on("chainChanged", handleChainChanged);
       ethereum.on("accountsChanged", handleAccountsChanged);
     }
-  }, []);
+  }, [account]);
 
   return (
     <PageLayout className="App">
@@ -51,6 +54,9 @@ function App() {
       <Switch>
         <Route path="/" exact>
           <Home />
+        </Route>
+        <Route path="/dashboard" exact>
+          <Dashboard />
         </Route>
         <Route path="/trade" exact>
           <Swap />

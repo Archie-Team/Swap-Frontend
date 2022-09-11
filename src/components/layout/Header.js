@@ -15,10 +15,10 @@ const Header = () => {
   return (
     <header className="header">
       <nav className="nav navbar">
-        <div className="nav-logo">
+        <NavLink to="/" className="nav-logo">
           <img src={BULC} alt="" />
           <p>Bullcoin</p>
-        </div>
+        </NavLink>
         <ul className={"nav-menu " + navbarActivate}>
           {navigationItems.map((item) => (
             <li className="nav-item" key={item.link}>
