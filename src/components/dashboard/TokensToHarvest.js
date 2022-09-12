@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import {
   getTotalValueLockLPToken,
   getAllStakedBalance,
-} from "../../store/stake-actions";
+} from "../../store/token-actions";
 
 const TokensToHarvest = ({
   // BULCContract,

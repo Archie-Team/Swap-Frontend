@@ -2,13 +2,12 @@
   background-color: var(--dark-green);
   max-width: 40rem;
   width: 90%;
-  margin: auto;
+  margin-inline: auto;
   border-radius: 15px;
   height: 100%;
   padding: 25px;
   position: relative;
   box-sizing: border-box;
-  
 }
 
 .main-card > img {
@@ -16,7 +15,7 @@
   position: absolute;
   transition: all 300ms ease-in;
   max-width: none;
-  z-index: -1 ;
+  z-index: -1;
 }
 
 .robo1 {

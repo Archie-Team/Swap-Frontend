@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CommaFormat } from "../../modules/formatNumbers";
 import { fromWei } from "../../modules/web3Wei";
 import { getToatalValueLocked } from "../../store/token-actions";
@@ -7,11 +7,12 @@ import "./TotalValueLocked.css";
 
 const TotalValue = ({ pairContract }) => {
   const dispatch = useDispatch();
+  const account = useSelector((state) => state.auth.account);
 
-  const [totalValueLocked, setTotalValueLocked] = useState();
+  const [totalValueLocked, setTotalValueLocked] = useState(0);
 
   useEffect(() => {
-    if (pairContract) {
+    if (pairContract && account) {
       dispatch(getToatalValueLocked(pairContract)).then((res) => {
         setTotalValueLocked(fromWei(res.toString(), "ether") * 2);
       });

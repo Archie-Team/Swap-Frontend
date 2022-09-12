@@ -1,8 +1,66 @@
+.staking-main__lp-balance {
+  background-color: var(--dark-green);
+  border-radius: 15px;
+  padding-inline: 1rem;
+  padding-block: 0.5rem 1rem;
+  margin: 1rem auto;
+  width: 100%;
+  font-weight: 700;
+  max-width: 700px;
+}
+
+.stake-forms__container {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.staking-card {
+  height: 100%;
+  width: 100%;
+  max-width: 700px;
+  background-color: var(--dark-green);
+  margin-inline: auto;
+  border-radius: 15px;
+  height: 100%;
+  padding: 25px;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.stake-type__actions {
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.stake-type__actions button {
+  margin: 5px;
+  border: 1px solid var(--green);
+  background-color: var(--main-dark-green);
+  padding: 1rem;
+  border-radius: 10px;
+  min-width: 200px;
+}
+
+.stake-type__actions button:hover {
+  opacity: 0.7;
+}
+
 .staking-actions {
   display: flex;
   justify-content: space-between;
 }
 
 .staking-actions button {
-  width: 100%;
+  width: 49%;
+  padding: 1rem;
+}
+
+.return-button {
+  border-radius: 10px;
+  border: 1px solid var(--green);
+  background-color: inherit;
 }
