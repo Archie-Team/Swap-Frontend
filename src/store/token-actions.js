@@ -14,12 +14,12 @@ export const getToatalValueLocked = (pairContract) => {
 
 export const getTotalTokenSupply = (BULCContract) => {
   return async (dispatch) => {
-    console.log(BULCContract);
+    // console.log(BULCContract);
     return await BULCContract.methods
       .totalSupply()
       .call()
       .then((res) => {
-        console.log(res);
+        console.log("getTotalTokenSupply", res);
         return res;
       })
       .catch((err) => {
@@ -31,7 +31,7 @@ export const getTotalTokenSupply = (BULCContract) => {
 export const getTotalValueLockLPToken = (stakeContract) => {
   return async (dispatch) => {
     return await stakeContract.methods
-      .totalValueLuckLPToken()
+      .totalValueLockLPToken()
       .call()
       .then((res) => {
         return res;

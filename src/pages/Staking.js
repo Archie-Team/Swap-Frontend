@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import MainCard from "../components/layout/MainCard";
 import "./Staking.css";
 import { addresses } from "../modules/addresses";
 import stakeAbi from "../assets/files/Staking.json";

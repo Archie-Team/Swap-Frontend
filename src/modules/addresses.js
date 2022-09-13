@@ -1,9 +1,10 @@
 export const addresses = {
-  swap_address: "0x031BD2babed7fb3d1B2e8b81258770D3cE1741D0", //swap_address
+  swap_address: "0xbedf866172F7379eAc0E657A13Eba6DA5580ed12", //swap_address
   BUSD_address: "0x3afC77D320CB164134FC5afD73B8dB453813094a",
   BULC_address: "0x1603035964573375E9546fA2cDbed9Ad435865df",
-  pair_address: "0x654587138635b580F323B6fc000990b6c3bFB19d",
+  pair_address: "0x75d10e96f98146ea7aeaf4f44773e097687eefd0",
   // staking_address : '0x6BDBc6D288F5A4184FdF7A52Ef129D43f579cDD7'
-  staking_address: "0x7748fd5634B0885dB4e07C4Cd9d95f88EC65190E",
-  staking2_address: "0x44Ec379bBF4B70c653f3fFf03e46031A4d9BFDC8",
+  staking_address: "0x5af257437EeF4df9Cf4967e1c15e49adBC37CCF6",
+  staking2_address: "0x38Ab6ff177df89D79B086A5b3ed0679a9E136569",
+  factory_address: "0xF61bD87231915Fc570B882e0e667Aa36DAB4D167",
 };
