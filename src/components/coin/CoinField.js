@@ -18,7 +18,6 @@ const CoinField = ({
   };
 
   useEffect(() => {
-    console.log(calculatedAmount);
     calculatedAmount === 0
       ? setCoinValue("")
       : setCoinValue(roundNumber(calculatedAmount, 5));

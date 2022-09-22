@@ -1,0 +1,24 @@
+.new-staking {
+  border: 1px solid rgba(129, 157, 128, 0.4);
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.new-staking > div {
+  margin-block: 1rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.new-staking > div p,
+.new-staking > div h4 {
+  padding: 0;
+  margin: 0;
+}
+
+.new-staking .unstake-btn {
+  padding: 0.5rem;
+  border-radius: 10px;
+}

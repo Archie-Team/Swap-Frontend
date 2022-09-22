@@ -1,10 +1,10 @@
 .swap-price {
   display: flex;
   justify-content: space-between;
-  margin-block: 10px 5px;
+  margin-top: 20px;
+  /* background-color: rgba(247, 40, 40, 0.501); */
 }
 
 .swap-price p:first-child {
-  color: #22a24d;
   font-size: large;
 }

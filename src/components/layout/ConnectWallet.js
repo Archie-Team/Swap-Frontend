@@ -3,18 +3,21 @@ import "./ConnectWallet.css";
 import { IoWalletOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { ethRequestAccounts } from "../../store/wallet-actions";
+import { shortAccountAddress } from "../../modules/formatNumbers";
 
 const ConnectWallet = () => {
   const dispatch = useDispatch();
   const account = useSelector((state) => state.auth.account);
 
-  const shortAccountAddress = () => {
-    return "0x..." + account.substr(account.length - 4);
-  };
+  // const shortAccountAddress = () => {
+  //   return "0x..." + account.substr(account.length - 4);
+  // };
 
   const connectToWallet = () => {
     dispatch(ethRequestAccounts());
   };
+
+  let shortAddress = shortAccountAddress(account);
 
   return (
     <div className="connect-wallet__actions">
@@ -27,7 +30,7 @@ const ConnectWallet = () => {
           <div className="wallet-icon">
             <IoWalletOutline />
           </div>
-          <p>{shortAccountAddress()}</p>
+          <p>{shortAddress}</p>
         </div>
       )}
     </div>

@@ -76,10 +76,10 @@ const Staking = () => {
         return (
           <div className="stake-type__actions">
             <button onClick={() => selectStakeTypeHandler("BUSD_B")}>
-              BUSD Bounty
+              BULC Bounty
             </button>
             <button onClick={() => selectStakeTypeHandler("BULC_B")}>
-              BULC Bounty
+              BUSD Bounty
             </button>
           </div>
         );

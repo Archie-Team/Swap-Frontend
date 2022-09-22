@@ -13,6 +13,7 @@ import CoinField from "../coin/CoinField";
 
 import { fromWei, toWei } from "../../modules/web3Wei";
 import useBalance from "../../hooks/use-balance";
+import useCoin from "../../hooks/use-coin";
 
 const PoolForm = ({
   swapContract,
@@ -21,6 +22,18 @@ const PoolForm = ({
   BULCContract,
 }) => {
   const account = useSelector((state) => state.auth.account);
+
+  // const {
+  //   coin: coin1,
+  //   setCoinHandler: setCoin1,
+  //   setCoinValueHandler: setCoin1Value,
+  // } = useCoin(coins.BUSD);
+
+  // const {
+  //   coin: coin2,
+  //   setCoinValueHandler: setCoin2Value,
+  //   setCoinHandler: setCoin2,
+  // } = useCoin(coins.BULC);
 
   const [coin1, setCoin1] = useState({
     ...coins.BULC,
@@ -41,8 +54,7 @@ const PoolForm = ({
     getBUSDBalance(BUSDContract, account);
   };
 
-  const changeBULCAmount = async (data) => {
-    console.log(data);
+  const changeCoin1AmountHandler = async (data) => {
     if (!data.value || data.value <= 0) {
       setCoin2((prev) => {
         return { ...prev, amount: "" };
@@ -53,9 +65,12 @@ const PoolForm = ({
       return { ...prev, amount: data.value };
     });
     await getBalances().then(async (res) => {
+      console.log("getbalance", res);
       if (res.resBUSD < 2000 || res.resBULC < 2000) return;
       await quote(data.value, res.resBULC, res.resBUSD).then((res2) => {
         setCoin2((prev) => {
+          console.log("res2,0", res2);
+
           return { ...prev, amount: fromWei(res2, "ether") };
         });
       });
@@ -83,7 +98,7 @@ const PoolForm = ({
     });
   }, [BULCBalance]);
 
-  const changeBUSDAmount = async (data) => {
+  const changeCoin2AmountHandler = async (data) => {
     if (!data.value || data.value <= 0) {
       setCoin1((prev) => {
         return { ...prev, amount: "" };
@@ -143,10 +158,10 @@ const PoolForm = ({
           coinBalance={coin1.balance}
           tokenImage={coin1.image}
           tokenName={coin1.name}
-          tokenContract={BULCContract}
+          tokenContract={coin1.contract}
           tokenAddress={coin1.address}
           calculatedAmount={coin1.amount}
-          onChangeInputHandler={changeBULCAmount}
+          onChangeInputHandler={changeCoin1AmountHandler}
         />
 
         <BsPlusLg className="pool-icon" />
@@ -158,7 +173,7 @@ const PoolForm = ({
           tokenContract={BUSDContract}
           tokenAddress={coin2.address}
           calculatedAmount={coin2.amount}
-          onChangeInputHandler={changeBUSDAmount}
+          onChangeInputHandler={changeCoin2AmountHandler}
         />
       </div>
       <PoolActions

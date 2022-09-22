@@ -9,6 +9,7 @@ import {
   getTotalValueLockLPToken,
   getAllStakedBalance,
 } from "../../store/token-actions";
+import { fromWei } from "../../modules/web3Wei";
 
 const TokensToHarvest = ({
   // BULCContract,
@@ -34,7 +35,7 @@ const TokensToHarvest = ({
       ).then((res) => {
         return res;
       });
-      setLPBalance(allStakedBalance + totalValLock);
+      setLPBalance(fromWei(allStakedBalance + totalValLock, "ether"));
     };
     if (stakeContract && account) {
       getValues();

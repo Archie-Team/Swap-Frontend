@@ -21,8 +21,8 @@
   justify-content: space-between;
 }
 
-.pool-actions > div{
-width: 50%;
+.pool-actions > div {
+  width: 50%;
 }
 
 .pool-actions button {
@@ -30,7 +30,7 @@ width: 50%;
 }
 
 .pool-actions button.supply {
-  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .pool-actions button:hover {

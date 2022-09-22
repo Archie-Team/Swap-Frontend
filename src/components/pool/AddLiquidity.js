@@ -87,7 +87,7 @@ const AddLiquidity = ({
         onClick={() => addLiquidity(account)}
         className="main-button supply"
       >
-        Supply
+        Supply LP
       </button>
     </div>
   );

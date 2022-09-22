@@ -1,9 +1,5 @@
 .swap__price-impact {
   display: flex;
-  margin-block: 15px 10px;
+  margin-block: 15px;
   justify-content: space-between;
-}
-
-.swap__price-impact p:first-child {
-  color: #22a24d;
 }

@@ -2,7 +2,6 @@ import React from "react";
 import AddLiquidity from "./AddLiquidity";
 import RemoveLiquidity from "./RemoveLiquidity";
 
-
 const PoolActions = ({
   coin1,
   coin2,
@@ -10,26 +9,16 @@ const PoolActions = ({
   pairContract,
   BUSDContract,
   BULCContract,
-  onUpdateTokenBalances
+  onUpdateTokenBalances,
 }) => {
-
-
   // const updateTokenBalances = () => {
   //   getBULCBalance(BULCContract, account);
   //   getBUSDBalance(BUSDContract, account);
   // };
 
-
-
   return (
     <div>
       <div className="pool-actions">
-        <RemoveLiquidity
-          coin1={coin1}
-          coin2={coin2}
-          pairContract={pairContract}
-          swapContract={swapContract}
-        />
         <AddLiquidity
           coin1={coin1}
           coin2={coin2}
@@ -37,6 +26,12 @@ const PoolActions = ({
           BUSDContract={BUSDContract}
           swapContract={swapContract}
           onUpdateTokenBalances={onUpdateTokenBalances}
+        />
+        <RemoveLiquidity
+          coin1={coin1}
+          coin2={coin2}
+          pairContract={pairContract}
+          swapContract={swapContract}
         />
       </div>
     </div>

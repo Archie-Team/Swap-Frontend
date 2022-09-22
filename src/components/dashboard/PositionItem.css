@@ -1,11 +1,9 @@
 .position-item {
   border-bottom: 1px solid #ccc;
   margin-block: 20px;
-  padding: 10px 0;
-}
-
-.position-item:last-child {
-  border: none;
+  border: 1px solid rgba(129, 157, 128, 0.4);
+  border-radius: 10px;
+  padding: 1rem;
 }
 
 .position-item > div {
@@ -15,8 +13,12 @@
   align-items: center;
 }
 
-.position-item > div p:first-child {
-  color: #ccc;
+.position-item > div p {
+  margin: 0;
+}
+
+.position-item > div h4:first-child {
+  margin-block: 0.5rem;
 }
 
 .position-item button {

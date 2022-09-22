@@ -55,3 +55,29 @@ export const getAllStakedBalance = (stakeContract2) => {
       });
   };
 };
+
+export const getPositions = (contract) => {
+  return async (dispatch) => {
+    return await contract.methods
+      .getPositions()
+      .call()
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
+export const unstakePosition = async (index, account, stakeContract) => {
+  return await stakeContract.methods
+    .unstake(index)
+    .send({ from: account })
+    .then(async (res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    });
+};

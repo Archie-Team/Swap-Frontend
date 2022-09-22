@@ -1,10 +1,12 @@
-import React, { useState } from "react";
-import { stakes } from "../../modules/stakes";
-import Stake from "./StakeItem";
-import Web3 from "web3";
+import React, { useEffect, useState } from "react";
+// import { stakes } from "../../modules/stakes";
+// import Stake from "./StakeItem";
+// import Web3 from "web3";
 import useWeb3 from "../../hooks/use-web3";
 import { toWei } from "../../modules/web3Wei";
 import toast from "react-hot-toast";
+import { getIsStartedStake } from "../../store/stake-actions";
+import { useDispatch } from "react-redux";
 // import { addresses } from "../../modules/addresses";
 
 const SecStake = ({
@@ -15,18 +17,24 @@ const SecStake = ({
   onBackStakingButtons,
 }) => {
   const [value, setValue] = useState("");
+  const [isStartedStake, setIsStartedStake] = useState(false);
+  // const [isStartedStake, setIsStartedStake] = useState(false);
 
-  //   const [selectedStake, setSelectedStake] = useState({
-  //     value: null,
-  //     stake: {},
-  //   });
+  const dispatch = useDispatch();
 
   const changeStakeItem = (e) => {
     setValue(e.target.value);
-    // onChangeStakeItem({ value: e.target.value, choice: stake.choice });
   };
 
   const { getAllowence, approve } = useWeb3();
+
+  useEffect(() => {
+    if ((stakeContract, account)) {
+      dispatch(getIsStartedStake(stakeContract)).then((res) => {
+        setIsStartedStake(res);
+      });
+    }
+  }, [stakeContract]);
 
   const stakeHandler = async () => {
     await getAllowence(
@@ -37,7 +45,7 @@ const SecStake = ({
         if (pairAllowence < Number(toWei(value, "ether"))) {
           await approve(
             pairContract,
-            toWei("100000000000000", "tether"),
+            toWei("100000000000000", "ether"),
             account,
             stakeAddress,
             (res) => {
@@ -51,12 +59,17 @@ const SecStake = ({
       }
     );
 
+    console.log("stakeAmount", toWei(value, "ether"));
+
     await stakeContract.methods
-      .stake(Web3.utils.toWei(value, "ether"))
+      .stake(toWei(value, "ether"))
       .send({ from: account })
       .then((res) => {
         console.log(res);
         toast.success("Position Set Successfully !");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       })
       .catch((err) => {
         console.log(err);
@@ -83,7 +96,7 @@ const SecStake = ({
 
       <div className="staking-actions">
         <button
-          disabled={value <= 0}
+          disabled={isStartedStake ? false : true}
           onClick={stakeHandler}
           className="main-button"
         >

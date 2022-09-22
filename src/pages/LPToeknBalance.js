@@ -22,7 +22,7 @@ const LPToeknBalance = ({ contract }) => {
   return (
     <div className="LP-token-balance">
       <p>Balance :</p>
-      <p>{roundNumber(fromWei(LPTokenBalance, "ether"), 5)} BUSD_BULC LP</p>
+      <p>{roundNumber(fromWei(LPTokenBalance, "ether"), 5)} BUSD-BULC LP</p>
     </div>
   );
 };

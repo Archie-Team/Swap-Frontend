@@ -7,13 +7,12 @@ import useWeb3 from "../../hooks/use-web3";
 import { addresses } from "../../modules/addresses";
 import { toWei } from "../../modules/web3Wei";
 import { useSelector } from "react-redux";
-
+import { roundNumber } from "../../modules/formatNumbers";
 
 const RemoveLiquidity = ({ coin1, coin2, pairContract, swapContract }) => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const { getAllowence, approve } = useWeb3();
   const account = useSelector((state) => state.auth.account);
-
 
   const closeModal = () => {
     setIsOpen(false);
@@ -48,6 +47,8 @@ const RemoveLiquidity = ({ coin1, coin2, pairContract, swapContract }) => {
       }
     );
 
+    var now = new Date().getTime();
+
     await swapContract.methods
       .removeLiquidity(
         coin1.address,
@@ -55,7 +56,8 @@ const RemoveLiquidity = ({ coin1, coin2, pairContract, swapContract }) => {
         toWei(LPToken, "ether"),
         1,
         1,
-        account
+        account,
+        roundNumber((now + 300000) / 1000, 0)
       )
       .send({ from: account })
       .then((res) => {
@@ -88,7 +90,7 @@ const RemoveLiquidity = ({ coin1, coin2, pairContract, swapContract }) => {
       )}
 
       <button onClick={openModal} className="main-button">
-        Remove
+        Remove LP
       </button>
     </div>
   );

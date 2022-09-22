@@ -4,10 +4,14 @@ export function CommaFormat(number) {
   return format;
 }
 
-export function roundNumber (number, digits) {
-  if(number === '') return ''
+export function roundNumber(number, digits) {
+  if (number === "") return "";
   var multiplier = Math.pow(10, digits),
-      adjustedNum = number * multiplier,
-      truncatedNum = Math[adjustedNum < 0 ? 'ceil' : 'floor'](adjustedNum);
+    adjustedNum = number * multiplier,
+    truncatedNum = Math[adjustedNum < 0 ? "ceil" : "floor"](adjustedNum);
   return truncatedNum / multiplier;
-};
+}
+
+export function shortAccountAddress(account) {
+  return "0x..." + account.substr(account.length - 4);
+}

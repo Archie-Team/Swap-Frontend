@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import Web3 from "web3";
+// import Web3 from "web3";
 import { roundNumber } from "../../modules/formatNumbers";
 import { fromWei } from "../../modules/web3Wei";
 import "./PositionItem.css";
@@ -25,7 +25,7 @@ const PositionItem = ({
 
     if (timeleft > 0) {
       days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
-      hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)) ;
+      hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
       seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
     } else {
@@ -50,7 +50,7 @@ const PositionItem = ({
         setTimer(time);
       }, 1000);
     };
-    countdownTimer(((Number(deadline) +30) * 1000));
+    countdownTimer((Number(deadline) + 30) * 1000);
   }, []);
 
   const unstakePositionHandler = () => {
@@ -60,24 +60,24 @@ const PositionItem = ({
   return (
     <div className="position-item">
       <div>
-        <p>Position :</p>
+        <h4>Position :</h4>
         <p>
           {choice.monthNumber} Months - {choice.APRAmountPersent}% APR
         </p>
       </div>
 
       <div>
-        <p>Stake Token :</p>
+        <h4>Stake Token :</h4>
         <p>{fromWei(lpToken, "ether")} BULC-BUSD</p>
       </div>
 
       <div>
-        <p>Profit :</p>
+        <h4>Profit :</h4>
         <p> {roundNumber(fromWei(profit, "ether"), 5)} BULC</p>
       </div>
 
       <div className="deadline-timer">
-        <p>Deadline :</p>
+        <h4>Deadline :</h4>
         <div className="deadline-timer__times">
           <div>
             <p>{timer.day}</p>
