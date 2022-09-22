@@ -24,7 +24,6 @@ const RemoveLiquidity = ({ coin1, coin2, pairContract, swapContract }) => {
 
   const removeLiquidity = async (input) => {
     let LPToken = input.current.value;
-    // let account = account;
 
     await getAllowence(
       pairContract,

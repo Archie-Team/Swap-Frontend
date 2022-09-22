@@ -4,6 +4,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     account: "",
+    owner: "0x359093423404DC7F9a64E05B6C64327aEbadDa45",
   },
   reducers: {
     login(state, action) {

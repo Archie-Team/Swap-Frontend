@@ -1,0 +1,16 @@
+.admin-dashoard__actions {
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+.admin-dashoard__actions button {
+  font-size: large;
+  background-color: inherit;
+  border: 1px solid var(--green);
+  margin-inline: 0.2rem;
+  padding: 0.2rem 1rem;
+  border-radius: 20px;
+  margin-block: 0.2rem;
+}

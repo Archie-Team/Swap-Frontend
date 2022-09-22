@@ -14,9 +14,7 @@ import BULCBountyPositions from "../components/dashboard/BULCBountyPositions";
 const Home = () => {
   const [stakeContract, setStakeContract] = useState(null);
   const [stakeContract2, setStakeContract2] = useState(null);
-
   const { getContract } = useContract();
-  // const [BUSDBountyPositions, setBUSDBountyPositions] = useState([]);
 
   useEffect(() => {
     getContract(stakeAbi.abi, addresses.staking_address, (contract) =>

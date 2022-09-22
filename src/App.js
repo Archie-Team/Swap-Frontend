@@ -13,8 +13,7 @@ import { walletActions } from "./store/wallet-slice";
 import { useDispatch, useSelector } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 import { getCurrentAccount, getCurrentNetworkId } from "./store/wallet-actions";
-// import PoolList from "./components/pool/PoolList";
-// import PoolForm from "./components/pool/PoolForm";
+import AdminDashboard from "./pages/AdminDashboard";
 
 function App() {
   const { ethereum } = window;
@@ -69,9 +68,9 @@ function App() {
         <Route path="/pool" exact>
           <Pool />
         </Route>
-        {/* <Route path="/pool/:id">
-          <PoolForm />
-        </Route> */}
+        <Route path="/admin">
+          <AdminDashboard />
+        </Route>
         <Route component={NotFound} />
       </Switch>
     </PageLayout>

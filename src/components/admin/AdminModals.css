@@ -1,0 +1,85 @@
+.Modal {
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  padding: 35px;
+  margin: auto;
+  max-width: 700px;
+  border-radius: 20px;
+  background-color: #415c4e;
+  width: 60%;
+  color: "#000";
+}
+
+.Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  background-color: rgb(201, 201, 201, 0.7);
+}
+
+form {
+  margin-block: 20px 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+form input {
+  padding: 8px;
+  width: 100%;
+  border-radius: 10px;
+  min-width: 360px;
+  padding: 20px 0;
+  border-radius: 10px;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  font-size: larger;
+  color: white;
+  background-color: var(--main-dark-green);
+}
+
+.Modal form .actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.Modal form .actions button {
+  width: 100%;
+  padding: 10px;
+  font-size: medium;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  margin-inline: 0.3rem;
+}
+
+.Modal form .actions .submit-btn {
+  background-color: var(--green);
+}
+
+.Modal form .actions .cansel-btn {
+  border: 1px solid var(--green);
+  background-color: inherit;
+}
+
+@media only screen and (max-width: 798px) {
+  .Modal {
+    padding: 30px 20px;
+    width: 95%;
+  }
+
+  form input {
+    padding: 8px;
+    width: 100%;
+    min-width: 100px;
+    padding: 15px 0;
+  }
+}
