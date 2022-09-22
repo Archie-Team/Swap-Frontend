@@ -10,15 +10,15 @@ import { useSelector } from "react-redux";
 const Header = () => {
   const [navbarActivate, setNavbarActivate] = useState("");
   const { account, owner } = useSelector((state) => state.auth);
-  const [isAdmin, setisAdmin] = useState(false);
+  const [isAdmin, setisAdmin] = useState(true);
 
-  useEffect(() => {
-    if (account && owner) {
-      const isAdmin =
-        owner === web3.utils.toChecksumAddress(account) ? true : false;
-      setisAdmin(isAdmin);
-    }
-  }, [owner, account]);
+  // useEffect(() => {
+  //   if (account && owner) {
+  //     const isAdmin =
+  //       owner === web3.utils.toChecksumAddress(account) ? true : false;
+  //     setisAdmin(isAdmin);
+  //   }
+  // }, [owner, account]);
 
   const toggleNavbarHandler = () => {
     setNavbarActivate(navbarActivate === "active" ? "" : "active");
