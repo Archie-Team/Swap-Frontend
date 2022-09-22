@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { roundNumber, shortAccountAddress } from "../../modules/formatNumbers";
 import { fromWei } from "../../modules/web3Wei";
 import {
+  getIsStartedStake,
   getIsStartedWithdraw,
   getNewStakePositions,
   getReward,
@@ -20,7 +21,8 @@ const BUSDBountyPositions = ({ stakeContract }) => {
     value: 0,
     reward: 0,
   });
-  const [isStartedStake, setIsStartedStake] = useState(true);
+  const [isStartedStake, setIsStartedStake] = useState(false);
+  const [isStartedWitdraw, setIsStartedWitdraw] = useState(false);
 
   useEffect(() => {
     const getNewStakePosition = async () => {
@@ -31,13 +33,13 @@ const BUSDBountyPositions = ({ stakeContract }) => {
         .catch((err) => {
           console.log("no psition");
         });
-      await dispatch(getIsStartedWithdraw(stakeContract)).then((res) => {
+      await dispatch(getIsStartedStake(stakeContract)).then((res) => {
         setIsStartedStake(res);
       });
 
-      // await dispatch(getIsStartedWithdraw(stakeContract)).then((res) => {
-      //   setIsStartedStake(res);
-      // });
+      await dispatch(getIsStartedWithdraw(stakeContract)).then((res) => {
+        setIsStartedWitdraw(res);
+      });
     };
     if (stakeContract && account) {
       getNewStakePosition();
@@ -118,7 +120,11 @@ const BUSDBountyPositions = ({ stakeContract }) => {
           >
             Unstake
           </button>
-          <button onClick={getRewardHandler} className="unstake-btn">
+          <button
+            onClick={getRewardHandler}
+            className="unstake-btn"
+            disabled={isStartedWitdraw === false ? true : false}
+          >
             Get Reward
           </button>
         </div>
