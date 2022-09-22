@@ -21,7 +21,7 @@ const BUSDBountyPositions = ({ stakeContract }) => {
     value: 0,
     reward: 0,
   });
-  const [isStartedStake, setIsStartedStake] = useState(false);
+  // const [isStartedStake, setIsStartedStake] = useState(false);
   const [isStartedWitdraw, setIsStartedWitdraw] = useState(false);
 
   useEffect(() => {
@@ -33,9 +33,9 @@ const BUSDBountyPositions = ({ stakeContract }) => {
         .catch((err) => {
           console.log("no psition");
         });
-      await dispatch(getIsStartedStake(stakeContract)).then((res) => {
-        setIsStartedStake(res);
-      });
+      // await dispatch(getIsStartedStake(stakeContract)).then((res) => {
+      //   setIsStartedStake(res);
+      // });
 
       await dispatch(getIsStartedWithdraw(stakeContract)).then((res) => {
         setIsStartedWitdraw(res);
@@ -116,14 +116,14 @@ const BUSDBountyPositions = ({ stakeContract }) => {
           <button
             onClick={unstakePositionHandler}
             className="unstake-btn"
-            disabled={isStartedStake === false ? true : false}
+            disabled={isStartedWitdraw === false ? true : false}
           >
             Unstake
           </button>
           <button
             onClick={getRewardHandler}
             className="unstake-btn"
-            disabled={isStartedWitdraw === false ? true : false}
+            // disabled={isStartedWitdraw === false ? true : false}
           >
             Get Reward
           </button>
