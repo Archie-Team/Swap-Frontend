@@ -1,16 +1,16 @@
-import BULC from '../assets/images/Logo.png'
+import BULC from "../assets/images/Logo.png";
 
 export const coins = {
-  BULC :{
+  BULC: {
     name: "BULC",
     abbr: "BULC",
-    image : BULC,
-    address: "0x33A12CEe993da069BF7EBAB3D7423e25278acf61",
+    image: BULC,
+    address: "0x1603035964573375E9546fA2cDbed9Ad435865df",
   },
-  BUSD : {
+  BUSD: {
     name: "BUSD",
     abbr: "BUSD",
-    image : 'https://cryptologos.cc/logos/binance-usd-busd-logo.png?v=0',
-    address: "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
+    image: "https://cryptologos.cc/logos/binance-usd-busd-logo.png?v=0",
+    address: "0x3afC77D320CB164134FC5afD73B8dB453813094a",
   },
 };
