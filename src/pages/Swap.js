@@ -194,7 +194,6 @@ const Swap = () => {
       account
     )
       .then((res) => {
-        updateTokenBalances();
         toast.success(res);
       })
       .catch((err) => {
@@ -243,7 +242,6 @@ const Swap = () => {
       account
     )
       .then((res) => {
-        updateTokenBalances();
         toast.success(res);
       })
       .catch((err) => {
